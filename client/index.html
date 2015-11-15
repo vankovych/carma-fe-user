@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ELEKS Career Map</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="css/style.css">
+
+        <script src="js/libs/d3/d3.js"></script>
+        <!--<script src="js/libs/jquery/jquery-2.1.4.min.js"></script>-->
+
+        <!--<script src="js/app/main.js"></script>-->
+    </head>
+    <body>
+        <script>
+            'use strict';
+
+            var data = ['SDO', 'QAO', 'PMO'];
+
+            var R = 200,
+                    CX = 100,
+                    CY = 100,
+                    P = Math.PI * 2,
+                    ArcLen = P / 10,
+                    ArcMargin = P / 200;
+
+            var svg = d3.select("body").append("svg")
+                    .attr("width", 600)
+                    .attr("height", 600);
+            var group = svg.append("g")
+                    .attr("transform", "translate(200, 200)");
+
+// base circles
+
+            group.append("circle")
+                    .attr("cx", CX)
+                    .attr("cy", CY)
+                    .attr('class', 'circle-main-out')
+                    .attr("r", R);
+
+            group.append("circle")
+                    .attr("cx", CX)
+                    .attr("cy", CY)
+                    .attr('class', 'circle-main-in')
+                    .attr("r", R - 7);
+
+            var arc = d3.svg.arc()
+                    .innerRadius(R - 7)
+                    .outerRadius(R + 7)
+                    .startAngle(ArcLen)
+                    .endAngle(ArcLen * 2 - ArcMargin);
+
+//            d3.select('svg > g').selectAll('path')
+//                    .data(data)
+//                    .enter()
+//                    .append('path')
+//                    .attr('cx', 100)
+//                    .attr('transform', 'translate(' + CX + ', ' + CY + ')')
+//                    .attr('class', 'division')
+//                    .attr('id', function (d) {
+//                        console.log('id', d);
+//                        return d;
+//                    })
+//                    .attr('d', function (d, i) {
+//
+//                        console.log('d', d);
+//
+//                        var arc = d3.svg.arc()
+//                                .innerRadius(R - 7)
+//                                .outerRadius(R + 7)
+//                                .startAngle(ArcLen)
+//                                .endAngle(ArcLen * 2 - ArcMargin);
+//
+//                        return arc;
+//                    }());
+
+            data.forEach(function (d, i) {
+                var arc = d3.svg.arc()
+                        .innerRadius(R - 10)
+                        .outerRadius(R + 7)
+                        .startAngle(ArcLen * i)
+                        .endAngle(ArcLen * (i + 1) - ArcMargin);
+
+                //console.log(arc());
+
+                group.append("path")
+                        .attr("d", arc)
+                        .attr('cx', 100)
+                        .attr("transform", "translate(100,100)")
+                        .attr('class', 'division')
+                        .attr('id', d);
+            });
+
+// SDO
+//            var arc = d3.svg.arc()
+//                    .innerRadius(R - 7)
+//                    .outerRadius(R + 7)
+//                    .startAngle(0)
+//                    .endAngle(ArcLen - ArcMargin);
+//
+//            //console.log(arc());
+//
+//            group.append("path")
+//                    .attr("d", arc)
+//                    .attr('cx', 100)
+//                    .attr("transform", "translate(100,100)")
+//                    .attr('class', 'division')
+//                    .attr('id', 'SDO');
+
+            d3.select('#SDO').on('click', function () {
+                arc
+                        .startAngle(ArcLen * 3)
+                        .endAngle(ArcLen * 4 - ArcMargin);
+
+                svg.selectAll("#SDO")
+                        .transition()
+                        //.ease("elastic")
+                        .duration(750)
+                        .attr("d", arc);
+
+            });
+
+            function arcTween(a) {
+                var i = d3.interpolate(this._current, a);
+                this._current = i(0);
+                return function (t) {
+                    return arc(i(t));
+                };
+            }
+        </script>        
+    </body>
+</html>

@@ -1,0 +1,52 @@
+
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: auto;
+    position: relative;
+    width: 960px;
+}
+
+.circle-main-in {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 4px;
+}
+
+.circle-main-out {
+    fill: none;
+    stroke: #eee;
+    stroke-width: 14px;
+}
+
+text {
+    font: 10px sans-serif;
+}
+
+form {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+path.division {
+    cursor: pointer;
+    fill-opacity: .7;
+    transition: all 0.3s;
+}
+
+path.division:hover {
+    fill-opacity: .9;
+}
+
+#SDO {
+    fill: #769ECB;
+}
+
+#QAO {
+    fill: #C5D07E;
+}
+
+#PMO {
+    fill: #F4B375;
+}
