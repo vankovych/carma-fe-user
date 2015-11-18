@@ -10,116 +10,91 @@
         <script src="js/libs/d3/d3.js"></script>
         <!--<script src="js/libs/jquery/jquery-2.1.4.min.js"></script>-->
 
-        <!--<script src="js/app/main.js"></script>-->
+        <script src="js/app/main.js"></script>
     </head>
     <body>
+        <p>eleks Career Map</p>
+        
         <script>
             'use strict';
 
-            var data = ['SDO', 'QAO', 'PMO'];
-
-            var R = 200,
+            var R = 300,
                     CX = 100,
                     CY = 100,
                     P = Math.PI * 2,
-                    ArcLen = P / 10,
-                    ArcMargin = P / 200;
+                    ArcLen = P / 20,
+                    ArcMargin = P / 400;
 
-            var svg = d3.select("body").append("svg")
-                    .attr("width", 600)
-                    .attr("height", 600);
-            var group = svg.append("g")
-                    .attr("transform", "translate(200, 200)");
+            d3.json('data.json', function (error, json) {
+                if (error) {
+                    return console.warn(error);
+                }
 
-// base circles
+                var divisions = json.divisions;
 
-            group.append("circle")
-                    .attr("cx", CX)
-                    .attr("cy", CY)
-                    .attr('class', 'circle-main-out')
-                    .attr("r", R);
+                divisions.forEach(function (d, i) {
+                    d.i = i + 1;
+                });
 
-            group.append("circle")
-                    .attr("cx", CX)
-                    .attr("cy", CY)
-                    .attr('class', 'circle-main-in')
-                    .attr("r", R - 7);
+                //console.log(data);
 
-            var arc = d3.svg.arc()
-                    .innerRadius(R - 7)
-                    .outerRadius(R + 7)
-                    .startAngle(ArcLen)
-                    .endAngle(ArcLen * 2 - ArcMargin);
+                var svg = d3.select('body').append('svg');
+                var group = svg.append('g')
+                        .attr('transform', 'translate(300, 300)');
 
-//            d3.select('svg > g').selectAll('path')
-//                    .data(data)
-//                    .enter()
-//                    .append('path')
-//                    .attr('cx', 100)
-//                    .attr('transform', 'translate(' + CX + ', ' + CY + ')')
-//                    .attr('class', 'division')
-//                    .attr('id', function (d) {
-//                        console.log('id', d);
-//                        return d;
-//                    })
-//                    .attr('d', function (d, i) {
-//
-//                        console.log('d', d);
-//
-//                        var arc = d3.svg.arc()
-//                                .innerRadius(R - 7)
-//                                .outerRadius(R + 7)
-//                                .startAngle(ArcLen)
-//                                .endAngle(ArcLen * 2 - ArcMargin);
-//
-//                        return arc;
-//                    }());
+                group.append('circle')
+                        .attr('cx', CX)
+                        .attr('cy', CY)
+                        .attr('class', 'circle-main-out')
+                        .attr('r', R);
 
-            data.forEach(function (d, i) {
-                var arc = d3.svg.arc()
-                        .innerRadius(R - 10)
-                        .outerRadius(R + 7)
-                        .startAngle(ArcLen * i)
-                        .endAngle(ArcLen * (i + 1) - ArcMargin);
+                group.append('circle')
+                        .attr('cx', CX)
+                        .attr('cy', CY)
+                        .attr('class', 'circle-main-in')
+                        .attr('r', R - 7);
 
-                //console.log(arc());
-
-                group.append("path")
-                        .attr("d", arc)
+                // render divisions
+                group.selectAll('path.division')
+                        .data(divisions).enter()
+                        .append('path')
+                        .attr('d', arc)
                         .attr('cx', 100)
-                        .attr("transform", "translate(100,100)")
+                        .attr('transform', 'translate(100,100)')
                         .attr('class', 'division')
-                        .attr('id', d);
+                        .attr('fill', function (d) {
+                            return d.color;
+                        })
+                        .on('click', move);
             });
 
-// SDO
-//            var arc = d3.svg.arc()
-//                    .innerRadius(R - 7)
-//                    .outerRadius(R + 7)
-//                    .startAngle(0)
-//                    .endAngle(ArcLen - ArcMargin);
-//
-//            //console.log(arc());
-//
-//            group.append("path")
-//                    .attr("d", arc)
-//                    .attr('cx', 100)
-//                    .attr("transform", "translate(100,100)")
-//                    .attr('class', 'division')
-//                    .attr('id', 'SDO');
+            // Arc function
+            var arc = d3.svg.arc()
+                    .startAngle(function (d) {
+                        return ArcLen * d.i;
+                    })
+                    .endAngle(function (d) {
+                        return ArcLen * (d.i + 1) - ArcMargin;
+                    })
+                    .innerRadius(R - 10)
+                    .outerRadius(R + 7);
 
-            d3.select('#SDO').on('click', function () {
-                arc
-                        .startAngle(ArcLen * 3)
-                        .endAngle(ArcLen * 4 - ArcMargin);
+            function move() {
+                var arc1 = d3.svg.arc()
+                        .startAngle(function (d) {
+                            return ArcLen * 15;
+                        })
+                        .endAngle(function (d) {
+                            return ArcLen * (15 + 1) - ArcMargin;
+                        })
+                        .innerRadius(R - 10)
+                        .outerRadius(R + 7);
 
-                svg.selectAll("#SDO")
+                d3.select(this)
                         .transition()
-                        //.ease("elastic")
                         .duration(750)
-                        .attr("d", arc);
-
-            });
+                        .attr("d", arc1);
+            }
 
             function arcTween(a) {
                 var i = d3.interpolate(this._current, a);

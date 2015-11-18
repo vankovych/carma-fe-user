@@ -1,16 +1,12 @@
-
-
-body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin: auto;
-    position: relative;
-    width: 960px;
+svg {
+    width: 800px;
+    height: 800px;
 }
 
 .circle-main-in {
     fill: none;
-    stroke: #ccc;
-    stroke-width: 4px;
+    stroke: #999;
+    stroke-width: 3px;
 }
 
 .circle-main-out {
@@ -19,34 +15,14 @@ body {
     stroke-width: 14px;
 }
 
-text {
-    font: 10px sans-serif;
-}
-
-form {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-}
+/* DIVISION */
 
 path.division {
     cursor: pointer;
     fill-opacity: .7;
-    transition: all 0.3s;
+    transition: all .2s;
 }
 
 path.division:hover {
     fill-opacity: .9;
-}
-
-#SDO {
-    fill: #769ECB;
-}
-
-#QAO {
-    fill: #C5D07E;
-}
-
-#PMO {
-    fill: #F4B375;
 }

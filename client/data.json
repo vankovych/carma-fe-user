@@ -1,0 +1,46 @@
+{
+    "divisions": [
+        {
+            "id": "d1",
+            "abbreviation": "SEDO",
+            "Title": "Software Engineering & Development",
+            "color": "#DC8B8A"
+        },
+        {
+            "id": "d2",
+            "abbreviation": "QAO",
+            "Title": "Quality Assurance",
+            "color": "#CB79A9"
+        },
+        {
+            "id": "d3",
+            "abbreviation": "PMO",
+            "Title": "Project Management",
+            "color": "#958CBB"
+        },
+        {
+            "id": "d4",
+            "abbreviation": "BAO",
+            "Title": "Business Analysis",
+            "color": "#83A4C5"
+        },
+        {
+            "id": "d5",
+            "abbreviation": "PS",
+            "Title": "Products&Services",
+            "color": "#97C2AE"
+        },
+        {
+            "id": "d6",
+            "abbreviation": "IT",
+            "Title": "IT",
+            "color": "#C8D182"
+        },
+        {
+            "id": "d7",
+            "abbreviation": "Legal",
+            "Title": "Legal",
+            "color": "#E1A67A"
+        }
+    ]
+}
