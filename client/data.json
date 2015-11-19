@@ -3,49 +3,49 @@
         {
             "id": "d1",
             "abbreviation": "SEDO",
-            "Title": "Software Engineering & Development",
+            "title": "Software Engineering & Development",
             "color": "#DC8B8A"
         },
         {
             "id": "d2",
             "abbreviation": "QAO",
-            "Title": "Quality Assurance",
+            "title": "Quality Assurance",
             "color": "#CB79A9"
         },
         {
             "id": "d3",
             "abbreviation": "PMO",
-            "Title": "Project Management",
+            "title": "Project Management",
             "color": "#958CBB"
         },
         {
             "id": "d4",
             "abbreviation": "BAO",
-            "Title": "Business Analysis",
+            "title": "Business Analysis",
             "color": "#83A4C5"
         },
         {
             "id": "d5",
             "abbreviation": "PS",
-            "Title": "Products&Services",
+            "title": "Products&Services",
             "color": "#97C2AE"
         },
         {
             "id": "d6",
             "abbreviation": "IT",
-            "Title": "IT",
+            "title": "IT",
             "color": "#C8D182"
         },
         {
             "id": "d7",
             "abbreviation": "Legal",
-            "Title": "Legal",
+            "title": "Legal",
             "color": "#DFC87A"
         },
         {
             "id": "d8",
             "abbreviation": "TMO",
-            "Title": "Talent Management",
+            "title": "Talent Management",
             "color": "#E1A67A"
         }
     ]

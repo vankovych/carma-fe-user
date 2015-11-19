@@ -78,6 +78,23 @@
                             return d.color;
                         })
                         .on('click', moveArc);
+
+                group.selectAll('text')
+                        .data(divisions).enter()
+                        .append('text')
+                        .attr("x", function (d) {
+                            return 100;//d.x < 180 ? 8 : -8;
+                        })
+                        .attr("y", 100)
+//                        .attr("text-anchor", function (d) {
+//                            return 'end';//d.x < 180 ? "start" : "end";
+//                        })
+                        .attr("transform", function (d) {
+                            return null;//d.x < 180 ? null : "rotate(180)";
+                        })
+                        .text(function (d) {
+                            return d.title;
+                        });
             });
 
             // Arc function
