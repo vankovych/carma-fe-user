@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <link rel="stylesheet" href="css/vendor/normalize.css">
         <link rel="stylesheet" href="css/style.css">
 
         <script src="js/libs/d3/d3.js"></script>
@@ -13,8 +14,16 @@
         <script src="js/app/main.js"></script>
     </head>
     <body>
-        <p>eleks Career Map</p>
-        
+        <div id="container">
+            <div class="menu">
+                <h3><a href="#">eleks Career map</a></h3>
+                <ul>
+                    <li><a href="#" class="active">Career opportunities</a></li>
+                    <li><a href="#">Discovery positions</a></li>
+                </ul>                
+            </div>
+            <div id="map"></div>
+        </div>
         <script>
             'use strict';
 
@@ -33,26 +42,29 @@
                 var divisions = json.divisions;
 
                 divisions.forEach(function (d, i) {
-                    d.i = i + 1;
+                    i++;
+                    d.startAngle = ArcLen * i;
+                    d.endAngle = ArcLen * (i + 1) - ArcMargin;
                 });
 
-                //console.log(data);
-
-                var svg = d3.select('body').append('svg');
+                var svg = d3.select('div#map').append('svg');
                 var group = svg.append('g')
-                        .attr('transform', 'translate(300, 300)');
-
-                group.append('circle')
-                        .attr('cx', CX)
-                        .attr('cy', CY)
-                        .attr('class', 'circle-main-out')
-                        .attr('r', R);
+                        .attr('transform', 'translate(250, 250)');
 
                 group.append('circle')
                         .attr('cx', CX)
                         .attr('cy', CY)
                         .attr('class', 'circle-main-in')
                         .attr('r', R - 7);
+
+                // render placeholder
+                group.selectAll('path.placeholder')
+                        .data(divisions).enter()
+                        .append('path')
+                        .attr('d', arc)
+                        .attr('cx', 100)
+                        .attr('transform', 'translate(100,100)')
+                        .attr('class', 'placeholder');
 
                 // render divisions
                 group.selectAll('path.division')
@@ -65,44 +77,43 @@
                         .attr('fill', function (d) {
                             return d.color;
                         })
-                        .on('click', move);
+                        .on('click', moveArc);
             });
 
             // Arc function
             var arc = d3.svg.arc()
                     .startAngle(function (d) {
-                        return ArcLen * d.i;
+                        return d.startAngle;
                     })
                     .endAngle(function (d) {
-                        return ArcLen * (d.i + 1) - ArcMargin;
+                        return d.endAngle;
                     })
                     .innerRadius(R - 10)
                     .outerRadius(R + 7);
 
-            function move() {
-                var arc1 = d3.svg.arc()
-                        .startAngle(function (d) {
-                            return ArcLen * 15;
-                        })
-                        .endAngle(function (d) {
-                            return ArcLen * (15 + 1) - ArcMargin;
-                        })
-                        .innerRadius(R - 10)
-                        .outerRadius(R + 7);
-
+            function moveArc() {
                 d3.select(this)
                         .transition()
                         .duration(750)
-                        .attr("d", arc1);
+                        .call(arcTween, 0.73 * P, 0.78 * P - ArcMargin);
             }
 
-            function arcTween(a) {
-                var i = d3.interpolate(this._current, a);
-                this._current = i(0);
-                return function (t) {
-                    return arc(i(t));
-                };
+            function arcTween(transition, newAngleS, newAngleE) {
+                transition.attrTween("d", function (d) {
+
+                    var interpolateS = d3.interpolate(d.startAngle, newAngleS);
+                    var interpolateE = d3.interpolate(d.endAngle, newAngleE);
+
+                    return function (t) {
+                        d.startAngle = interpolateS(t);
+                        d.endAngle = interpolateE(t);
+
+                        return arc(d);
+                    };
+                });
             }
-        </script>        
+
+
+        </script>
     </body>
 </html>

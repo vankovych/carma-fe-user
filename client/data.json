@@ -40,6 +40,12 @@
             "id": "d7",
             "abbreviation": "Legal",
             "Title": "Legal",
+            "color": "#DFC87A"
+        },
+        {
+            "id": "d8",
+            "abbreviation": "TMO",
+            "Title": "Talent Management",
             "color": "#E1A67A"
         }
     ]
