@@ -42,7 +42,7 @@
                 var divisions = json.divisions;
 
                 divisions.forEach(function (d, i) {
-                    i++;
+                    d.i = i++;
                     d.startAngle = ArcLen * i;
                     d.endAngle = ArcLen * (i + 1) - ArcMargin;
                 });
@@ -82,14 +82,20 @@
                 group.selectAll('text')
                         .data(divisions).enter()
                         .append('text')
+                        .attr('class', 'division-title')
                         .attr("x", function (d) {
-                            return 100;//d.x < 180 ? 8 : -8;
+                            return 200;//d.x < 180 ? 8 : -8;
                         })
-                        .attr("y", 100)
-//                        .attr("text-anchor", function (d) {
-//                            return 'end';//d.x < 180 ? "start" : "end";
-//                        })
-                        .attr("transform", function (d) {
+                        .attr('y', function (d) {
+                            return d.i * 30;//d.x < 180 ? 8 : -8;
+                        })
+                        .attr("text-anchor", function (d) {
+                            return 'start';//d.x < 180 ? "start" : "end";
+                        })
+                        .attr('transform', function (d) {
+                            return null;//d.x < 180 ? null : "rotate(180)";
+                        })
+                        .attr('rotate', function (d) {
                             return null;//d.x < 180 ? null : "rotate(180)";
                         })
                         .text(function (d) {

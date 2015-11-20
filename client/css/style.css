@@ -77,3 +77,7 @@ path.division {
 path.division:hover {
     fill-opacity: .9;
 }
+
+text.division-title {
+    fill: #494949;
+}
