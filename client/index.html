@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ELEKS Career Map</title>
+        <title>eleks Career Map</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -20,19 +20,51 @@
                 <ul>
                     <li><a href="#" class="active">Career opportunities</a></li>
                     <li><a href="#">Discovery positions</a></li>
-                </ul>                
+                </ul>
             </div>
-            <div id="map"></div>
+            <div id="map">
+                <svg></svg>
+            </div>
         </div>
         <script>
             'use strict';
 
-            var R = 300,
-                    CX = 100,
-                    CY = 100,
-                    P = Math.PI * 2,
-                    ArcLen = P / 20,
-                    ArcMargin = P / 400;
+            var CM = {
+                svgWidth: 1000,
+                svgHeight: 900,
+                R: 300,
+                arcTween: function (transition, newAngleS, newAngleE) {
+                    transition.attrTween("d", function (d) {
+
+                        var interpolateS = d3.interpolate(d.startAngle, newAngleS),
+                                interpolateE = d3.interpolate(d.endAngle, newAngleE);
+
+                        return function (t) {
+                            d.startAngle = interpolateS(t);
+                            d.endAngle = interpolateE(t);
+
+                            return CM.arc(d);
+                        };
+                    });
+                }
+            };
+
+            CM.P = Math.PI * 2;
+            CM.ArcLen = CM.P / 20;
+            CM.ArcMargin = CM.P / 400;
+
+            // Arc function
+            CM.arc = d3.svg.arc()
+                    .startAngle(function (d) {
+                        return d.startAngle;
+                    })
+                    .endAngle(function (d) {
+                        return d.endAngle;
+                    })
+                    .innerRadius(CM.R - 10)
+                    .outerRadius(CM.R + 7);
+
+            var division;
 
             d3.json('data.json', function (error, json) {
                 if (error) {
@@ -41,102 +73,126 @@
 
                 var divisions = json.divisions;
 
+                division = divisions[0];
+
                 divisions.forEach(function (d, i) {
                     d.i = i++;
-                    d.startAngle = ArcLen * i;
-                    d.endAngle = ArcLen * (i + 1) - ArcMargin;
+                    d.startAngle = CM.ArcLen * i;
+                    d.endAngle = CM.ArcLen * (i + 1) - CM.ArcMargin;
                 });
 
-                var svg = d3.select('div#map').append('svg');
-                var group = svg.append('g')
-                        .attr('transform', 'translate(250, 250)');
+                CM.svg = d3.select('#map svg')
+                        .attr('width', CM.svgWidth)
+                        .attr('height', CM.svgHeight);
+                CM.group = CM.svg.append('g')
+                        .attr('transform', 'translate(' + CM.svgWidth / 2 + ', ' + CM.svgHeight / 2 + ')');
 
-                group.append('circle')
-                        .attr('cx', CX)
-                        .attr('cy', CY)
+                CM.group.append('circle')
+                        .attr('cx', 0)
+                        .attr('cy', 0)
                         .attr('class', 'circle-main-in')
-                        .attr('r', R - 7);
+                        .attr('r', CM.R - 7);
 
                 // render placeholder
-                group.selectAll('path.placeholder')
+                CM.group.selectAll('path.placeholder')
                         .data(divisions).enter()
                         .append('path')
-                        .attr('d', arc)
-                        .attr('cx', 100)
-                        .attr('transform', 'translate(100,100)')
+                        .attr('d', CM.arc)
                         .attr('class', 'placeholder');
 
                 // render divisions
-                group.selectAll('path.division')
+                CM.group.selectAll('path.division')
                         .data(divisions).enter()
                         .append('path')
-                        .attr('d', arc)
+                        .attr('id', function (d) {
+                            return d.id;
+                        })
+                        .attr('d', CM.arc)
                         .attr('cx', 100)
-                        .attr('transform', 'translate(100,100)')
                         .attr('class', 'division')
                         .attr('fill', function (d) {
                             return d.color;
                         })
                         .on('click', moveArc);
 
-                group.selectAll('text')
+                // render text
+                CM.group.selectAll('g')
                         .data(divisions).enter()
-                        .append('text')
-                        .attr('class', 'division-title')
-                        .attr("x", function (d) {
-                            return 200;//d.x < 180 ? 8 : -8;
-                        })
-                        .attr('y', function (d) {
-                            return d.i * 30;//d.x < 180 ? 8 : -8;
-                        })
-                        .attr("text-anchor", function (d) {
-                            return 'start';//d.x < 180 ? "start" : "end";
+                        .append('g')
+//                        .attr('class', 'node')
+                        .attr('id', function (d) {
+                            return d.id + '-title';
                         })
                         .attr('transform', function (d) {
-                            return null;//d.x < 180 ? null : "rotate(180)";
+                            return "rotate(" + ((d.startAngle + CM.ArcLen / 2) * (180 / Math.PI) - 90) + ")translate(" + 300 + ')';
                         })
-                        .attr('rotate', function (d) {
-                            return null;//d.x < 180 ? null : "rotate(180)";
+                        .style('opacity', 1)
+                        .append('text')
+                        .attr('class', 'division-title')
+                        .attr('dx', function (d) {
+                            return d.startAngle * (180 / Math.PI) < 180 ? 15 : -15;
+                        })
+                        .attr('dy', '.31em')
+                        .attr('text-anchor', function (d) {
+                            return d.startAngle * (180 / Math.PI) < 180 ? 'start' : 'end';
+                        })
+                        .attr('transform', function (d) {
+                            return d.startAngle * (180 / Math.PI) < 180 ? null : 'rotate(180)';
                         })
                         .text(function (d) {
                             return d.title;
                         });
             });
 
-            // Arc function
-            var arc = d3.svg.arc()
-                    .startAngle(function (d) {
-                        return d.startAngle;
-                    })
-                    .endAngle(function (d) {
-                        return d.endAngle;
-                    })
-                    .innerRadius(R - 10)
-                    .outerRadius(R + 7);
-
             function moveArc() {
+
+                var root = this;
+
+                // tmp
+                var ang = (0.78 * CM.P - CM.ArcLen / 2) * (180 / Math.PI);
+
+                // fade in all divisions except for selected
+                CM.group.selectAll('.division')
+                        .transition()
+                        .duration(500)
+                        .style('opacity', function () {
+                            return (this.id === root.id) ? .8 : 0;
+                        });
+
+                // fade in selected division title             
+                CM.group.selectAll('g')
+                        .transition()
+                        .duration(500)
+                        .style('opacity', 0);
+
+                // move arc
                 d3.select(this)
                         .transition()
                         .duration(750)
-                        .call(arcTween, 0.73 * P, 0.78 * P - ArcMargin);
+                        .call(CM.arcTween, 0.73 * CM.P, 0.78 * CM.P - CM.ArcMargin);
+
+                var gr = d3.select('g#d1-title')
+                        .attr('transform', function (d) {
+                            return 'rotate(' + (ang - 90) + ')translate(' + 300 + ')';
+                        })
+                        .select('text')
+                        .attr('dx', function (d) {
+                            return ang < 180 ? 15 : -15;
+                        })
+                        .attr('text-anchor', function (d) {
+                            return ang < 180 ? 'start' : 'end';
+                        })
+                        .attr('transform', function (d) {
+                            return ang < 180 ? null : 'rotate(180)';
+                        });
+
+                // fade out selected division title        
+                gr.transition()
+                        .delay(500)
+                        .duration(500)
+                        .style('opacity', 1);
+
             }
-
-            function arcTween(transition, newAngleS, newAngleE) {
-                transition.attrTween("d", function (d) {
-
-                    var interpolateS = d3.interpolate(d.startAngle, newAngleS);
-                    var interpolateE = d3.interpolate(d.endAngle, newAngleE);
-
-                    return function (t) {
-                        d.startAngle = interpolateS(t);
-                        d.endAngle = interpolateE(t);
-
-                        return arc(d);
-                    };
-                });
-            }
-
-
         </script>
     </body>
 </html>
