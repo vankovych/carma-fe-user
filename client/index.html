@@ -119,7 +119,6 @@
                 CM.group.selectAll('g')
                         .data(divisions).enter()
                         .append('g')
-//                        .attr('class', 'node')
                         .attr('id', function (d) {
                             return d.id + '-title';
                         })
@@ -142,6 +141,28 @@
                         .text(function (d) {
                             return d.title;
                         });
+
+                CM.group.append('line')
+                        .attr('class', 'ololo')
+                        .attr('x1', -CM.R + 5)
+                        .attr('y1', 0)
+                        .attr('x2', -150)
+                        .attr('y2', 0)
+                        .attr('stroke-width', 1)
+                        .attr('stroke', '#DC8B8A');
+
+                var pos = [1, 2, 3, 4, 5, 6];
+
+                CM.group.selectAll('circle.position')
+                        .data(pos).enter()
+                        .append('circle')
+                        .attr('class', 'position')
+                        .attr('cx', function (d) {
+                            return -CM.R + 25 * d;
+                        })
+                        .attr('cy', 0)
+                        .attr('r', 7)
+                        .style('fill', '#DC8B8A');
             });
 
             function moveArc() {
@@ -169,7 +190,7 @@
                 d3.select(this)
                         .transition()
                         .duration(750)
-                        .call(CM.arcTween, 0.73 * CM.P, 0.78 * CM.P - CM.ArcMargin);
+                        .call(CM.arcTween, 0.725 * CM.P, 0.775 * CM.P - CM.ArcMargin);
 
                 var gr = d3.select('g#d1-title')
                         .attr('transform', function (d) {
@@ -192,7 +213,7 @@
                         .duration(500)
                         .style('opacity', 1);
 
-            }        
+            }
         </script>
     </body>
 </html>

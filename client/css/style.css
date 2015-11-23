@@ -78,3 +78,7 @@ text.division-title {
     fill: #494949;
     cursor: pointer;
 }
+
+.position {
+    cursor: pointer;
+}
