@@ -50,7 +50,7 @@
             };
 
             CM.P = Math.PI * 2;
-            CM.ArcLen = CM.P / 25;
+            CM.ArcLen = CM.P / 24;
             CM.ArcMargin = CM.P / 400;
 
             // Arc function
@@ -75,14 +75,25 @@
 
                 division = divisions[0];
 
-                divisions.forEach(function (d, i) {
-                    if(i === 10){
-                        //i=+2;
+                for (var i = 0, j = 1; i < divisions.length; i++, j++) {
+
+                    if (j === 11) {
+                        j += 2;
                     }
-                    d.i = i++;
-                    d.startAngle = CM.ArcLen * i;
-                    d.endAngle = CM.ArcLen * (i + 1) - CM.ArcMargin;
-                });
+
+                    divisions[i].i = j;
+                    divisions[i].startAngle = CM.ArcLen * j;
+                    divisions[i].endAngle = CM.ArcLen * (j + 1) - CM.ArcMargin;
+                }
+
+//                divisions.forEach(function (d, i) {
+//                    if (i === 10) {
+//                        i++;
+//                    }
+//                    d.i = i++;
+//                    d.startAngle = CM.ArcLen * i;
+//                    d.endAngle = CM.ArcLen * (i + 1) - CM.ArcMargin;
+//                });
 
                 CM.svg = d3.select('#map svg')
                         .attr('width', CM.svgWidth)
@@ -90,18 +101,18 @@
                 CM.group = CM.svg.append('g')
                         .attr('transform', 'translate(' + CM.svgWidth / 2 + ', ' + CM.svgHeight / 2 + ')');
 
-                CM.group.append('circle')
-                        .attr('cx', 0)
-                        .attr('cy', 0)
-                        .attr('class', 'circle-main-in')
-                        .attr('r', CM.R - 7);
+//                CM.group.append('circle')
+//                        .attr('cx', 0)
+//                        .attr('cy', 0)
+//                        .attr('class', 'circle-main-in')
+//                        .attr('r', CM.R - 7);
 
                 // render placeholder
-                CM.group.selectAll('path.placeholder')
-                        .data(divisions).enter()
-                        .append('path')
-                        .attr('d', CM.arc)
-                        .attr('class', 'placeholder');
+//                CM.group.selectAll('path.placeholder')
+//                        .data(divisions).enter()
+//                        .append('path')
+//                        .attr('d', CM.arc)
+//                        .attr('class', 'placeholder');
 
                 // render divisions
                 CM.group.selectAll('path.division')
@@ -145,6 +156,11 @@
                             return d.title;
                         });
 
+
+                // positions tree
+                var pos = [1, 2, 3, 4, 5, 6];
+
+                // purple        
                 CM.group.append('line')
                         .attr('class', 'ololo')
                         .attr('x1', -CM.R + 5)
@@ -152,20 +168,45 @@
                         .attr('x2', -150)
                         .attr('y2', 0)
                         .attr('stroke-width', 1)
-                        .attr('stroke', '#DC8B8A');
+                        .attr('stroke', '#a185b8');
 
-                var pos = [1, 2, 3, 4, 5, 6];
-
-                CM.group.selectAll('circle.position')
+                CM.group.append('g').selectAll('circle.position')
                         .data(pos).enter()
                         .append('circle')
-                        .attr('class', 'position')
                         .attr('cx', function (d) {
                             return -CM.R + 25 * d;
                         })
                         .attr('cy', 0)
                         .attr('r', 7)
-                        .style('fill', '#DC8B8A');
+                        .attr('class', function (d) {
+                            return d < 4 ? 'position active' : 'position';
+                        })
+                        .style('fill', '#a185b8');
+
+                // yellow
+                CM.group.append('line')
+                        .attr('class', 'ololo')
+                        .attr('x1', CM.R / 2)
+                        .attr('y1', -80)
+                        .attr('x2', CM.R)
+                        .attr('y2', -150)
+                        .attr('stroke-width', 1)
+                        .attr('stroke', '#9bca90');
+
+                CM.group.append('g').selectAll('circle.position')
+                        .data(pos).enter()
+                        .append('circle')
+                        .attr('cx', function (d) {
+                            return CM.R - 25 * d;
+                        })
+                        .attr('cy', function (d) {
+                            return CM.R / 2 - 25 * d;
+                        })
+                        .attr('r', 7)
+                        .attr('class', function (d) {
+                            return d < 4 ? 'position active' : 'position';
+                        })
+                        .style('fill', '#9bca90');
             });
 
             function moveArc() {
@@ -193,7 +234,7 @@
                 d3.select(this)
                         .transition()
                         .duration(750)
-                        .call(CM.arcTween, 0.725 * CM.P, 0.775 * CM.P - CM.ArcMargin);
+                        .call(CM.arcTween, 0.75 * CM.P - CM.ArcLen / 2, 0.75 * CM.P + CM.ArcLen / 2);
 
                 var gr = d3.select('g#d1-title')
                         .attr('transform', function (d) {

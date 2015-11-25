@@ -3,102 +3,102 @@
         {
             "id": "d1",
             "title": "Project Management",
-            "color": "#DC8B8A"
+            "color": "#93bdc1"
         },
         {
             "id": "d2",
             "title": "Business Analysis",
-            "color": "#CB79A9"
+            "color": "#96c2ae"
         },
         {
             "id": "d3",
             "title": "UX",
-            "color": "#958CBB"
+            "color": "#97c4a6"
         },
         {
             "id": "d4",
             "title": "Software Engineering & Development",
-            "color": "#83A4C5"
+            "color": "#9bca90"
         },
         {
             "id": "d5",
             "title": "Information Development",
-            "color": "#97C2AE"
+            "color": "#b2d289"
         },
         {
             "id": "d6",
             "title": "Quality Assurance",
-            "color": "#C8D182"
+            "color": "#c8d082"
         },
         {
             "id": "d7",
             "title": "Localization",
-            "color": "#DFC87A"
+            "color": "#d6cc7d"
         },
         {
             "id": "d8",
             "title": "IT",
-            "color": "#E1A67A"
+            "color": "#dfc67b"
         },
         {
             "id": "d9",
             "title": "Finance",
-            "color": "#DC8B8A"
+            "color": "#e2b278"
         },
         {
             "id": "d10",
             "title": "Legal",
-            "color": "#CB79A9"
+            "color": "#e1a77a"
         },
         {
             "id": "d11",
             "title": "BD",
-            "color": "#958CBB"
+            "color": "#dd8a8b"
         },
         {
             "id": "d12",
             "title": "Talent Management",
-            "color": "#83A4C5"
+            "color": "#dc7a96"
         },
         {
             "id": "d13",
             "title": "Talent Staffing",
-            "color": "#97C2AE"
+            "color": "#d377a3"
         },
         {
             "id": "d14",
             "title": "University",
-            "color": "#C8D182"
+            "color": "#ca79a8"
         },
         {
             "id": "d15",
             "title": "Human Capital Administration",
-            "color": "#DFC87A"
+            "color": "#bd7cb0"
         },
         {
             "id": "d16",
             "title": "PMG",
-            "color": "#E1A67A"
+            "color": "#a185b8"
         },
         {
             "id": "d17",
             "title": "A&F",
-            "color": "#E1A67A"
+            "color": "#948ab9"
         },
         {
             "id": "d18",
             "title": "Marketing&Communication",
-            "color": "#E1A67A"
+            "color": "#888fbe"
         },
         {
             "id": "d19",
             "title": "Products&Services",
-            "color": "#E1A67A"
+            "color": "#829ec8"
         },
         {
             "id": "d20",
             "title": "Solution Management",
-            "color": "#E1A67A"
+            "color": "#83a4c4"
         }
     ]
 }
