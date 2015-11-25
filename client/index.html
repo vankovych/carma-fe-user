@@ -50,7 +50,7 @@
             };
 
             CM.P = Math.PI * 2;
-            CM.ArcLen = CM.P / 20;
+            CM.ArcLen = CM.P / 25;
             CM.ArcMargin = CM.P / 400;
 
             // Arc function
@@ -76,6 +76,9 @@
                 division = divisions[0];
 
                 divisions.forEach(function (d, i) {
+                    if(i === 10){
+                        //i=+2;
+                    }
                     d.i = i++;
                     d.startAngle = CM.ArcLen * i;
                     d.endAngle = CM.ArcLen * (i + 1) - CM.ArcMargin;
