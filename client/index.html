@@ -9,9 +9,9 @@
         <link rel="stylesheet" href="css/style.css">
 
         <script src="js/libs/d3/d3.js"></script>
-        <!--<script src="js/libs/jquery/jquery-2.1.4.min.js"></script>-->
+        <script src="js/libs/jquery/jquery-2.1.4.min.js"></script>
 
-        <script src="js/app/main.js"></script>
+        <!--<script src="js/app/main.js"></script>-->
     </head>
     <body>
         <div id="container">
@@ -20,10 +20,11 @@
                 <ul>
                     <li><a href="#" class="active">Career opportunities</a></li>
                     <li><a href="#">Discovery positions</a></li>
-                </ul>
-            </div>
+                </ul>                
+            </div>            
             <div id="map">
                 <svg></svg>
+                <button type="button" id="animate">Animate</button>
             </div>
         </div>
         <script>
@@ -76,6 +77,10 @@
                 division = divisions[0];
 
                 for (var i = 0, j = 1; i < divisions.length; i++, j++) {
+                    
+                    if(i < 3){
+                        j = 0;
+                    }
 
                     if (j === 11) {
                         j += 2;
@@ -127,7 +132,9 @@
                         .attr('fill', function (d) {
                             return d.color;
                         })
-                        .on('click', moveArc);
+                        .on('click', function () {
+                            moveArc(this);
+                        });
 
                 // render text
                 CM.group.selectAll('g')
@@ -209,20 +216,22 @@
                         .style('fill', '#9bca90');
             });
 
-            function moveArc() {
+            function moveArc(arc, angle) {
 
-                var root = this;
+                var root = arc;
+
+                console.log(arc.id);
 
                 // tmp
                 var ang = (0.78 * CM.P - CM.ArcLen / 2) * (180 / Math.PI);
 
                 // fade in all divisions except for selected
-                CM.group.selectAll('.division')
-                        .transition()
-                        .duration(500)
-                        .style('opacity', function () {
-                            return (this.id === root.id) ? .8 : 0;
-                        });
+//                CM.group.selectAll('.division')
+//                        .transition()
+//                        .duration(500)
+//                        .style('opacity', function () {
+//                            return (this.id === root.id) ? .8 : 0;
+//                        });
 
                 // fade in selected division title             
                 CM.group.selectAll('g')
@@ -231,33 +240,37 @@
                         .style('opacity', 0);
 
                 // move arc
-                d3.select(this)
+                d3.select(arc)
                         .transition()
                         .duration(750)
                         .call(CM.arcTween, 0.75 * CM.P - CM.ArcLen / 2, 0.75 * CM.P + CM.ArcLen / 2);
 
-                var gr = d3.select('g#d1-title')
-                        .attr('transform', function (d) {
-                            return 'rotate(' + (ang - 90) + ')translate(' + 300 + ')';
-                        })
-                        .select('text')
-                        .attr('dx', function (d) {
-                            return ang < 180 ? 15 : -15;
-                        })
-                        .attr('text-anchor', function (d) {
-                            return ang < 180 ? 'start' : 'end';
-                        })
-                        .attr('transform', function (d) {
-                            return ang < 180 ? null : 'rotate(180)';
-                        });
+//                var gr = d3.select('g#d1-title')
+//                        .attr('transform', function (d) {
+//                            return 'rotate(' + (ang - 90) + ')translate(' + 300 + ')';
+//                        })
+//                        .select('text')
+//                        .attr('dx', function (d) {
+//                            return ang < 180 ? 15 : -15;
+//                        })
+//                        .attr('text-anchor', function (d) {
+//                            return ang < 180 ? 'start' : 'end';
+//                        })
+//                        .attr('transform', function (d) {
+//                            return ang < 180 ? null : 'rotate(180)';
+//                        });
 
                 // fade out selected division title        
-                gr.transition()
-                        .delay(500)
-                        .duration(500)
-                        .style('opacity', 1);
+//                gr.transition()
+//                        .delay(500)
+//                        .duration(500)
+//                        .style('opacity', 1);
 
             }
+
+            d3.select('#animate').on('click', function () {
+                moveArc(d3.select('#d2')[0][0]);
+            });
         </script>
     </body>
 </html>
