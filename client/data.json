@@ -100,5 +100,19 @@
             "title": "Solution Management",
             "color": "#83a4c4"
         }
+    ],
+    "subdivisions": [
+        {
+            "id": "s1",
+            "title": "Software Development"
+        },
+        {
+            "id": "s2",
+            "title": "Software Architecture"
+        },
+        {
+            "id": "s3",
+            "title": "DevOps"
+        }
     ]
 }

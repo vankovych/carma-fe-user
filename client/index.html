@@ -11,7 +11,7 @@
         <script src="js/libs/d3/d3.js"></script>
         <script src="js/libs/jquery/jquery-2.1.4.min.js"></script>
 
-        <!--<script src="js/app/main.js"></script>-->
+        <script src="js/app/main.js"></script>
     </head>
     <body>
         <div id="container">
@@ -30,41 +30,6 @@
         <script>
             'use strict';
 
-            var CM = {
-                svgWidth: 1000,
-                svgHeight: 900,
-                R: 300,
-                arcTween: function (transition, newAngleS, newAngleE) {
-                    transition.attrTween("d", function (d) {
-
-                        var interpolateS = d3.interpolate(d.startAngle, newAngleS),
-                                interpolateE = d3.interpolate(d.endAngle, newAngleE);
-
-                        return function (t) {
-                            d.startAngle = interpolateS(t);
-                            d.endAngle = interpolateE(t);
-
-                            return CM.arc(d);
-                        };
-                    });
-                }
-            };
-
-            CM.P = Math.PI * 2;
-            CM.ArcLen = CM.P / 24;
-            CM.ArcMargin = CM.P / 400;
-
-            // Arc function
-            CM.arc = d3.svg.arc()
-                    .startAngle(function (d) {
-                        return d.startAngle;
-                    })
-                    .endAngle(function (d) {
-                        return d.endAngle;
-                    })
-                    .innerRadius(CM.R - 10)
-                    .outerRadius(CM.R + 7);
-
             var division;
 
             d3.json('data.json', function (error, json) {
@@ -72,15 +37,12 @@
                     return console.warn(error);
                 }
 
-                var divisions = json.divisions;
+                var divisions = json.divisions,
+                        subdivisions = json.subdivisions;
 
                 division = divisions[0];
 
                 for (var i = 0, j = 1; i < divisions.length; i++, j++) {
-                    
-                    if(i < 3){
-                        j = 0;
-                    }
 
                     if (j === 11) {
                         j += 2;
@@ -88,7 +50,12 @@
 
                     divisions[i].i = j;
                     divisions[i].startAngle = CM.ArcLen * j;
-                    divisions[i].endAngle = CM.ArcLen * (j + 1) - CM.ArcMargin;
+                }
+
+                for (var i = 0, j = 1; i < subdivisions.length; i++, j++) {
+                    subdivisions[i].i = j;
+                    subdivisions[i].startAngle = CM.ArcLen * 4;
+                    subdivisions[i].expandAngle = CM.ArcLen * i;
                 }
 
 //                divisions.forEach(function (d, i) {
@@ -119,6 +86,20 @@
 //                        .attr('d', CM.arc)
 //                        .attr('class', 'placeholder');
 
+                // render subdivisions
+                CM.group.selectAll('path.subdivision')
+                        .data(subdivisions).enter()
+                        .append('path')
+                        .attr('id', function (d) {
+                            return d.id;
+                        })
+                        .attr('d', CM.arc)
+                        .attr('cx', 100)
+                        .attr('class', 'subdivision')
+                        .attr('fill', function (d) {
+                            return '#9bca90';//d.color;
+                        });
+
                 // render divisions
                 CM.group.selectAll('path.division')
                         .data(divisions).enter()
@@ -132,14 +113,16 @@
                         .attr('fill', function (d) {
                             return d.color;
                         })
-                        .on('click', function () {
-                            moveArc(this);
-                        });
+                        /*
+                         .on('click', function () {
+                         moveArc(this);
+                         })*/;
 
                 // render text
                 CM.group.selectAll('g')
                         .data(divisions).enter()
                         .append('g')
+                        .attr('class', 'division-title')
                         .attr('id', function (d) {
                             return d.id + '-title';
                         })
@@ -148,7 +131,6 @@
                         })
                         .style('opacity', 1)
                         .append('text')
-                        .attr('class', 'division-title')
                         .attr('dx', function (d) {
                             return d.startAngle * (180 / Math.PI) < 180 ? 15 : -15;
                         })
@@ -165,85 +147,67 @@
 
 
                 // positions tree
-                var pos = [1, 2, 3, 4, 5, 6];
-
-                // purple        
-                CM.group.append('line')
-                        .attr('class', 'ololo')
-                        .attr('x1', -CM.R + 5)
-                        .attr('y1', 0)
-                        .attr('x2', -150)
-                        .attr('y2', 0)
-                        .attr('stroke-width', 1)
-                        .attr('stroke', '#a185b8');
-
-                CM.group.append('g').selectAll('circle.position')
-                        .data(pos).enter()
-                        .append('circle')
-                        .attr('cx', function (d) {
-                            return -CM.R + 25 * d;
-                        })
-                        .attr('cy', 0)
-                        .attr('r', 7)
-                        .attr('class', function (d) {
-                            return d < 4 ? 'position active' : 'position';
-                        })
-                        .style('fill', '#a185b8');
-
-                // yellow
-                CM.group.append('line')
-                        .attr('class', 'ololo')
-                        .attr('x1', CM.R / 2)
-                        .attr('y1', -80)
-                        .attr('x2', CM.R)
-                        .attr('y2', -150)
-                        .attr('stroke-width', 1)
-                        .attr('stroke', '#9bca90');
-
-                CM.group.append('g').selectAll('circle.position')
-                        .data(pos).enter()
-                        .append('circle')
-                        .attr('cx', function (d) {
-                            return CM.R - 25 * d;
-                        })
-                        .attr('cy', function (d) {
-                            return CM.R / 2 - 25 * d;
-                        })
-                        .attr('r', 7)
-                        .attr('class', function (d) {
-                            return d < 4 ? 'position active' : 'position';
-                        })
-                        .style('fill', '#9bca90');
+                /*var pos = [1, 2, 3, 4, 5, 6];
+                 
+                 // purple        
+                 CM.group.append('line')
+                 .attr('class', 'ololo')
+                 .attr('x1', -CM.R + 5)
+                 .attr('y1', 0)
+                 .attr('x2', -150)
+                 .attr('y2', 0)
+                 .attr('stroke-width', 1)
+                 .attr('stroke', '#a185b8');
+                 
+                 CM.group.append('g').selectAll('circle.position')
+                 .data(pos).enter()
+                 .append('circle')
+                 .attr('cx', function (d) {
+                 return -CM.R + 25 * d;
+                 })
+                 .attr('cy', 0)
+                 .attr('r', 7)
+                 .attr('class', function (d) {
+                 return d < 4 ? 'position active' : 'position';
+                 })
+                 .style('fill', '#a185b8');
+                 
+                 // yellow
+                 CM.group.append('line')
+                 .attr('class', 'ololo')
+                 .attr('x1', CM.R / 2)
+                 .attr('y1', -80)
+                 .attr('x2', CM.R)
+                 .attr('y2', -150)
+                 .attr('stroke-width', 1)
+                 .attr('stroke', '#9bca90');
+                 
+                 CM.group.append('g').selectAll('circle.position')
+                 .data(pos).enter()
+                 .append('circle')
+                 .attr('cx', function (d) {
+                 return CM.R - 25 * d;
+                 })
+                 .attr('cy', function (d) {
+                 return CM.R / 2 - 25 * d;
+                 })
+                 .attr('r', 7)
+                 .attr('class', function (d) {
+                 return d < 4 ? 'position active' : 'position';
+                 })
+                 .style('fill', '#9bca90');*/
             });
 
             function moveArc(arc, angle) {
 
-                var root = arc;
+//                var root = arc;
 
-                console.log(arc.id);
+                angle = angle || (0.73 * CM.P);
 
-                // tmp
-                var ang = (0.78 * CM.P - CM.ArcLen / 2) * (180 / Math.PI);
-
-                // fade in all divisions except for selected
-//                CM.group.selectAll('.division')
-//                        .transition()
-//                        .duration(500)
-//                        .style('opacity', function () {
-//                            return (this.id === root.id) ? .8 : 0;
-//                        });
-
-                // fade in selected division title             
-                CM.group.selectAll('g')
-                        .transition()
-                        .duration(500)
-                        .style('opacity', 0);
-
-                // move arc
                 d3.select(arc)
                         .transition()
                         .duration(750)
-                        .call(CM.arcTween, 0.75 * CM.P - CM.ArcLen / 2, 0.75 * CM.P + CM.ArcLen / 2);
+                        .call(CM.arcTween, angle);
 
 //                var gr = d3.select('g#d1-title')
 //                        .attr('transform', function (d) {
@@ -268,8 +232,53 @@
 
             }
 
-            d3.select('#animate').on('click', function () {
-                moveArc(d3.select('#d2')[0][0]);
+            function hideDivisions(exceptId) {
+                console.log(exceptId);
+                // fade in all divisions except for selected
+                CM.group.selectAll('.division')
+                        .transition()
+                        .duration(300)
+                        .style('opacity', function () {
+                            return (this.id === exceptId) ? .8 : 0;
+                        });
+
+                // fade in selected division title             
+                CM.group.selectAll('g.division-title')
+                        .transition()
+                        //.duration(500)
+                        .style('opacity', function () {
+                            return (this.id === exceptId + '-title') ? 1 : 0;
+                        });
+
+                console.log('g#' + exceptId + '-title>text');
+                CM.group.selectAll('g#' + exceptId + '-title>text')
+                        .transition()
+                        .duration(750)
+//                        .delay(500)
+                        .style('fill', '#9bca90');
+            }
+
+            function expandDivision() {
+                var d = {
+                    subdivisions: ['s1', 's2', 's3'],
+                    i: 4
+                };
+
+//                    CM.group.select('#d4-title')
+//                            .transition()
+//                            .delay(1000)
+//                            .duration(500)
+//                            .style('color', '#0f0')
+//                            .style('opacity', 1);
+
+                hideDivisions(this.id);
+                d.subdivisions.forEach(function (id, i) {
+                    moveArc(d3.select('#' + id)[0][0], CM.ArcLen * (i + d.i));
+                });
+            }
+
+            $(document).on('ready', function () {
+                d3.select('#d4').on('click', expandDivision);
             });
         </script>
     </body>
