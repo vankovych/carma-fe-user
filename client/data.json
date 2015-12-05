@@ -2,103 +2,94 @@
     "divisions": [
         {
             "id": "d1",
-            "title": "Project Management",
-            "color": "#93bdc1"
+            "title": "Project Management"
         },
         {
             "id": "d2",
-            "title": "Business Analysis",
-            "color": "#96c2ae"
+            "title": "Business Analysis"
         },
         {
             "id": "d3",
-            "title": "UX",
-            "color": "#97c4a6"
+            "title": "UX"
         },
         {
             "id": "d4",
             "title": "Software Engineering & Development",
-            "color": "#9bca90"
+            "subdivisions": [
+                "s1",
+                "s2",
+                "s3",
+                "s4",
+                "s5"
+            ]
         },
         {
             "id": "d5",
-            "title": "Information Development",
-            "color": "#b2d289"
+            "title": "Information Development"
         },
         {
             "id": "d6",
             "title": "Quality Assurance",
-            "color": "#c8d082"
+            "subdivisions": [
+                "s6",
+                "s7"
+            ]
         },
         {
             "id": "d7",
-            "title": "Localization",
-            "color": "#d6cc7d"
+            "title": "Localization"
         },
         {
             "id": "d8",
-            "title": "IT",
-            "color": "#dfc67b"
+            "title": "IT"
         },
         {
             "id": "d9",
-            "title": "Finance",
-            "color": "#e2b278"
+            "title": "Finance"
         },
         {
             "id": "d10",
-            "title": "Legal",
-            "color": "#e1a77a"
+            "title": "Legal"
         },
         {
             "id": "d11",
-            "title": "BD",
-            "color": "#dd8a8b"
+            "title": "BD"
         },
         {
             "id": "d12",
-            "title": "Talent Management",
-            "color": "#dc7a96"
+            "title": "Talent Management"
         },
         {
             "id": "d13",
-            "title": "Talent Staffing",
-            "color": "#d377a3"
+            "title": "Talent Staffing"
         },
         {
             "id": "d14",
-            "title": "University",
-            "color": "#ca79a8"
+            "title": "University"
         },
         {
             "id": "d15",
-            "title": "Human Capital Administration",
-            "color": "#bd7cb0"
+            "title": "Human Capital Administration"
         },
         {
             "id": "d16",
-            "title": "PMG",
-            "color": "#a185b8"
+            "title": "PMG"
         },
         {
             "id": "d17",
-            "title": "A&F",
-            "color": "#948ab9"
+            "title": "A&F"
         },
         {
             "id": "d18",
-            "title": "Marketing&Communication",
-            "color": "#888fbe"
+            "title": "Marketing&Communication"
         },
         {
             "id": "d19",
-            "title": "Products&Services",
-            "color": "#829ec8"
+            "title": "Products&Services"
         },
         {
             "id": "d20",
-            "title": "Solution Management",
-            "color": "#83a4c4"
+            "title": "Solution Management"
         }
     ],
     "subdivisions": [
@@ -113,6 +104,44 @@
         {
             "id": "s3",
             "title": "DevOps"
+        },
+        {
+            "id": "s4",
+            "title": "Competency Management"
+        },
+        {
+            "id": "s5",
+            "title": "Technical Leadership"
+        },
+        {
+            "id": "s6",
+            "title": "Test Engineer"
+        },
+        {
+            "id": "s7",
+            "title": "Automation Test Engineer"
         }
+    ],
+    "colors": [
+        "#93bdc1",
+        "#96c2ae",
+        "#97c4a6",
+        "#9bca90",
+        "#b2d289",
+        "#c8d082",
+        "#d6cc7d",
+        "#dfc67b",
+        "#e2b278",
+        "#e1a77a",
+        "#dd8a8b",
+        "#dc7a96",
+        "#d377a3",
+        "#ca79a8",
+        "#bd7cb0",
+        "#a185b8",
+        "#948ab9",
+        "#888fbe",
+        "#829ec8",
+        "#83a4c4"
     ]
 }

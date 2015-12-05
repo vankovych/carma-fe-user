@@ -58,6 +58,10 @@ body {
 }
 
 /* DIVISION */
+text {
+    fill: #494949;    
+    cursor: pointer;
+}
 
 path.placeholder {    
     fill: #eee;
@@ -74,8 +78,7 @@ path.division:hover {
     fill-opacity: .9;
 }
 
-text.division-title {
-    fill: #494949;
+.division-title {
     cursor: pointer;
 }
 

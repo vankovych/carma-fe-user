@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="css/style.css">
 
         <script src="js/libs/d3/d3.js"></script>
-        <script src="js/libs/jquery/jquery-2.1.4.min.js"></script>
+        <!--<script src="js/libs/jquery/jquery-2.1.4.min.js"></script>-->
 
         <script src="js/app/main.js"></script>
     </head>
@@ -24,48 +24,40 @@
             </div>            
             <div id="map">
                 <svg></svg>
-                <button type="button" id="animate">Animate</button>
+                <!--<button type="button" id="animate">Animate</button>-->
             </div>
         </div>
         <script>
             'use strict';
 
-            var division;
+//            var division;
 
             d3.json('data.json', function (error, json) {
                 if (error) {
                     return console.warn(error);
                 }
 
-                var divisions = json.divisions,
-                        subdivisions = json.subdivisions;
+                var divisions = json.divisions;
 
-                division = divisions[0];
+//                division = divisions[0];
 
+                CM.subdivisions = json.subdivisions;
+
+                // add additional data        
                 for (var i = 0, j = 1; i < divisions.length; i++, j++) {
-
                     if (j === 11) {
                         j += 2;
                     }
-
                     divisions[i].i = j;
                     divisions[i].startAngle = CM.ArcLen * j;
                 }
 
-                for (var i = 0, j = 1; i < subdivisions.length; i++, j++) {
-                    subdivisions[i].i = j;
-                    subdivisions[i].startAngle = CM.ArcLen * 4;
-                    subdivisions[i].expandAngle = CM.ArcLen * i;
-                }
-
-//                divisions.forEach(function (d, i) {
-//                    if (i === 10) {
-//                        i++;
-//                    }
-//                    d.i = i++;
-//                    d.startAngle = CM.ArcLen * i;
-//                    d.endAngle = CM.ArcLen * (i + 1) - CM.ArcMargin;
-//                });
+                // create custom color scale from predifined colors
+                CM.color = d3.scale.ordinal()
+                        .domain(divisions.map(function (d) {
+                            return d.i;
+                        }))
+                        .range(json.colors);
 
                 CM.svg = d3.select('#map svg')
                         .attr('width', CM.svgWidth)
@@ -79,26 +71,19 @@
 //                        .attr('class', 'circle-main-in')
 //                        .attr('r', CM.R - 7);
 
-                // render placeholder
-//                CM.group.selectAll('path.placeholder')
-//                        .data(divisions).enter()
+//                // render subdivisions
+//                CM.group.selectAll('path.subdivision')
+//                        .data(subdivisions).enter()
 //                        .append('path')
+//                        .attr('id', function (d) {
+//                            return d.id;
+//                        })
 //                        .attr('d', CM.arc)
-//                        .attr('class', 'placeholder');
-
-                // render subdivisions
-                CM.group.selectAll('path.subdivision')
-                        .data(subdivisions).enter()
-                        .append('path')
-                        .attr('id', function (d) {
-                            return d.id;
-                        })
-                        .attr('d', CM.arc)
-                        .attr('cx', 100)
-                        .attr('class', 'subdivision')
-                        .attr('fill', function (d) {
-                            return '#9bca90';//d.color;
-                        });
+//                        .attr('cx', 100)
+//                        .attr('class', 'subdivision')
+//                        .attr('fill', function (d) {
+//                            return '#9bca90';//d.color;
+//                        });
 
                 // render divisions
                 CM.group.selectAll('path.division')
@@ -111,14 +96,14 @@
                         .attr('cx', 100)
                         .attr('class', 'division')
                         .attr('fill', function (d) {
-                            return d.color;
+                            return CM.color(d.i);
                         })
-                        /*
-                         .on('click', function () {
-                         moveArc(this);
-                         })*/;
+                        .on('click', function (d) {
+                            expandDivision(d);
+                        });
+                ;
 
-                // render text
+                // render division titles
                 CM.group.selectAll('g')
                         .data(divisions).enter()
                         .append('g')
@@ -127,22 +112,25 @@
                             return d.id + '-title';
                         })
                         .attr('transform', function (d) {
-                            return "rotate(" + ((d.startAngle + CM.ArcLen / 2) * (180 / Math.PI) - 90) + ")translate(" + 300 + ')';
+                            return "rotate(" + ((d.startAngle + CM.ArcLen / 2).toDeg() - 90) + ")translate(" + 300 + ')';
                         })
-                        .style('opacity', 1)
+//                        .style('opacity', 1)
                         .append('text')
                         .attr('dx', function (d) {
-                            return d.startAngle * (180 / Math.PI) < 180 ? 15 : -15;
+                            return d.startAngle.toDeg() < 180 ? 15 : -15;
                         })
                         .attr('dy', '.31em')
                         .attr('text-anchor', function (d) {
-                            return d.startAngle * (180 / Math.PI) < 180 ? 'start' : 'end';
+                            return d.startAngle.toDeg() < 180 ? 'start' : 'end';
                         })
                         .attr('transform', function (d) {
-                            return d.startAngle * (180 / Math.PI) < 180 ? null : 'rotate(180)';
+                            return d.startAngle.toDeg() < 180 ? null : 'rotate(180)';
                         })
                         .text(function (d) {
                             return d.title;
+                        })
+                        .on('click', function (d) {
+                            collapseDivision(d);
                         });
 
 
@@ -196,89 +184,6 @@
                  return d < 4 ? 'position active' : 'position';
                  })
                  .style('fill', '#9bca90');*/
-            });
-
-            function moveArc(arc, angle) {
-
-//                var root = arc;
-
-                angle = angle || (0.73 * CM.P);
-
-                d3.select(arc)
-                        .transition()
-                        .duration(750)
-                        .call(CM.arcTween, angle);
-
-//                var gr = d3.select('g#d1-title')
-//                        .attr('transform', function (d) {
-//                            return 'rotate(' + (ang - 90) + ')translate(' + 300 + ')';
-//                        })
-//                        .select('text')
-//                        .attr('dx', function (d) {
-//                            return ang < 180 ? 15 : -15;
-//                        })
-//                        .attr('text-anchor', function (d) {
-//                            return ang < 180 ? 'start' : 'end';
-//                        })
-//                        .attr('transform', function (d) {
-//                            return ang < 180 ? null : 'rotate(180)';
-//                        });
-
-                // fade out selected division title        
-//                gr.transition()
-//                        .delay(500)
-//                        .duration(500)
-//                        .style('opacity', 1);
-
-            }
-
-            function hideDivisions(exceptId) {
-                console.log(exceptId);
-                // fade in all divisions except for selected
-                CM.group.selectAll('.division')
-                        .transition()
-                        .duration(300)
-                        .style('opacity', function () {
-                            return (this.id === exceptId) ? .8 : 0;
-                        });
-
-                // fade in selected division title             
-                CM.group.selectAll('g.division-title')
-                        .transition()
-                        //.duration(500)
-                        .style('opacity', function () {
-                            return (this.id === exceptId + '-title') ? 1 : 0;
-                        });
-
-                console.log('g#' + exceptId + '-title>text');
-                CM.group.selectAll('g#' + exceptId + '-title>text')
-                        .transition()
-                        .duration(750)
-//                        .delay(500)
-                        .style('fill', '#9bca90');
-            }
-
-            function expandDivision() {
-                var d = {
-                    subdivisions: ['s1', 's2', 's3'],
-                    i: 4
-                };
-
-//                    CM.group.select('#d4-title')
-//                            .transition()
-//                            .delay(1000)
-//                            .duration(500)
-//                            .style('color', '#0f0')
-//                            .style('opacity', 1);
-
-                hideDivisions(this.id);
-                d.subdivisions.forEach(function (id, i) {
-                    moveArc(d3.select('#' + id)[0][0], CM.ArcLen * (i + d.i));
-                });
-            }
-
-            $(document).on('ready', function () {
-                d3.select('#d4').on('click', expandDivision);
             });
         </script>
     </body>
