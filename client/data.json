@@ -2,7 +2,11 @@
     "divisions": [
         {
             "id": "d1",
-            "title": "Project Management"
+            "title": "Project Management",
+            "positions": [
+                "p13",
+                "p14"
+            ]
         },
         {
             "id": "d2",
@@ -95,11 +99,22 @@
     "subdivisions": [
         {
             "id": "s1",
-            "title": "Software Development"
+            "title": "Software Development",
+            "positions": [
+                "p1",
+                "p2",
+                "p3",
+                "p4",
+                "p5"
+            ]
         },
         {
             "id": "s2",
-            "title": "Software Architecture"
+            "title": "Software Architecture",
+            "positions": [
+                "p11",
+                "p12"
+            ]
         },
         {
             "id": "s3",
@@ -115,11 +130,76 @@
         },
         {
             "id": "s6",
-            "title": "Test Engineer"
+            "title": "Test Engineer",
+            "positions": [
+                "p6",
+                "p7",
+                "p8",
+                "p9",
+                "p10"
+            ]
         },
         {
             "id": "s7",
             "title": "Automation Test Engineer"
+        }
+    ],
+    "positions": [
+        {
+            "id": "p1",
+            "title": "Junior Software Developer"
+        },
+        {
+            "id": "p2",
+            "title": "Intermediate Software Developer"
+        },
+        {
+            "id": "p3",
+            "title": "Full Competent Software Developer"
+        },
+        {
+            "id": "p4",
+            "title": "Superior Software Developer"
+        },
+        {
+            "id": "p5",
+            "title": "Principal Software Developer"
+        },
+        {
+            "id": "p6",
+            "title": "Junior Test Engineer"
+        },
+        {
+            "id": "p7",
+            "title": "Intermediate Test Engineer"
+        },
+        {
+            "id": "p8",
+            "title": "Full Competent Test Engineer"
+        },
+        {
+            "id": "p9",
+            "title": "Senior Software Developer"
+        },
+        {
+            "id": "p10",
+            "title": "Test Leader"
+        },
+        {
+            "id": "p11",
+            "title": "Application Architect"
+        },
+        {
+            "id": "p12",
+            "title": "Solution Architect"
+        },
+        {
+            "id": "p13",
+            "title": "Project Coordinator"
+        },
+        {
+            "id": "p14",
+            "title": "Project Manager"
         }
     ],
     "colors": [

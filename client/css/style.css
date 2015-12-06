@@ -83,7 +83,7 @@ path.division:hover {
 }
 
 .position {
-    fill-opacity: .5;
+    fill-opacity: 1;
     cursor: pointer;
 }
 

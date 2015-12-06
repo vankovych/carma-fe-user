@@ -30,8 +30,6 @@
         <script>
             'use strict';
 
-//            var division;
-
             d3.json('data.json', function (error, json) {
                 if (error) {
                     return console.warn(error);
@@ -39,9 +37,8 @@
 
                 var divisions = json.divisions;
 
-//                division = divisions[0];
-
                 CM.subdivisions = json.subdivisions;
+                CM.positions = json.positions;
 
                 // add additional data        
                 for (var i = 0, j = 1; i < divisions.length; i++, j++) {
@@ -71,23 +68,10 @@
 //                        .attr('class', 'circle-main-in')
 //                        .attr('r', CM.R - 7);
 
-//                // render subdivisions
-//                CM.group.selectAll('path.subdivision')
-//                        .data(subdivisions).enter()
-//                        .append('path')
-//                        .attr('id', function (d) {
-//                            return d.id;
-//                        })
-//                        .attr('d', CM.arc)
-//                        .attr('cx', 100)
-//                        .attr('class', 'subdivision')
-//                        .attr('fill', function (d) {
-//                            return '#9bca90';//d.color;
-//                        });
-
                 // render divisions
                 CM.group.selectAll('path.division')
                         .data(divisions).enter()
+                        // arc
                         .append('path')
                         .attr('id', function (d) {
                             return d.id;
@@ -95,96 +79,21 @@
                         .attr('d', CM.arc)
                         .attr('cx', 100)
                         .attr('class', 'division')
-                        .attr('fill', function (d) {
+                        .attr('fill', function (d, i) {
                             return CM.color(d.i);
                         })
                         .on('click', function (d) {
                             expandDivision(d);
                         });
-                ;
 
-                // render division titles
-                CM.group.selectAll('g')
-                        .data(divisions).enter()
-                        .append('g')
-                        .attr('class', 'division-title')
-                        .attr('id', function (d) {
-                            return d.id + '-title';
-                        })
-                        .attr('transform', function (d) {
-                            return "rotate(" + ((d.startAngle + CM.ArcLen / 2).toDeg() - 90) + ")translate(" + 300 + ')';
-                        })
-//                        .style('opacity', 1)
-                        .append('text')
-                        .attr('dx', function (d) {
-                            return d.startAngle.toDeg() < 180 ? 15 : -15;
-                        })
-                        .attr('dy', '.31em')
-                        .attr('text-anchor', function (d) {
-                            return d.startAngle.toDeg() < 180 ? 'start' : 'end';
-                        })
-                        .attr('transform', function (d) {
-                            return d.startAngle.toDeg() < 180 ? null : 'rotate(180)';
-                        })
-                        .text(function (d) {
-                            return d.title;
-                        })
-                        .on('click', function (d) {
-                            collapseDivision(d);
-                        });
-
-
-                // positions tree
-                /*var pos = [1, 2, 3, 4, 5, 6];
-                 
-                 // purple        
-                 CM.group.append('line')
-                 .attr('class', 'ololo')
-                 .attr('x1', -CM.R + 5)
-                 .attr('y1', 0)
-                 .attr('x2', -150)
-                 .attr('y2', 0)
-                 .attr('stroke-width', 1)
-                 .attr('stroke', '#a185b8');
-                 
-                 CM.group.append('g').selectAll('circle.position')
-                 .data(pos).enter()
-                 .append('circle')
-                 .attr('cx', function (d) {
-                 return -CM.R + 25 * d;
-                 })
-                 .attr('cy', 0)
-                 .attr('r', 7)
-                 .attr('class', function (d) {
-                 return d < 4 ? 'position active' : 'position';
-                 })
-                 .style('fill', '#a185b8');
-                 
-                 // yellow
-                 CM.group.append('line')
-                 .attr('class', 'ololo')
-                 .attr('x1', CM.R / 2)
-                 .attr('y1', -80)
-                 .attr('x2', CM.R)
-                 .attr('y2', -150)
-                 .attr('stroke-width', 1)
-                 .attr('stroke', '#9bca90');
-                 
-                 CM.group.append('g').selectAll('circle.position')
-                 .data(pos).enter()
-                 .append('circle')
-                 .attr('cx', function (d) {
-                 return CM.R - 25 * d;
-                 })
-                 .attr('cy', function (d) {
-                 return CM.R / 2 - 25 * d;
-                 })
-                 .attr('r', 7)
-                 .attr('class', function (d) {
-                 return d < 4 ? 'position active' : 'position';
-                 })
-                 .style('fill', '#9bca90');*/
+                renderTitles(divisions, 'division-title', 1);
             });
+
+            /*
+             * Workflow
+             * Hover effects
+             * Expand / collapse controls 
+             */
         </script>
     </body>
 </html>

@@ -7,12 +7,12 @@ var CM = {
     arcTween: function (transition, newAngle) {
         transition.attrTween("d", function (d) {
 
-            var interpolateS = d3.interpolate(d.startAngle, newAngle),
-                    interpolateE = d3.interpolate(d.endAngle, newAngle + CM.ArcLen - CM.ArcMargin);
+            var interpolateS = d3.interpolate(d.startAngle, newAngle);
+            //interpolateE = d3.interpolate(d.endAngle, newAngle + CM.ArcLen - CM.ArcMargin);
 
             return function (t) {
                 d.startAngle = interpolateS(t);
-                d.endAngle = interpolateE(t);
+                //d.endAngle = interpolateE(t);
 
                 return CM.arc(d);
             };
@@ -35,6 +35,16 @@ CM.arc = d3.svg.arc()
         .innerRadius(CM.R - 10)
         .outerRadius(CM.R + 7);
 
+CM.line = d3.svg.line.radial()
+        .interpolate('bundle')
+        .tension(.85)
+        .radius(function (d) {
+            return d.y;
+        })
+        .angle(function (d) {
+            return d.x / 180 * Math.PI;
+        });
+
 function moveArc(arc, angle) {
 
     angle = angle || (0.73 * CM.P);
@@ -43,22 +53,6 @@ function moveArc(arc, angle) {
             .transition()
             .duration(750)
             .call(CM.arcTween, angle);
-
-//                var gr = d3.select('g#d1-title')
-//                        .attr('transform', function (d) {
-//                            return 'rotate(' + (ang - 90) + ')translate(' + 300 + ')';
-//                        })
-//                        .select('text')
-//                        .attr('dx', function (d) {
-//                            return ang < 180 ? 15 : -15;
-//                        })
-//                        .attr('text-anchor', function (d) {
-//                            return ang < 180 ? 'start' : 'end';
-//                        })
-//                        .attr('transform', function (d) {
-//                            return ang < 180 ? null : 'rotate(180)';
-//                        });
-
 }
 
 function hideDivisions(exceptId) {
@@ -99,11 +93,13 @@ function showDivisions() {
 
 function expandDivision(division) {
 
+    var subdivisions = [];
+
     if (division.subdivisions) {
 
         hideDivisions(division.id);
 
-        var subdivisions = CM.subdivisions.filter(function (s) {
+        subdivisions = CM.subdivisions.filter(function (s) {
             return division.subdivisions.indexOf(s.id) >= 0;
         });
 
@@ -116,6 +112,7 @@ function expandDivision(division) {
         // render subdivisions
         CM.group.selectAll('path.subdivision')
                 .data(subdivisions).enter()
+                // arc
                 .append('path')
                 .attr('id', function (d) {
                     return d.id;
@@ -138,14 +135,17 @@ function expandDivision(division) {
         });
 
         // render subdivision titles
+//        renderTitles(subdivisions, 'subdivision-title', 0);
         CM.group.selectAll('g.subdivision-title')
                 .data(subdivisions).enter()
+                // title group
                 .append('g')
                 .attr('class', 'subdivision-title')
                 .style('opacity', 0)
                 .attr('transform', function (d) {
-                    return "rotate(" + ((d.expandAngle + CM.ArcLen / 2).toDeg() - 90) + ")translate(" + 300 + ')';
+                    return 'rotate(' + ((d.expandAngle + CM.ArcLen / 2).toDeg() - 90) + ')translate(' + 300 + ')';
                 })
+                // title text
                 .append('text')
                 .attr('dx', function (d) {
                     return d.expandAngle.toDeg() < 180 ? 15 : -15;
@@ -167,41 +167,196 @@ function expandDivision(division) {
                 .duration(750)
                 .style('opacity', '1');
     }
+
+    // render position trees
+    var range = division.subdivisions ? subdivisions : new Array(division);
+
+//    console.log(range);
+
+    CM.group.selectAll('g.position-tree')
+            .data(range).enter()
+            // tree group
+            .append('g')
+            .attr('class', 'position-tree')
+            .attr('id', function (d) {
+                return d.id + '-position-tree';
+            })
+            .attr('transform', function (d, i) {
+                return 'rotate(' + ((i + division.i) * 15 + 7) + ')';
+            })
+            .style('opacity', 0)
+            // tree trunk
+            .append('rect')
+            .attr('class', 'trunk')
+            .attr('x', -2)
+            .attr('y', -290)
+            .attr('width', 2)
+            .attr('height', function (d) {
+                return d.positions ? d.positions.length * 28 : 0;
+            })
+            .attr('fill', function (d, i) {
+                return CM.color(division.i);
+            });
+
+    range.forEach(function (div) {
+
+        var positions = [];
+        if (div.positions) {
+            positions = CM.positions.filter(function (p) {
+                return div.positions.indexOf(p.id) >= 0;
+            });
+        }
+
+        CM.group.selectAll('g#' + div.id + '-position-tree')
+                .selectAll('circle.position')
+                .data(positions).enter()
+                // position leaf
+                .append('circle')
+                .attr('class', 'position')
+                .attr('cx', function (d) {
+                    return -1;
+                })
+                .attr('cy', function (d, i) {
+                    return -CM.R + 30 * ++i;
+                })
+                .attr('r', 7)
+                .style('fill', function (d, i) {
+                    return CM.color(division.i);
+                })
+                // tooltip with position title
+                .append('title')
+                .text(function (d) {
+                    return d.title;
+                });
+    });
+
+    CM.group.selectAll('g.position-tree')
+            .transition()
+            .delay(function () {
+                return range > 1 ? 300 : 0;
+            })
+            .duration(function () {
+                return range > 1 ? 250 : 750;
+            })
+            .style('opacity', '1');
+
 }
 
 function collapseDivision(division) {
 
-    showDivisions(division.id);
+    if (division.subdivisions) {
 
-    CM.group.selectAll('g#' + division.id + '-title>text')
+        showDivisions(division.id);
+
+        CM.group.selectAll('g#' + division.id + '-title>text')
+                .transition()
+                .duration(750)
+                .style('fill', '#494949')
+                .attr('dy', '.31em');
+
+        division.subdivisions.forEach(function (id) {
+            moveArc(d3.select('#' + id)[0][0], CM.ArcLen * division.i);
+        });
+
+        // remove subdivisions
+        CM.group.selectAll('.subdivision')
+                .transition()
+                .delay(700)
+                .duration(500)
+                .style('opacity', '0')
+                .remove();
+
+        // remove subdivision titles
+        CM.group.selectAll('g.subdivision-title')
+                .transition()
+                .duration(750)
+                .style('opacity', '0')
+                .remove();
+
+    }
+
+    CM.group.selectAll('.position-tree')
             .transition()
-            .duration(750)
-            .style('fill', '#494949')
-            .attr('dy', '.31em');
-
-    division.subdivisions.forEach(function (id) {
-        moveArc(d3.select('#' + id)[0][0], CM.ArcLen * division.i);
-    });
-
-    // render division titles
-    CM.group.selectAll('.subdivision')
-            .transition()
-            .delay(700)
             .duration(500)
-            .style('opacity', '0')
-            .remove();
-
-    // render division titles
-    CM.group.selectAll('g.subdivision-title')
-            .transition()
-            .duration(750)
             .style('opacity', '0')
             .remove();
 }
 
-window.onload = function runD3code() {
-    //d3.select('#d4').on('click', expandDivision);
-//    d3.select('#d4-title').on('click', collapseDivision);
+function renderTitles(data, className, opacity) {
+    CM.group.selectAll('g.' + className)
+            .data(data).enter()
+            .append('g')
+            .attr('class', className)
+            .attr('id', function (d) {
+                return d.id + '-title';
+            })
+            .attr('transform', function (d) {
+                return 'rotate(' + ((d.startAngle + CM.ArcLen / 2).toDeg() - 90) + ')translate(' + 300 + ')';
+            })
+            .style('opacity', opacity)
+            .append('text')
+            .attr('dx', function (d) {
+                return d.startAngle.toDeg() < 180 ? 15 : -15;
+            })
+            .attr('dy', '.31em')
+            .attr('text-anchor', function (d) {
+                return d.startAngle.toDeg() < 180 ? 'start' : 'end';
+            })
+            .attr('transform', function (d) {
+                return d.startAngle.toDeg() < 180 ? null : 'rotate(180)';
+            })
+            .text(function (d) {
+                return d.title;
+            })
+            .on('click', function (d) {
+                collapseDivision(d);
+            });
+}
+
+window.onload = function () {
+
+    d3.select('#d15').on('click', function () {
+        var
+                lineData = [
+                    [
+                        {'x': -CM.R + 30, 'y': 30},
+                        {'x': -CM.R / 2, 'y': -100},
+                        {'x': CM.R - 100, 'y': -10},
+                        {'x': CM.R - 50, 'y': -110}
+                    ],
+                    [
+                        {'x': -CM.R + 30, 'y': 30},
+                        {'x': -CM.R / 2, 'y': -100},
+                        {'x': CM.R - 100, 'y': -10},
+                        {'x': CM.R - 80, 'y': -100}
+                    ],
+                    [
+                        {'x': -CM.R + 30, 'y': 30},
+                        {'x': -CM.R / 2, 'y': -100},
+                        {'x': CM.R - 100, 'y': 10},
+                        {'x': CM.R - 30, 'y': -40}
+                    ]
+                ];
+
+        var lineFunction = d3.svg.line()
+                .x(function (d) {
+                    return d.x;
+                })
+                .y(function (d) {
+                    return d.y;
+                })
+                .interpolate('basis');
+
+        CM.group.selectAll('path.spline')
+                .data(lineData).enter()
+                .append('path')
+                .attr('d', function (d) {
+                    return lineFunction(d);
+                })
+                .attr('stroke', CM.color(4))
+                .attr('stroke-width', 1)
+                .attr('fill', 'none');
+    });
 };
 
 Number.prototype.toDeg = function () {
