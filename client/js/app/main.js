@@ -6,14 +6,10 @@ var CM = {
     R: 300,
     arcTween: function (transition, newAngle) {
         transition.attrTween("d", function (d) {
-
-            var interpolateS = d3.interpolate(d.startAngle, newAngle);
-            //interpolateE = d3.interpolate(d.endAngle, newAngle + CM.ArcLen - CM.ArcMargin);
+            var interpolate = d3.interpolate(d.startAngle, newAngle);
 
             return function (t) {
-                d.startAngle = interpolateS(t);
-                //d.endAngle = interpolateE(t);
-
+                d.startAngle = interpolate(t);
                 return CM.arc(d);
             };
         });
@@ -35,6 +31,7 @@ CM.arc = d3.svg.arc()
         .innerRadius(CM.R - 10)
         .outerRadius(CM.R + 7);
 
+// Bezier curve function
 CM.line = d3.svg.line.radial()
         .interpolate('bundle')
         .tension(.85)
@@ -95,21 +92,23 @@ function expandDivision(division) {
 
     var subdivisions = [];
 
+    hideDivisions(division.id);
+
+    // process subs
     if (division.subdivisions) {
 
-        hideDivisions(division.id);
-
+        // get subs for selected division
         subdivisions = CM.subdivisions.filter(function (s) {
             return division.subdivisions.indexOf(s.id) >= 0;
         });
 
         subdivisions.forEach(function (subdivision, i) {
-            subdivision.i = i + 1;
+//            subdivision.i = i + 1;
             subdivision.startAngle = division.startAngle;
             subdivision.expandAngle = CM.ArcLen * (i + division.i);
         });
 
-        // render subdivisions
+        // render subs
         CM.group.selectAll('path.subdivision')
                 .data(subdivisions).enter()
                 // arc
@@ -171,8 +170,6 @@ function expandDivision(division) {
     // render position trees
     var range = division.subdivisions ? subdivisions : new Array(division);
 
-//    console.log(range);
-
     CM.group.selectAll('g.position-tree')
             .data(range).enter()
             // tree group
@@ -192,7 +189,7 @@ function expandDivision(division) {
             .attr('y', -290)
             .attr('width', 2)
             .attr('height', function (d) {
-                return d.positions ? d.positions.length * 28 : 0;
+                return d.positions ? d.positions.length * 27 : 0;
             })
             .attr('fill', function (d, i) {
                 return CM.color(division.i);
@@ -233,10 +230,10 @@ function expandDivision(division) {
     CM.group.selectAll('g.position-tree')
             .transition()
             .delay(function () {
-                return range > 1 ? 300 : 0;
+                return range.length > 1 ? 300 : 300;
             })
             .duration(function () {
-                return range > 1 ? 250 : 750;
+                return range.length > 1 ? 750 : 750;
             })
             .style('opacity', '1');
 
@@ -244,9 +241,9 @@ function expandDivision(division) {
 
 function collapseDivision(division) {
 
-    if (division.subdivisions) {
+    showDivisions(division.id);
 
-        showDivisions(division.id);
+    if (division.subdivisions) {
 
         CM.group.selectAll('g#' + division.id + '-title>text')
                 .transition()
