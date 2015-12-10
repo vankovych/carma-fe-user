@@ -3,9 +3,8 @@
         {
             "id": "d1",
             "title": "Project Management",
-            "positions": [
-                "p13",
-                "p14"
+            "subdivisions": [
+                "s10"
             ]
         },
         {
@@ -157,6 +156,15 @@
         {
             "id": "s9",
             "title": "Subdivision"
+        },
+        {
+            "id": "s10",
+            "title": "Project Management",
+            "positions": [
+                "p13",
+                "p14"
+            ]
+
         }
     ],
     "positions": [

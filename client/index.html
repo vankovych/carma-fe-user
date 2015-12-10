@@ -7,7 +7,7 @@
 
         <link rel="stylesheet" href="css/vendor/normalize.css">
         <link rel="stylesheet" href="css/style.css">
-        
+
         <link rel="shortcut icon" href="favicon.ico">
 
         <script src="js/libs/d3/d3.js"></script>
@@ -20,8 +20,8 @@
             <div class="menu">
                 <h3><a href="#">eleks Career map</a></h3>
                 <ul>
-                    <li><a href="#" class="active">Career opportunities</a></li>
-                    <li><a href="#">Discovery positions</a></li>
+                    <li><a href="#" class="active">Build my career</a></li>
+                    <li><a href="#">Browse positions</a></li>
                 </ul>                
             </div>            
             <div id="map">
@@ -42,13 +42,14 @@
                 CM.subdivisions = json.subdivisions;
                 CM.positions = json.positions;
 
-                // add additional data        
+                // add additional data
                 for (var i = 0, j = 1; i < divisions.length; i++, j++) {
                     if (j === 11) {
                         j += 2;
                     }
                     divisions[i].i = j;
-                    divisions[i].startAngle = CM.ArcLen * j;
+                    divisions[i].initAngle = 0;
+                    divisions[i].QQQ = CM.ArcLen * j;
                 }
 
                 // create custom color scale from predifined colors
@@ -64,11 +65,11 @@
                 CM.group = CM.svg.append('g')
                         .attr('transform', 'translate(' + CM.svgWidth / 2 + ', ' + CM.svgHeight / 2 + ')');
 
-//                CM.group.append('circle')
-//                        .attr('cx', 0)
-//                        .attr('cy', 0)
-//                        .attr('class', 'circle-main-in')
-//                        .attr('r', CM.R - 7);
+                CM.group.append('circle')
+                        .attr('cx', 0)
+                        .attr('cy', 0)
+                        .attr('class', 'circle-main-in')
+                        .attr('r', CM.R + 30);
 
                 // render divisions
                 CM.group.selectAll('path.division')
@@ -88,14 +89,13 @@
                             expandDivision(d);
                         });
 
-                renderTitles(divisions, 'division-title', 1);
+                divisions.forEach(function (division, i) {
+                    moveArc(d3.select('#' + division.id)[0][0], division.QQQ);
+                });
+
+                renderTitles(divisions, 'division-title', 0);
             });
 
-            /*
-             * Workflow
-             * Hover effects
-             * Expand / collapse controls 
-             */
         </script>
     </body>
 </html>

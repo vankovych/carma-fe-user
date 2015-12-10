@@ -6,10 +6,10 @@ var CM = {
     R: 300,
     arcTween: function (transition, newAngle) {
         transition.attrTween("d", function (d) {
-            var interpolate = d3.interpolate(d.startAngle, newAngle);
+            var interpolate = d3.interpolate(d.initAngle, newAngle);
 
             return function (t) {
-                d.startAngle = interpolate(t);
+                d.initAngle = interpolate(t);
                 return CM.arc(d);
             };
         });
@@ -20,13 +20,13 @@ CM.P = Math.PI * 2;
 CM.ArcLen = CM.P / 24;
 CM.ArcMargin = CM.P / 400;
 
-// Arc function
+// Draw arc function
 CM.arc = d3.svg.arc()
         .startAngle(function (d) {
-            return d.startAngle;
+            return d.initAngle;
         })
         .endAngle(function (d) {
-            return d.startAngle + CM.ArcLen - CM.ArcMargin;
+            return d.initAngle + CM.ArcLen - CM.ArcMargin;
         })
         .innerRadius(CM.R - 10)
         .outerRadius(CM.R + 7);
@@ -42,8 +42,13 @@ CM.line = d3.svg.line.radial()
             return d.x / 180 * Math.PI;
         });
 
+/**
+ * 
+ * @param {type} arc
+ * @param {type} angle
+ * @returns {undefined}
+ */
 function moveArc(arc, angle) {
-
     angle = angle || (0.73 * CM.P);
 
     d3.select(arc)
@@ -52,6 +57,11 @@ function moveArc(arc, angle) {
             .call(CM.arcTween, angle);
 }
 
+/**
+ * 
+ * @param {type} exceptId
+ * @returns {undefined}
+ */
 function hideDivisions(exceptId) {
 
     // fade in all divisions except for selected
@@ -71,6 +81,10 @@ function hideDivisions(exceptId) {
             });
 }
 
+/**
+ * 
+ * @returns {undefined}
+ */
 function showDivisions() {
 
     // fade out all divisions
@@ -88,14 +102,19 @@ function showDivisions() {
             .style('opacity', '1');
 }
 
+/**
+ * 
+ * @param {type} division
+ * @returns {undefined}
+ */
 function expandDivision(division) {
-
-    var subdivisions = [];
-
-    hideDivisions(division.id);
 
     // process subs
     if (division.subdivisions) {
+
+        var subdivisions = [];
+
+        hideDivisions(division.id);
 
         // get subs for selected division
         subdivisions = CM.subdivisions.filter(function (s) {
@@ -104,7 +123,7 @@ function expandDivision(division) {
 
         subdivisions.forEach(function (subdivision, i) {
 //            subdivision.i = i + 1;
-            subdivision.startAngle = division.startAngle;
+            subdivision.initAngle = division.initAngle;
             subdivision.expandAngle = CM.ArcLen * (i + division.i);
         });
 
@@ -165,80 +184,81 @@ function expandDivision(division) {
                 .delay(300)
                 .duration(750)
                 .style('opacity', '1');
-    }
 
-    // render position trees
-    var range = division.subdivisions ? subdivisions : new Array(division);
+        // render position trees
+        var range = division.subdivisions ? subdivisions : new Array(division);
 
-    CM.group.selectAll('g.position-tree')
-            .data(range).enter()
-            // tree group
-            .append('g')
-            .attr('class', 'position-tree')
-            .attr('id', function (d) {
-                return d.id + '-position-tree';
-            })
-            .attr('transform', function (d, i) {
-                return 'rotate(' + ((i + division.i) * 15 + 7) + ')';
-            })
-            .style('opacity', 0)
-            // tree trunk
-            .append('rect')
-            .attr('class', 'trunk')
-            .attr('x', -2)
-            .attr('y', -290)
-            .attr('width', 2)
-            .attr('height', function (d) {
-                return d.positions ? d.positions.length * 27 : 0;
-            })
-            .attr('fill', function (d, i) {
-                return CM.color(division.i);
-            });
-
-    range.forEach(function (div) {
-
-        var positions = [];
-        if (div.positions) {
-            positions = CM.positions.filter(function (p) {
-                return div.positions.indexOf(p.id) >= 0;
-            });
-        }
-
-        CM.group.selectAll('g#' + div.id + '-position-tree')
-                .selectAll('circle.position')
-                .data(positions).enter()
-                // position leaf
-                .append('circle')
-                .attr('class', 'position')
-                .attr('cx', function (d) {
-                    return -1;
+        CM.group.selectAll('g.position-tree')
+                .data(range).enter()
+                // tree group
+                .append('g')
+                .attr('class', 'position-tree')
+                .attr('id', function (d) {
+                    return d.id + '-position-tree';
                 })
-                .attr('cy', function (d, i) {
-                    return -CM.R + 30 * ++i;
+                .attr('transform', function (d, i) {
+                    return 'rotate(' + ((i + division.i) * 15 + 7) + ')';
                 })
-                .attr('r', 7)
-                .style('fill', function (d, i) {
+                .style('opacity', 0)
+                // tree trunk
+                .append('rect')
+                .attr('class', 'trunk')
+                .attr('x', -2)
+                .attr('y', -290)
+                .attr('width', 2)
+                .attr('height', function (d) {
+                    return d.positions ? d.positions.length * 27 : 0;
+                })
+                .attr('fill', function (d, i) {
                     return CM.color(division.i);
-                })
-                // tooltip with position title
-                .append('title')
-                .text(function (d) {
-                    return d.title;
                 });
-    });
 
-    CM.group.selectAll('g.position-tree')
-            .transition()
-            .delay(function () {
-                return range.length > 1 ? 300 : 300;
-            })
-            .duration(function () {
-                return range.length > 1 ? 750 : 750;
-            })
-            .style('opacity', '1');
+        range.forEach(function (div) {
+
+            var positions = [];
+            if (div.positions) {
+                positions = CM.positions.filter(function (p) {
+                    return div.positions.indexOf(p.id) >= 0;
+                });
+            }
+
+            CM.group.selectAll('g#' + div.id + '-position-tree')
+                    .selectAll('circle.position')
+                    .data(positions).enter()
+                    // position leaf
+                    .append('circle')
+                    .attr('class', 'position')
+                    .attr('cx', function (d) {
+                        return -1;
+                    })
+                    .attr('cy', function (d, i) {
+                        return -CM.R + 30 * ++i;
+                    })
+                    .attr('r', 7)
+                    .style('fill', function (d, i) {
+                        return CM.color(division.i);
+                    })
+                    // tooltip with position title
+                    .append('title')
+                    .text(function (d) {
+                        return d.title;
+                    });
+        });
+
+        CM.group.selectAll('g.position-tree')
+                .transition()
+                .delay(300)
+                .duration(750)
+                .style('opacity', '1');
+    }
 
 }
 
+/**
+ * 
+ * @param {type} division
+ * @returns {undefined}
+ */
 function collapseDivision(division) {
 
     showDivisions(division.id);
@@ -279,6 +299,13 @@ function collapseDivision(division) {
             .remove();
 }
 
+/**
+ * 
+ * @param {type} data
+ * @param {type} className
+ * @param {type} opacity
+ * @returns {undefined}
+ */
 function renderTitles(data, className, opacity) {
     CM.group.selectAll('g.' + className)
             .data(data).enter()
@@ -288,19 +315,19 @@ function renderTitles(data, className, opacity) {
                 return d.id + '-title';
             })
             .attr('transform', function (d) {
-                return 'rotate(' + ((d.startAngle + CM.ArcLen / 2).toDeg() - 90) + ')translate(' + 300 + ')';
+                return 'rotate(' + ((d.QQQ + CM.ArcLen / 2).toDeg() - 90) + ')translate(' + 300 + ')';
             })
             .style('opacity', opacity)
             .append('text')
             .attr('dx', function (d) {
-                return d.startAngle.toDeg() < 180 ? 15 : -15;
+                return d.QQQ.toDeg() < 180 ? 15 : -15;
             })
             .attr('dy', '.31em')
             .attr('text-anchor', function (d) {
-                return d.startAngle.toDeg() < 180 ? 'start' : 'end';
+                return d.QQQ.toDeg() < 180 ? 'start' : 'end';
             })
             .attr('transform', function (d) {
-                return d.startAngle.toDeg() < 180 ? null : 'rotate(180)';
+                return d.QQQ.toDeg() < 180 ? null : 'rotate(180)';
             })
             .text(function (d) {
                 return d.title;
@@ -308,6 +335,12 @@ function renderTitles(data, className, opacity) {
             .on('click', function (d) {
                 collapseDivision(d);
             });
+
+    CM.group.selectAll('g.' + className)
+            .transition()
+            .delay(500)
+            .duration(750)
+            .style('opacity', '1');
 }
 
 window.onload = function () {

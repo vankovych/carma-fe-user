@@ -52,9 +52,10 @@ body {
 }
 
 .circle-main-in {
-    fill: none;
+    fill: #fff;
     stroke: #999;
-    stroke-width: 3px;
+    stroke-width: 0;
+    box-shadow: 10px 10px 5px #888888;
 }
 
 /* DIVISION */
