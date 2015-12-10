@@ -122,9 +122,9 @@ function expandDivision(division) {
         });
 
         subdivisions.forEach(function (subdivision, i) {
-//            subdivision.i = i + 1;
+            var j = division.i < 11 ? division.i + i : division.i - i;
             subdivision.initAngle = division.initAngle;
-            subdivision.expandAngle = CM.ArcLen * (i + division.i);
+            subdivision.expandAngle = CM.ArcLen * j;
         });
 
         // render subs
@@ -149,7 +149,8 @@ function expandDivision(division) {
                 .attr('dy', '-2em');
 
         division.subdivisions.forEach(function (id, i) {
-            moveArc(d3.select('#' + id)[0][0], CM.ArcLen * (i + division.i));
+            var j = division.i < 11 ? division.i + i : division.i - i;
+            moveArc(d3.select('#' + id)[0][0], CM.ArcLen * j);
         });
 
         // render subdivision titles
@@ -338,7 +339,7 @@ function renderTitles(data, className, opacity) {
 
     CM.group.selectAll('g.' + className)
             .transition()
-            .delay(500)
+            .delay(750)
             .duration(750)
             .style('opacity', '1');
 }
