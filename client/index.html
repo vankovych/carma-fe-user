@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <title>Career map, ELEKS</title>
@@ -25,6 +25,8 @@
                 </ul>                
             </div>            
             <div id="map">
+                <div class="whitebg"></div>
+                <div class="whitebg1"></div>
                 <svg></svg>
                 <!--<button type="button" id="animate">Animate</button>-->
             </div>
@@ -65,11 +67,11 @@
                 CM.group = CM.svg.append('g')
                         .attr('transform', 'translate(' + CM.svgWidth / 2 + ', ' + CM.svgHeight / 2 + ')');
 
-                CM.group.append('circle')
-                        .attr('cx', 0)
-                        .attr('cy', 0)
-                        .attr('class', 'circle-main-in')
-                        .attr('r', CM.R + 30);
+//                CM.group.append('circle')
+//                        .attr('cx', 0)
+//                        .attr('cy', 0)
+//                        .attr('class', 'circle-main-in')
+//                        .attr('r', CM.R + 30);
 
                 // render divisions
                 CM.group.selectAll('path.division')
