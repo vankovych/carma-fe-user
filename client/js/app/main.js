@@ -1,9 +1,9 @@
 'use strict';
 
 var CM = {
-    svgWidth: 1000,
+    svgWidth: 1024,
     svgHeight: 900,
-    R: 300,
+    R: 325,
     arcTween: function (transition, newAngle) {
         transition.attrTween("d", function (d) {
             var interpolate = d3.interpolate(d.initAngle, newAngle);
@@ -28,8 +28,8 @@ CM.arc = d3.svg.arc()
         .endAngle(function (d) {
             return d.initAngle + CM.ArcLen - CM.ArcMargin;
         })
-        .innerRadius(CM.R - 10)
-        .outerRadius(CM.R + 7);
+        .innerRadius(CM.R)
+        .outerRadius(CM.R + 20);
 
 // Bezier curve function
 CM.line = d3.svg.line.radial()
@@ -69,7 +69,7 @@ function hideDivisions(exceptId) {
             .transition()
             .duration(300)
             .style('opacity', function () {
-                return (this.id === exceptId) ? .8 : .2;
+                return (this.id === exceptId) ? 1 : .2;
             });
 
     // fade in selected division title             
@@ -117,7 +117,7 @@ function expandDivision(division) {
         hideDivisions(division.id);
 
         // get subs for selected division
-        subdivisions = CM.subdivisions.filter(function (s) {
+        subdivisions = CM.data.subdivisions.filter(function (s) {
             return division.subdivisions.indexOf(s.id) >= 0;
         });
 
@@ -167,7 +167,7 @@ function expandDivision(division) {
                 // title text
                 .append('text')
                 .attr('dx', function (d) {
-                    return d.expandAngle.toDeg() < 180 ? 15 : -15;
+                    return d.expandAngle.toDeg() < 180 ? 50 : -50;
                 })
                 .attr('dy', '.31em')
                 .attr('text-anchor', function (d) {
@@ -205,7 +205,7 @@ function expandDivision(division) {
                 .append('rect')
                 .attr('class', 'trunk')
                 .attr('x', -2)
-                .attr('y', -290)
+                .attr('y', -CM.R)
                 .attr('width', 2)
                 .attr('height', function (d) {
                     return d.positions ? d.positions.length * 27 : 0;
@@ -218,7 +218,7 @@ function expandDivision(division) {
 
             var positions = [];
             if (div.positions) {
-                positions = CM.positions.filter(function (p) {
+                positions = CM.data.positions.filter(function (p) {
                     return div.positions.indexOf(p.id) >= 0;
                 });
             }
@@ -233,7 +233,7 @@ function expandDivision(division) {
                         return -1;
                     })
                     .attr('cy', function (d, i) {
-                        return -CM.R + 30 * ++i;
+                        return -CM.R + 30 * i + 20;
                     })
                     .attr('r', 7)
                     .style('fill', function (d, i) {
@@ -307,7 +307,7 @@ function collapseDivision(division) {
  * @param {type} opacity
  * @returns {undefined}
  */
-function renderTitles(data, className, opacity) {
+function renderTitles(data, className) {
     CM.group.selectAll('g.' + className)
             .data(data).enter()
             .append('g')
@@ -316,19 +316,19 @@ function renderTitles(data, className, opacity) {
                 return d.id + '-title';
             })
             .attr('transform', function (d) {
-                return 'rotate(' + ((d.QQQ + CM.ArcLen / 2).toDeg() - 90) + ')translate(' + 300 + ')';
+                return 'rotate(' + ((d.finalAngle + CM.ArcLen / 2).toDeg() - 90) + ')translate(' + 300 + ')';
             })
-            .style('opacity', opacity)
+            .style('opacity', 0)
             .append('text')
             .attr('dx', function (d) {
-                return d.QQQ.toDeg() < 180 ? 15 : -15;
+                return d.finalAngle.toDeg() < 180 ? 50 : -50;
             })
             .attr('dy', '.31em')
             .attr('text-anchor', function (d) {
-                return d.QQQ.toDeg() < 180 ? 'start' : 'end';
+                return d.finalAngle.toDeg() < 180 ? 'start' : 'end';
             })
             .attr('transform', function (d) {
-                return d.QQQ.toDeg() < 180 ? null : 'rotate(180)';
+                return d.finalAngle.toDeg() < 180 ? null : 'rotate(180)';
             })
             .text(function (d) {
                 return d.title;
@@ -337,14 +337,69 @@ function renderTitles(data, className, opacity) {
                 collapseDivision(d);
             });
 
-    CM.group.selectAll('g.' + className)
+//    CM.group.selectAll('g.' + className)
+//            .transition()
+//            .delay(750)
+//            .duration(750)
+//            .style('opacity', '1');
+}
+
+/**
+ * 
+ * @returns {undefined}
+ */
+function renderDivisions() {
+
+    // add additional data
+    for (var i = 0, j = 1; i < CM.data.divisions.length; i++, j++) {
+        if (j === 11) {
+            j += 2;
+        }
+        CM.data.divisions[i].initAngle = 0;
+        CM.data.divisions[i].finalAngle = CM.ArcLen * j;
+    }
+
+    CM.group.selectAll('g.division-title')
+            .transition()
+            .style('opacity', '0');
+
+    CM.group.selectAll('path.division').remove();
+
+    // render divisions
+    CM.group.selectAll('path.division')
+            .data(CM.data.divisions).enter()
+            // arc
+            .append('path')
+            .attr('id', function (d) {
+                return d.id;
+            })
+            .attr('d', CM.arc)
+            .attr('cx', 100)
+            .attr('class', 'division')
+            .attr('fill', function (d, i) {
+                return CM.color(d.i);
+            })
+            .on('click', function (d) {
+                expandDivision(d);
+            });
+
+    CM.data.divisions.forEach(function (division, i) {
+        moveArc(d3.select('#' + division.id)[0][0], division.finalAngle);
+    });
+
+    CM.group.selectAll('g.division-title')
             .transition()
             .delay(750)
             .duration(750)
             .style('opacity', '1');
+
 }
 
 window.onload = function () {
+
+    d3.selectAll('.menu li').on('click', function () {
+        renderDivisions();
+    });
 
     d3.select('#d15').on('click', function () {
         var

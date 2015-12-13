@@ -18,17 +18,21 @@
     <body>
         <div id="container">
             <div class="menu">
-                <h3><a href="#">eleks Career map</a></h3>
+                <h3><a href="#">eleks<sup>&reg;</sup> Career map</a></h3>
                 <ul>
                     <li><a href="#" class="active">Build my career</a></li>
                     <li><a href="#">Browse positions</a></li>
                 </ul>                
             </div>            
             <div id="map">
-                <div class="whitebg"></div>
-                <div class="whitebg1"></div>
+                <div class="gradient-white-transparent"></div>
+                <div class="gradient-blue-yellow"></div>
                 <svg></svg>
                 <!--<button type="button" id="animate">Animate</button>-->
+                <div id="form-container">
+                    <input type="text" value="I am...">
+                    <button type="button">GO</button>
+                </div>
             </div>
         </div>
         <script>
@@ -39,24 +43,11 @@
                     return console.warn(error);
                 }
 
-                var divisions = json.divisions;
-
-                CM.subdivisions = json.subdivisions;
-                CM.positions = json.positions;
-
-                // add additional data
-                for (var i = 0, j = 1; i < divisions.length; i++, j++) {
-                    if (j === 11) {
-                        j += 2;
-                    }
-                    divisions[i].i = j;
-                    divisions[i].initAngle = 0;
-                    divisions[i].QQQ = CM.ArcLen * j;
-                }
+                CM.data = json;
 
                 // create custom color scale from predifined colors
                 CM.color = d3.scale.ordinal()
-                        .domain(divisions.map(function (d) {
+                        .domain(CM.data.divisions.map(function (d) {
                             return d.i;
                         }))
                         .range(json.colors);
@@ -67,37 +58,22 @@
                 CM.group = CM.svg.append('g')
                         .attr('transform', 'translate(' + CM.svgWidth / 2 + ', ' + CM.svgHeight / 2 + ')');
 
-//                CM.group.append('circle')
-//                        .attr('cx', 0)
-//                        .attr('cy', 0)
-//                        .attr('class', 'circle-main-in')
-//                        .attr('r', CM.R + 30);
+                // add additional data
+                for (var i = 0, j = 1; i < CM.data.divisions.length; i++, j++) {
+                    if (j === 11) {
+                        j += 2;
+                    }
+                    CM.data.divisions[i].i = j;
+                    CM.data.divisions[i].initAngle = 0;
+                    CM.data.divisions[i].finalAngle = CM.ArcLen * j;
+                }
 
-                // render divisions
-                CM.group.selectAll('path.division')
-                        .data(divisions).enter()
-                        // arc
-                        .append('path')
-                        .attr('id', function (d) {
-                            return d.id;
-                        })
-                        .attr('d', CM.arc)
-                        .attr('cx', 100)
-                        .attr('class', 'division')
-                        .attr('fill', function (d, i) {
-                            return CM.color(d.i);
-                        })
-                        .on('click', function (d) {
-                            expandDivision(d);
-                        });
+                renderTitles(CM.data.divisions, 'division-title');
 
-                divisions.forEach(function (division, i) {
-                    moveArc(d3.select('#' + division.id)[0][0], division.QQQ);
-                });
-
-                renderTitles(divisions, 'division-title', 0);
+                renderDivisions(CM.data.divisions);
             });
 
         </script>
+        <!--Кількість доступних посад на одній гілці?-->
     </body>
 </html>
