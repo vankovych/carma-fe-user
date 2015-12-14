@@ -30,6 +30,10 @@ h3 {
     font-family: ProximaNovaSemibold;
 }
 
+a, a:hover, a:active, a:focus{
+    outline: 0;
+}
+
 /* BACKGROUND */
 
 .gradient-white-transparent {
@@ -59,8 +63,7 @@ h3 {
 }
 
 /* MENU */
-.menu {
-    color: #33599A;
+.menu {    
     z-index: 3;
     position: absolute;
 }
@@ -75,13 +78,16 @@ h3 {
 }
 
 .menu a {
-    font-family: ProximaNovaLight;
-    color: #33599A;
     text-decoration: none;
     padding-left: 25px;
 }
 
+.menu h3 a {
+    color: #33599A;
+}
+
 .menu ul a {
+    font-family: ProximaNovaLight;
     color: #738EAC;
     text-decoration: none;
     display: inline-block;    
@@ -90,7 +96,7 @@ h3 {
 }
 
 .menu a.active {
-    font-family: "ProximaNovaMedium";
+    font-family: ProximaNovaMedium;
     color: #3A63B2;
     border-left: #33599A solid 5px;
     padding-left: 20px;
@@ -116,7 +122,7 @@ text {
     cursor: pointer;
 }
 
-path.placeholder {    
+path.placeholder {
     fill: #eee;
     opacity: .4;
 }
@@ -151,15 +157,31 @@ path.division:hover {
 #form-container {
     position: absolute;
     z-index: 4;
-    top: -100;
+    left: 450px;
+    top: 400px;
+}
+
+#form-container label{    
+    font-size: 22px;
+    font-family: ProximaNovaLight;
+    color: #494949;
+    text-align: center;
+    display: block;
+    margin-bottom: 25px;
+    -webkit-user-select: none;  
+    -moz-user-select: none;     
+    -ms-user-select: none;      
+    user-select: none;          
 }
 
 #form-container input {
     width: 267px;
     height: 46px;
     background: #f0f5fa;
-    border: #edf2f7 solid 1px;    
+    border: #edf2f7 solid 1px;
+    border-radius: 1px;    
 }
+
 #form-container button {
     font-family: ProximaNovaRegular;
     color: #fff;
@@ -168,4 +190,8 @@ path.division:hover {
     background: #3963ad;
     border: none;
     margin-left: -5px;
+}
+
+#form-container button:hover {
+    background: #33599A;
 }

@@ -397,8 +397,48 @@ function renderDivisions() {
 
 window.onload = function () {
 
-    d3.selectAll('.menu li').on('click', function () {
+    d3.json('data.json', function (error, json) {
+        if (error) {
+            return console.warn(error);
+        }
+
+        CM.data = json;
+
+        // create custom color scale from predifined colors
+        CM.color = d3.scale.ordinal()
+                .domain(CM.data.divisions.map(function (d) {
+                    return d.i;
+                }))
+                .range(json.colors);
+
+        CM.svg = d3.select('#map svg')
+                .attr('width', CM.svgWidth)
+                .attr('height', CM.svgHeight);
+        CM.group = CM.svg.append('g')
+                .attr('transform', 'translate(' + CM.svgWidth / 2 + ', ' + CM.svgHeight / 2 + ')');
+
+        // add additional data
+        for (var i = 0, j = 1; i < CM.data.divisions.length; i++, j++) {
+            if (j === 11) {
+                j += 2;
+            }
+            CM.data.divisions[i].i = j;
+            CM.data.divisions[i].initAngle = 0;
+            CM.data.divisions[i].finalAngle = CM.ArcLen * j;
+        }
+
+        renderTitles(CM.data.divisions, 'division-title');
+
+        renderDivisions(CM.data.divisions);
+    });
+
+
+    // Events
+    var $menuItems = $('.menu a');
+    $menuItems.on('click', function () {
         renderDivisions();
+        $menuItems.removeClass('active');
+        $(this).addClass('active');
     });
 
     d3.select('#d15').on('click', function () {
