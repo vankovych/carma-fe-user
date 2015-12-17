@@ -31,6 +31,17 @@ CM.arc = d3.svg.arc()
         .innerRadius(CM.R)
         .outerRadius(CM.R + 20);
 
+// Draw arc function
+CM.arc1 = d3.svg.arc()
+        .startAngle(function (d) {
+            return d.initAngle - CM.ArcLen;// + CM.ArcMargin;
+        })
+        .endAngle(function (d) {
+            return d.initAngle + CM.ArcLen - CM.ArcMargin;
+        })
+        .innerRadius(CM.R)
+        .outerRadius(CM.R + 3);
+
 // Bezier curve function
 CM.line = d3.svg.line.radial()
         .interpolate('bundle')
@@ -404,9 +415,47 @@ function renderDivisions() {
             .duration(750)
             .style('opacity', '1');
 
+    var dc = [{
+            i: 0,
+            initAngle: 0
+        },
+        {
+            i: 12,
+            initAngle: CM.ArcLen * 12
+        }];
+
+    // render divisions
+    CM.group.selectAll('path.dc')
+            .data(dc).enter()
+            // arc
+            .append('path')
+            .attr('class', 'gradient-blue-yellow')
+//            .attr('id', function (d) {
+//                return d.id;
+//            })
+            .attr('d', CM.arc1)
+            .attr('cx', 100)
+            .attr('class', 'division');
+//            .attr('fill', '#ccc');
+
 }
 
 function selectPosition(ev) {
+
+//    var b = this.getBBox();
+
+//    console.log(b);
+
+//    var shape = $('#p1');
+//
+//    var matrix = shape.getCTM();
+//
+//// transform a point using the transformed matrix
+//    var position = svg.createSVGPoint();
+//    position.x = $(shape).attr("x");
+//    position.y = $(shape).attr("y");
+//    position = position.matrixTransform(matrix);
+
 //    console.log($(this));
 //    console.log($(this).parent());
 
@@ -436,14 +485,19 @@ function selectPosition(ev) {
 //    console.log(currentx);
 
 //    $('#' + $(this).attr('id')).click(function (ev) {
-    console.log($(ev.target));
+//    console.log($(ev.target));
     var svgPos = $('#' + $(this).attr('id')).offset(),
             x = svgPos.left + Math.abs($(this).attr('cx') * 1),
             y = svgPos.top + Math.abs($(this).attr('cy') * 1),
             coords = [x, y];
 
-    console.log(svgPos);
-    console.log(coords);
+//    console.log(svgPos);
+//    console.log(coords);
+
+    var b = d3.select('#' + $(this).attr('id'));
+    b[0][0].getBoundingClientRect();
+
+    console.log(b[0][0].getBoundingClientRect());
 
 
     // coords now has your coordinates
