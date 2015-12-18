@@ -255,7 +255,9 @@ function expandDivision(division) {
                     .style('fill', function (d, i) {
                         return CM.color(division.i);
                     })
-                    .on('click', selectPosition)
+                    .on('click', function (d) {
+                        selectPosition(d.id);
+                    })
                     // tooltip with position title
                     .append('title')
                     .text(function (d) {
@@ -429,81 +431,35 @@ function renderDivisions() {
             .data(dc).enter()
             // arc
             .append('path')
-            .attr('class', 'gradient-blue-yellow')
+//            .attr('class', '')
 //            .attr('id', function (d) {
 //                return d.id;
 //            })
             .attr('d', CM.arc1)
             .attr('cx', 100)
-            .attr('class', 'division');
-//            .attr('fill', '#ccc');
+            .attr('class', 'division')
+            .attr('fill', '#ccc');
 
 }
 
-function selectPosition(ev) {
+function selectPosition(currentId) {
 
-//    var b = this.getBBox();
+    console.log(currentId);
 
-//    console.log(b);
+    renderTransition(currentId, 'p12');
+}
 
-//    var shape = $('#p1');
-//
-//    var matrix = shape.getCTM();
-//
-//// transform a point using the transformed matrix
-//    var position = svg.createSVGPoint();
-//    position.x = $(shape).attr("x");
-//    position.y = $(shape).attr("y");
-//    position = position.matrixTransform(matrix);
+function renderTransition(currentId, targetId) {
+    var current = d3.select('#' + currentId),
+            target = d3.select('#' + targetId);
 
-//    console.log($(this));
-//    console.log($(this).parent());
+    var c = current[0][0].getBoundingClientRect(),
+            t = target[0][0].getBoundingClientRect();
 
-//    // The magic function.
-//    function getScreenCoords(x, y, ctm) {
-//        var xn = ctm.e + x * ctm.a;
-//        var yn = ctm.f + y * ctm.d;
-//        return {x: xn, y: yn};
-//    }
-//
-//    var circle = document.getElementById($(this).attr('id')),
-//            cx = +circle.getAttribute('cx'),
-//            cy = +circle.getAttribute('cy'),
-//            ctm = circle.getCTM(),
-//            coords = getScreenCoords(cx, cy, ctm);
-//    console.log(coords.x, coords.y); // shows coords relative to my svg container
-
-//    var g = d3.select('#s1-position-tree');
-//
-//    var c = g[0][0];
-//
-//    console.log(c);
-//
-//// get x position
-//    var currentx = d3.transform(g.attr("transform")).translate[0];
-//
-//    console.log(currentx);
-
-//    $('#' + $(this).attr('id')).click(function (ev) {
-//    console.log($(ev.target));
-    var svgPos = $('#' + $(this).attr('id')).offset(),
-            x = svgPos.left + Math.abs($(this).attr('cx') * 1),
-            y = svgPos.top + Math.abs($(this).attr('cy') * 1),
-            coords = [x, y];
-
-//    console.log(svgPos);
-//    console.log(coords);
-
-    var b = d3.select('#' + $(this).attr('id'));
-    b[0][0].getBoundingClientRect();
-
-    console.log(b[0][0].getBoundingClientRect());
-
-
-    // coords now has your coordinates
-//    });
-
-// set x position
-//    g.attr("transform", "translate(" + (currentx + 100) + ",0)");
-
+    d3.selectAll('svg>g').append('line')
+            .style('stroke', 'gray')
+            .attr("x1", Math.round(c.x) - CM.svgWidth / 2 - 105 - c.width / 2)
+            .attr("y1", Math.round(c.y) - CM.svgHeight / 2 + c.height / 2)
+            .attr("x2", Math.round(t.x) - CM.svgWidth / 2 - 105 - t.width / 2)
+            .attr("y2", Math.round(t.y) - CM.svgHeight / 2 + t.height / 2);
 }
