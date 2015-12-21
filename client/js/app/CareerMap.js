@@ -467,28 +467,57 @@ function renderTransition(currentId, targetId) {
             x2 = Math.round(t.x) - CM.svgWidth / 2 - 105 - t.width / 2,
             y2 = Math.round(t.y) - CM.svgHeight / 2 + t.height / 2;
 
-    d3.selectAll('svg>g').append('line')
-            .style('stroke', '#ccc')
-            .attr({
-                x1: x1,
-                y1: y1,
-                x2: x1,
-                y2: y1
+//    d3.selectAll('svg>g').append('line')
+//            .style('stroke', CM.color(18))
+//            .attr({
+//                x1: x1,
+//                y1: y1,
+//                x2: x1,
+//                y2: y1
+//            })
+//            .transition()
+//            .duration(CM.duration)
+//            .attr({
+//                x2: x2,
+//                y2: y2
+//            });
+
+    var
+            lineData = [
+                [
+                    {'x': x1, 'y': y1},
+                    {'x': x1 + CM.R / 2, 'y': y1 - CM.R / 2},
+                    {'x': x2, 'y': y2}
+                ]
+            ];
+
+    var lineFunction = d3.svg.line()
+            .x(function (d) {
+                return d.x;
             })
-            .transition()
-            .duration(CM.duration)
-            .attr({
-                x2: x2,
-                y2: y2
-            });
+            .y(function (d) {
+                return d.y;
+            })
+            .interpolate('basis');
+
+    CM.group.selectAll('path.spline')
+            .data(lineData).enter()
+            .append('path')
+            .attr('d', function (d) {
+                return lineFunction(d);
+            })
+            .attr('stroke', CM.color(4))
+            .attr('stroke-width', 1)
+            .attr('fill', 'none');
 }
 
-function renderTransitions(pId) {
-    var position = CM.data.positions.filter(function (p) {
-        return p.id === pId;
-    });
+function renderTransitions(position) {
 
-    position[0].transition.forEach(function (tId) {
-        renderTransition(pId, tId);
+//    var position = CM.data.positions.filter(function (p) {
+//        return p.id === division.id;
+//    });
+
+    position.transition.forEach(function (tId) {
+        renderTransition(position.id, tId);
     });
 }

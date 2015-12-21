@@ -52,28 +52,32 @@ window.onload = function () {
 
     d3.select('.menu h3').on('click', function () {
 
-        renderTransitions('p16');
+        var position = CM.data.positions.filter(function (p) {
+            return p.id === 'p16';
+        });
+
+        renderTransitions(position[0]);
 
         var
                 lineData = [
                     [
                         {'x': -CM.R + 30, 'y': 30},
                         {'x': -CM.R / 2, 'y': -100},
-                        {'x': CM.R - 100, 'y': -10},
+//                        {'x': CM.R - 100, 'y': -10},
                         {'x': CM.R - 50, 'y': -110}
                     ],
-                    [
-                        {'x': -CM.R + 30, 'y': 30},
-                        {'x': -CM.R / 2, 'y': -100},
-                        {'x': CM.R - 100, 'y': -10},
-                        {'x': CM.R - 80, 'y': -100}
-                    ],
-                    [
-                        {'x': -CM.R + 30, 'y': 30},
-                        {'x': -CM.R / 2, 'y': -100},
-                        {'x': CM.R - 100, 'y': 10},
-                        {'x': CM.R - 30, 'y': -40}
-                    ]
+//                    [
+//                        {'x': -CM.R + 30, 'y': 30},
+//                        {'x': -CM.R / 2, 'y': -100},
+//                        {'x': CM.R - 100, 'y': -10},
+//                        {'x': CM.R - 80, 'y': -100}
+//                    ],
+//                    [
+//                        {'x': -CM.R + 30, 'y': 30},
+//                        {'x': -CM.R / 2, 'y': -100},
+//                        {'x': CM.R - 100, 'y': 10},
+//                        {'x': CM.R - 30, 'y': -40}
+//                    ]
                 ];
 
         var lineFunction = d3.svg.line()
