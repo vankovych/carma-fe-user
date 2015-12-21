@@ -46,9 +46,14 @@ window.onload = function () {
         renderDivisions();
         $menuItems.removeClass('active');
         $(this).addClass('active');
+
+        CM.mode = $(this).attr('data-mode');
     });
 
     d3.select('.menu h3').on('click', function () {
+
+        renderTransitions('p16');
+
         var
                 lineData = [
                     [
@@ -80,30 +85,15 @@ window.onload = function () {
                 })
                 .interpolate('basis');
 
-        CM.group.selectAll('path.spline')
-                .data(lineData).enter()
-                .append('path')
-                .attr('d', function (d) {
-                    return lineFunction(d);
-                })
-                .attr('stroke', CM.color(4))
-                .attr('stroke-width', 1)
-                .attr('fill', 'none');
-
-        var cords = [];
-
-        var a = d3.select('#p1');
-        cords.push(a[0][0].getBoundingClientRect());
-
-        var b = d3.select('#p12');
-        cords.push(b[0][0].getBoundingClientRect());
-
-        CM.group.append('line')
-                .style("stroke", "black")  // colour the line
-                .attr("x1", 835)     // x position of the first end of the line
-                .attr("y1", 367)      // y position of the first end of the line
-                .attr("x2", 938)     // x position of the second end of the line
-                .attr("y2", 402);    // y position of the second end of the line
+//        CM.group.selectAll('path.spline')
+//                .data(lineData).enter()
+//                .append('path')
+//                .attr('d', function (d) {
+//                    return lineFunction(d);
+//                })
+//                .attr('stroke', CM.color(4))
+//                .attr('stroke-width', 1)
+//                .attr('fill', 'none');
 
 //        CM.group.selectAll('path.spline')
 //                .data(cords).enter()

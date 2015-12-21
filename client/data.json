@@ -76,15 +76,15 @@
         },
         {
             "id": "d16",
-            "title": "PMG"
-        },
-        {
-            "id": "d17",
-            "title": "A&F",
+            "title": "PMG",
             "subdivisions": [
                 "s8",
                 "s9"
             ]
+        },
+        {
+            "id": "d17",
+            "title": "A&F"
         },
         {
             "id": "d18",
@@ -125,7 +125,10 @@
         },
         {
             "id": "s4",
-            "title": "Competency Management"
+            "title": "Competency Management",
+            "positions": [
+                "p18"
+            ]
         },
         {
             "id": "s5",
@@ -148,14 +151,18 @@
         },
         {
             "id": "s8",
-            "title": "Subdivision",
+            "title": "Subdivision 1",
             "positions": [
-                "p15"
+                "p15",
+                "p16"
             ]
         },
         {
             "id": "s9",
-            "title": "Subdivision"
+            "title": "Subdivision 2",
+            "positions": [
+                "p17"
+            ]
         },
         {
             "id": "s10",
@@ -226,7 +233,25 @@
         },
         {
             "id": "p15",
-            "title": "Position"
+            "title": "Position 1"
+        },
+        {
+            "id": "p16",
+            "title": "Position 2",
+            "transition": [
+                "p11",
+                "p1",
+                "p17",
+                "p18"
+            ]
+        },
+        {
+            "id": "p17",
+            "title": "Position 3"
+        },
+        {
+            "id": "p18",
+            "title": "Position 4"
         }
     ],
     "colors": [

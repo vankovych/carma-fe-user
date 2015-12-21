@@ -148,6 +148,12 @@ path.division:hover {
 
 .position {
     cursor: pointer;
+    stroke:#666;
+    stroke-width: 0;
+}
+
+.position:hover {
+    stroke-width: 1;
 }
 
 .position.active {
