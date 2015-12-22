@@ -168,7 +168,7 @@ path.division:hover {
 }
 
 .position:hover {
-    stroke-width: 1;
+    /*stroke-width: 1;*/
 }
 
 .position.active {
@@ -237,4 +237,15 @@ path.division:hover {
 
 .ui-menu-item {
     padding: 10px !important;
+}
+
+
+/* Requirements */
+
+#requirements {
+    width: 200px;
+    height: 100%;
+    background: #fff;
+    float: left;
+    position: absolute;
 }

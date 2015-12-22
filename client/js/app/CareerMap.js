@@ -448,9 +448,9 @@ function selectPosition(currentId) {
 
 
     // show transitions
-    
+
     console.log(CM.mode);
-     console.log(currentId);
+    console.log(currentId);
 
     if (CM.mode === 1) {
 
@@ -466,89 +466,93 @@ function selectPosition(currentId) {
 
 function renderTransition(currentId, targetId) {
 
-    var c = d3.select('#' + currentId)[0][0].getBoundingClientRect(),
-            t = d3.select('#' + targetId)[0][0].getBoundingClientRect(),
-            x1 = Math.round(c.x) - CM.svgWidth / 2 - 105 - c.width / 2,
-            y1 = Math.round(c.y) - CM.svgHeight / 2 + c.height / 2,
-            x2 = Math.round(t.x) - CM.svgWidth / 2 - 105 - t.width / 2,
-            y2 = Math.round(t.y) - CM.svgHeight / 2 + t.height / 2;
+    var target = d3.select('#' + targetId);
 
-//    d3.selectAll('svg>g').append('line')
-//            .style('stroke', CM.color(18))
-//            .attr({
-//                x1: x1,
-//                y1: y1,
-//                x2: x1,
-//                y2: y1
+    if (target[0][0]) {
+
+        var c = d3.select('#' + currentId)[0][0].getBoundingClientRect(),
+                t = target[0][0].getBoundingClientRect(),
+                x1 = Math.round(c.x) - CM.svgWidth / 2 - 105 - c.width / 2,
+                y1 = Math.round(c.y) - CM.svgHeight / 2 + c.height / 2,
+                x2 = Math.round(t.x) - CM.svgWidth / 2 - 105 - t.width / 2,
+                y2 = Math.round(t.y) - CM.svgHeight / 2 + t.height / 2;
+
+        var
+                diff = Math.abs(x1 - x2),
+                lineData = [
+                    [
+                        {'x': x1, 'y': y1},
+                        {'x': diff > 100 ? x1 + CM.R : x1 + 10, 'y': diff > 100 ? y1 - CM.R / 3 : (Math.abs(y1 - y2) / 3)},
+                        {'x': x2, 'y': y2}
+                    ]
+                ];
+
+        var lineFunction = d3.svg.line()
+                .x(function (d) {
+                    return d.x;
+                })
+                .y(function (d) {
+                    return d.y;
+                })
+                .interpolate('basis');
+
+//    CM.group.selectAll('path.spline')
+//            .data(lineData).enter()
+//            .append('path')
+//            .attr('d', function (d) {
+//                return lineFunction(d);
 //            })
-//            .transition()
-//            .duration(CM.duration)
-//            .attr({
-//                x2: x2,
-//                y2: y2
-//            });
+//            .attr('stroke', '#aaa' /*CM.color(17)*/)
+//            .attr('stroke-width', 1)
+//            .attr('fill', 'none');
 
-    var
-            diff = Math.abs(x1 - x2),
-            lineData = [
+        var bezierLine = d3.svg.line()
+                .x(function (d) {
+                    return d[0];
+                })
+                .y(function (d) {
+                    return d[1];
+                })
+                .interpolate("basis");
+
+        var
+                diff1 = Math.abs(x1 - x2),
+                lineData1 =
                 [
-                    {'x': x1, 'y': y1},
-                    {'x': diff > 100 ? x1 + CM.R : x1 + 20, 'y': diff > 100 ? y1 - CM.R / 3 : y1 + 20},
-                    {'x': x2, 'y': y2}
-                ]
-            ];
+                    [x1, y1],
+                    [diff1 > 100 ? x1 + CM.R : x1 + 10, diff1 > 100 ? y1 - CM.R / 3 : (Math.abs(y1 - y2) / 3)],
+                    [x2, y2]
+                ];
 
-    var lineFunction = d3.svg.line()
-            .x(function (d) {
-                return d.x;
-            })
-            .y(function (d) {
-                return d.y;
-            })
-            .interpolate('basis');
 
-    CM.group.selectAll('path.spline')
-            .data(lineData).enter()
-            .append('path')
-            .attr('d', function (d) {
-                return lineFunction(d);
-            })
-            .attr('stroke', '#aaa' /*CM.color(17)*/)
-            .attr('stroke-width', 1)
-            .attr('fill', 'none');
 
-    var bezierLine = d3.svg.line()
-            .x(function (d) {
-                return d[0];
-            })
-            .y(function (d) {
-                return d[1];
-            })
-            .interpolate("basis");
-
-    CM.group.append('path')
-            .attr("d", bezierLine([[0, 40], [100, 50], [300, 120]]))
-            .attr("stroke", "red")
-//            .attr("stroke-width", 1)
-            .attr("fill", "none")
-            .transition()
-            .duration(CM.duration)
-            .attrTween("stroke-dasharray", function () {
-                var len = this.getTotalLength();
-                return function (t) {
-                    return (d3.interpolateString("0," + len, len + ",0"))(t)
-                };
-            });
+        CM.group.append('path')
+                .attr('d', bezierLine(lineData1))
+                .attr('class', 'spline')
+                .attr('stroke', '#aaa')
+                .attr('stroke-width', 1)
+                .attr('fill', 'none')
+                .transition()
+                .duration(CM.duration)
+                .attrTween('stroke-dasharray', function () {
+                    var len = this.getTotalLength();
+                    return function (t) {
+                        return (d3.interpolateString('0,' + len, len + ',0'))(t)
+                    };
+                });
+    }
 }
 
 function renderTransitions(position) {
+
+    d3.selectAll('.spline').remove();
 
     if (position.transition) {
         position.transition.forEach(function (tId) {
             renderTransition(position.id, tId);
         });
     }
-    else{
+    else {
         console.log('No positions');
     }
 }
