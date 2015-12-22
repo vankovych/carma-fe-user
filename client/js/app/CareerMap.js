@@ -66,7 +66,7 @@ function moveArc(arc, angle) {
 
     d3.select(arc)
             .transition()
-            .duration(750)
+            .duration(CM.duration)
             .call(CM.arcTween, angle);
 }
 
@@ -88,7 +88,7 @@ function hideDivisions(exceptId) {
     // fade in selected division title             
     CM.group.selectAll('g.division-title')
             .transition()
-            .duration(750)
+            .duration(CM.duration)
             .style('opacity', function () {
                 return (this.id === exceptId + '-title') ? 1 : 0;
             });
@@ -161,7 +161,7 @@ function expandDivision(division) {
         // move division title up
         CM.group.selectAll('g#' + division.id + '-title>text')
                 .transition()
-                .duration(750)
+                .duration(CM.duration)
                 .style('fill', CM.color(division.i))
                 .attr('dy', '-2em');
 
@@ -201,7 +201,7 @@ function expandDivision(division) {
         CM.group.selectAll('g.' + division.id + '-subdivision-title')
                 .transition()
                 .delay(300)
-                .duration(750)
+                .duration(CM.duration)
                 .style('opacity', '1');
 
         // render position trees
@@ -270,7 +270,7 @@ function expandDivision(division) {
         CM.group.selectAll('g.' + division.id + '-position-tree')
                 .transition()
                 .delay(300)
-                .duration(750)
+                .duration(CM.duration)
                 .style('opacity', '1');
     }
 }
@@ -290,7 +290,7 @@ function collapseDivision(division) {
 
         CM.group.selectAll('g#' + division.id + '-title>text')
                 .transition()
-                .duration(750)
+                .duration(CM.duration)
                 .style('fill', '#494949')
                 .attr('dy', '.31em');
 
@@ -309,7 +309,7 @@ function collapseDivision(division) {
         // remove subdivision titles
         CM.group.selectAll('g.subdivision-title')
                 .transition()
-                .duration(750)
+                .duration(CM.duration)
                 .style('opacity', '0')
                 .remove();
     }
@@ -360,8 +360,8 @@ function renderTitles(data, className) {
 
 //    CM.group.selectAll('g.' + className)
 //            .transition()
-//            .delay(750)
-//            .duration(750)
+//            .delay(CM.duration)
+//            .duration(CM.duration)
 //            .style('opacity', '1');
 }
 
@@ -414,7 +414,7 @@ function renderDivisions() {
     CM.group.selectAll('g.division-title')
             .transition()
             .delay(750)
-            .duration(750)
+            .duration(CM.duration)
             .style('opacity', '1');
 
     var dc = [{
@@ -448,11 +448,17 @@ function selectPosition(currentId) {
 
 
     // show transitions
+    
+    console.log(CM.mode);
+     console.log(currentId);
 
     if (CM.mode === 1) {
-        console.log(currentId);
 
-//        renderTransition(currentId, 'p11');
+        var position = CM.data.positions.filter(function (p) {
+            return p.id === currentId;
+        });
+
+        renderTransitions(position[0]);
 
 //    $('#' + currentId).addClass('active');
     }
@@ -483,10 +489,11 @@ function renderTransition(currentId, targetId) {
 //            });
 
     var
+            diff = Math.abs(x1 - x2),
             lineData = [
                 [
                     {'x': x1, 'y': y1},
-                    {'x': x1 + CM.R / 2, 'y': y1 - CM.R / 2},
+                    {'x': diff > 100 ? x1 + CM.R : x1 + 20, 'y': diff > 100 ? y1 - CM.R / 3 : y1 + 20},
                     {'x': x2, 'y': y2}
                 ]
             ];
@@ -506,18 +513,42 @@ function renderTransition(currentId, targetId) {
             .attr('d', function (d) {
                 return lineFunction(d);
             })
-            .attr('stroke', CM.color(4))
+            .attr('stroke', '#aaa' /*CM.color(17)*/)
             .attr('stroke-width', 1)
             .attr('fill', 'none');
+
+    var bezierLine = d3.svg.line()
+            .x(function (d) {
+                return d[0];
+            })
+            .y(function (d) {
+                return d[1];
+            })
+            .interpolate("basis");
+
+    CM.group.append('path')
+            .attr("d", bezierLine([[0, 40], [100, 50], [300, 120]]))
+            .attr("stroke", "red")
+//            .attr("stroke-width", 1)
+            .attr("fill", "none")
+            .transition()
+            .duration(CM.duration)
+            .attrTween("stroke-dasharray", function () {
+                var len = this.getTotalLength();
+                return function (t) {
+                    return (d3.interpolateString("0," + len, len + ",0"))(t)
+                };
+            });
 }
 
 function renderTransitions(position) {
 
-//    var position = CM.data.positions.filter(function (p) {
-//        return p.id === division.id;
-//    });
-
-    position.transition.forEach(function (tId) {
-        renderTransition(position.id, tId);
-    });
+    if (position.transition) {
+        position.transition.forEach(function (tId) {
+            renderTransition(position.id, tId);
+        });
+    }
+    else{
+        console.log('No positions');
+    }
 }

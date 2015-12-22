@@ -6,12 +6,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" href="css/vendor/normalize.css">
+        <link rel="stylesheet" href="css/vendor/jquery-ui.css">
         <link rel="stylesheet" href="css/style.css">
 
         <link rel="shortcut icon" href="favicon.ico">
 
         <script src="js/libs/d3/d3.js"></script>
         <script src="js/libs/jquery/jquery-2.1.4.min.js"></script>
+        <script src="js/libs/jquery-ui/jquery-ui.js"></script>
 
         <script src="js/app/CareerMap.js"></script>
         <script src="js/app/main.js"></script>
@@ -32,7 +34,8 @@
                 <div id="form-container">
                     <label>Enter your current position or find it in the circle<br>
                         to discover new career opportunities</label>
-                    <input type="text" placeholder="I am...">
+                    <input type="text" placeholder="I am..." id="positionTitle" value="">
+                    <input type="hidden" id="positionId" value="">
                     <button type="button">GO</button>
                 </div>
             </div>

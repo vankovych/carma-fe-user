@@ -1,3 +1,18 @@
+/* COLORS 
+
+blue dark   #33599A
+blue medium #3A63B2
+blue light  #738EAC
+
+gray        #494949
+gray light1 #edf2f7
+gray light2 #f0f5fa
+
+GRADIENT
+blue    #B2CCE7
+yellow  #F8F2D0
+
+*/
 
 /* FONTS */
 
@@ -166,6 +181,7 @@ path.division:hover {
     z-index: 4;
     left: 450px;
     top: 400px;
+    display: none;
 }
 
 #form-container label{    
@@ -183,10 +199,11 @@ path.division:hover {
 
 #form-container input {
     width: 267px;
-    height: 46px;
+    height: 45px;
     background: #f0f5fa;
     border: #edf2f7 solid 1px;
-    border-radius: 1px;    
+    border-radius: 1px;
+    padding-bottom: 2px;
 }
 
 #form-container button {
@@ -201,4 +218,23 @@ path.division:hover {
 
 #form-container button:hover {
     background: #33599A;
+}
+
+/* jQuery UI overwrites */
+
+.ui-autocomplete {
+    max-height: 170px;
+    width: 315px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+}
+
+.ui-state-focus {
+    background: #f0f5fa !important;
+    border-color: #f0f5fa !important;
+}
+
+.ui-menu-item {
+    padding: 10px !important;
 }

@@ -35,6 +35,36 @@ window.onload = function () {
         renderTitles(CM.data.divisions, 'division-title');
 
         renderDivisions(CM.data.divisions);
+
+        $('#form-container').fadeIn(750);
+
+        var positions = CM.data.positions.map(function (position) {
+            return {
+                id: position.id,
+                label: position.title
+            };
+        });
+
+        $('#positionTitle').val('');
+
+        $("#positionTitle").autocomplete({
+            minLength: 0,
+            source: positions,
+            focus: function (event, ui) {
+                $("#positionTitle").val(ui.item.label);
+                return false;
+            },
+            select: function (event, ui) {
+                $("#positionTitle").val(ui.item.label);
+                $("#positionId").val(ui.item.id);
+                return false;
+            }
+        })
+                .autocomplete("instance")._renderItem = function (ul, item) {
+            return $("<li>")
+                    .append("<a>" + item.label + "</a>")
+                    .appendTo(ul);
+        };
     });
 
 
@@ -51,13 +81,6 @@ window.onload = function () {
     });
 
     d3.select('.menu h3').on('click', function () {
-
-        var position = CM.data.positions.filter(function (p) {
-            return p.id === 'p16';
-        });
-
-        renderTransitions(position[0]);
-
         var
                 lineData = [
                     [
@@ -110,6 +133,8 @@ window.onload = function () {
 //                .attr('fill', 'none');
 
     });
+
+
 };
 
 Number.prototype.toDeg = function () {
