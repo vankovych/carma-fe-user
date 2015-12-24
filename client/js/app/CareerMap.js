@@ -449,8 +449,7 @@ function selectPosition(currentId) {
 
     // show transitions
 
-    console.log(CM.mode);
-    console.log(currentId);
+//    console.log(currentId);
 
     if (CM.mode === 1) {
 
@@ -472,10 +471,13 @@ function renderTransition(currentId, targetId) {
 
         var c = d3.select('#' + currentId)[0][0].getBoundingClientRect(),
                 t = target[0][0].getBoundingClientRect(),
-                x1 = Math.round(c.x) - CM.svgWidth / 2 - 105 - c.width / 2,
-                y1 = Math.round(c.y) - CM.svgHeight / 2 + c.height / 2,
-                x2 = Math.round(t.x) - CM.svgWidth / 2 - 105 - t.width / 2,
-                y2 = Math.round(t.y) - CM.svgHeight / 2 + t.height / 2;
+                x1 = Math.round(c.left) - CM.svgWidth / 2 - 105 - c.width / 2,
+                y1 = Math.round(c.top) - CM.svgHeight / 2 + c.height / 2,
+                x2 = Math.round(t.left) - CM.svgWidth / 2 - 105 - t.width / 2,
+                y2 = Math.round(t.top) - CM.svgHeight / 2 + t.height / 2;
+
+//        console.log(c);
+//        console.log(Math.floor(c.x));
 
         var
                 diff = Math.abs(x1 - x2),
@@ -549,6 +551,7 @@ function renderTransitions(position) {
 
     if (position.transition) {
         position.transition.forEach(function (tId) {
+//            console.log(tId);
             renderTransition(position.id, tId);
         });
     }
