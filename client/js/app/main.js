@@ -20,6 +20,8 @@ window.onload = function () {
                 .attr('width', CM.svgWidth)
                 .attr('height', CM.svgHeight);
         CM.group = CM.svg.append('g')
+                .attr('width', CM.svgWidth)
+                .attr('height', CM.svgHeight)
                 .attr('transform', 'translate(' + CM.svgWidth / 2 + ', ' + CM.svgHeight / 2 + ')');
 
         // add additional data
@@ -71,7 +73,7 @@ window.onload = function () {
     // Events
 
     // Menu navigation
-    var $menuItems = $('.menu ul a');
+    var $menuItems = $('nav ul a');
     $menuItems.on('click', function () {
         renderDivisions();
         $menuItems.removeClass('active');
@@ -80,60 +82,19 @@ window.onload = function () {
         CM.mode = $(this).attr('data-mode');
     });
 
-    d3.select('.menu h3').on('click', function () {
-        var
-                lineData = [
-                    [
-                        {'x': -CM.R + 30, 'y': 30},
-                        {'x': -CM.R / 2, 'y': -100},
-//                        {'x': CM.R - 100, 'y': -10},
-                        {'x': CM.R - 50, 'y': -110}
-                    ],
-//                    [
-//                        {'x': -CM.R + 30, 'y': 30},
-//                        {'x': -CM.R / 2, 'y': -100},
-//                        {'x': CM.R - 100, 'y': -10},
-//                        {'x': CM.R - 80, 'y': -100}
-//                    ],
-//                    [
-//                        {'x': -CM.R + 30, 'y': 30},
-//                        {'x': -CM.R / 2, 'y': -100},
-//                        {'x': CM.R - 100, 'y': 10},
-//                        {'x': CM.R - 30, 'y': -40}
-//                    ]
-                ];
-
-        var lineFunction = d3.svg.line()
-                .x(function (d) {
-                    return d.x;
-                })
-                .y(function (d) {
-                    return d.y;
-                })
-                .interpolate('basis');
-
-//        CM.group.selectAll('path.spline')
-//                .data(lineData).enter()
-//                .append('path')
-//                .attr('d', function (d) {
-//                    return lineFunction(d);
-//                })
-//                .attr('stroke', CM.color(4))
-//                .attr('stroke-width', 1)
-//                .attr('fill', 'none');
-
-//        CM.group.selectAll('path.spline')
-//                .data(cords).enter()
-//                .append('path')
-//                .attr('d', function (d) {
-//                    return lineFunction(d);
-//                })
-//                .attr('stroke', CM.color(4))
-//                .attr('stroke-width', 1)
-//                .attr('fill', 'none');
-
+    $('#close-requirements').on('click', function () {
+        $('#requirements-container').animate({'right': '-430'}, 250, 'easeInOutCubic');
     });
 
+    $('#form-container').on('submit', function (e) {
+        e.preventDefault();
+
+        selectPosition($('#positionId').val());
+    });
+
+    d3.select('nav h1').on('click', function () {
+
+    });
 
 };
 

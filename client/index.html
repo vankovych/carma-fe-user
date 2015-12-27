@@ -6,49 +6,62 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" href="css/vendor/normalize.css">
-        <link rel="stylesheet" href="css/vendor/jquery-ui.css">
+        <link rel="stylesheet" href="css/vendor/jquery-ui.min.css">
         <link rel="stylesheet" href="css/style.css">
 
         <link rel="shortcut icon" href="favicon.ico">
 
         <script src="js/libs/d3/d3.js"></script>
         <script src="js/libs/jquery/jquery-2.1.4.min.js"></script>
-        <script src="js/libs/jquery-ui/jquery-ui.js"></script>
+        <script src="js/libs/jquery-ui/jquery-ui.min.js"></script>
 
         <script src="js/app/CareerMap.js"></script>
         <script src="js/app/main.js"></script>
     </head>
     <body>
-        <div id="container">
-            <div class="menu">
-                <h3><a href="#">eleks<sup>&reg;</sup> Career map</a></h3>
+        <main>
+            <nav>
+                <h1><a href="#">eleks<sup>&reg;</sup> Career map</a></h1>
                 <ul>
                     <li><a href="#" class="active" data-mode="1">Build my career</a></li>
                     <li><a href="#" data-mode="2">Browse positions</a></li>
                 </ul>                
-            </div>
+            </nav>
             <div id="map">
                 <div class="gradient-white-transparent"></div>
                 <div class="gradient-blue-yellow"></div>
                 <svg></svg>
-                <div id="form-container">
+                <form id="form-container">
                     <label>Enter your current position or find it in the circle<br>
                         to discover new career opportunities</label>
                     <input type="text" placeholder="I am..." id="positionTitle" value="">
                     <input type="hidden" id="positionId" value="">
-                    <button type="button">GO</button>
-                </div>
-                <!--                <div id="requirements">                
-                                </div>-->
+                    <button type="submit">GO</button>
+                </form>
             </div>
-        </div>
+            <aside id="requirements-container">
+                <!--<div id="close-requirements">&times;</div>-->
+                <h2 id="current-position">Intermediate Test Automation Engineer</h2>
+                <h3 id="current-division">Software testing</h3>
+                <div id="target-position-container">
+                    <span class="arrow-down">&darr;</span>
+                    <h2>Intermediate Mobile Designer</h2>
+                    <h3>User experience</h3>
+                </div>
+                <ul id="position-requirements">
+                    <li>2+ year of experiance</li>
+                    <li>English Intermediate</li>
+                    <li>Practical use and strong understanding of testing methods, levels and types. metrics. different  tests analyses methods, practical use and strong understanding of test artefacts and their lifecycle (bug reports, test cases, etc.)</li>
+                    <li>Practical use and strong understanding of common artefact management system (bug trackers, test and requirement management, etc.) Understanding of automation testing purposes, approaches, benifits, life cycle, levels and types.</li>
+                    <li>Practical use and strong understanding of automation script structure (framework, preconditions, asserts, logging etc.)</li>
+                    <li>Practical use and strong understanding of automation testware (continuous integration, version control, visualization, build automation tools etc.), Practical use and strong understanding OOP language syntax, Practical use and understanding DB fundament</li>
+                    <li>Practical use and understanding network basics, practical use and understanding of software development methodologies, Understanding of web service and load/performance testing</li>
+                </ul>
+                <ul id="position-links">
+                    <li><a href="#" id="position-profile">View Job Profile</a></li>
+                    <li><a href="#" id="competency-matrix">View Competency Matrix</a></li>
+                </ul>
+            </aside>
+        </main>
     </body>
 </html>
-<!--
-
-Question:
-
-Designer
-Requirements
-
--->

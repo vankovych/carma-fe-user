@@ -444,22 +444,47 @@ function renderDivisions() {
 
 function selectPosition(currentId) {
 
+    var
+            position = CM.data.positions.filter(function (p) {
+                return p.id === currentId;
+            })[0],
+            subdivision = CM.data.subdivisions.filter(function (s) {
+                if (s.positions) {
+                    return s.positions.indexOf(currentId) >= 0;
+                }
+                else {
+                    return false;
+                }
+            })[0],
+            division = CM.data.divisions.filter(function (s) {
+                if (s.subdivisions) {
+                    return s.subdivisions.indexOf(subdivision.id) >= 0;
+                }
+                else {
+                    return false;
+                }
+            })[0];
+
     // show requirements
 
+    $('#current-position').text(position.title);
+    $('#current-position').css('color', CM.color(division.i));
+    $('#current-division').text(division.title);
+
+    $('#position-profile').attr('href', '#');
+    $('#competency-matrix').attr('href', '#');
+
+//    $('#requirements-container').animate({'right': '0'}, 250, 'easeInOutCubic');
+
+    //    $('#' + currentId).addClass('active');
 
     // show transitions
-
-//    console.log(currentId);
-
     if (CM.mode === 1) {
-
-        var position = CM.data.positions.filter(function (p) {
-            return p.id === currentId;
-        });
-
-        renderTransitions(position[0]);
-
-//    $('#' + currentId).addClass('active');
+        $('#target-position-container').show();
+        renderTransitions(position);
+    }
+    else {
+        $('#target-position-container').hide();
     }
 }
 
@@ -476,38 +501,6 @@ function renderTransition(currentId, targetId) {
                 x2 = Math.round(t.left) - CM.svgWidth / 2 - 105 - t.width / 2,
                 y2 = Math.round(t.top) - CM.svgHeight / 2 + t.height / 2;
 
-//        console.log(c);
-//        console.log(Math.floor(c.x));
-
-        var
-                diff = Math.abs(x1 - x2),
-                lineData = [
-                    [
-                        {'x': x1, 'y': y1},
-                        {'x': diff > 100 ? x1 + CM.R : x1 + 10, 'y': diff > 100 ? y1 - CM.R / 3 : (Math.abs(y1 - y2) / 3)},
-                        {'x': x2, 'y': y2}
-                    ]
-                ];
-
-        var lineFunction = d3.svg.line()
-                .x(function (d) {
-                    return d.x;
-                })
-                .y(function (d) {
-                    return d.y;
-                })
-                .interpolate('basis');
-
-//    CM.group.selectAll('path.spline')
-//            .data(lineData).enter()
-//            .append('path')
-//            .attr('d', function (d) {
-//                return lineFunction(d);
-//            })
-//            .attr('stroke', '#aaa' /*CM.color(17)*/)
-//            .attr('stroke-width', 1)
-//            .attr('fill', 'none');
-
         var bezierLine = d3.svg.line()
                 .x(function (d) {
                     return d[0];
@@ -518,18 +511,17 @@ function renderTransition(currentId, targetId) {
                 .interpolate("basis");
 
         var
-                diff1 = Math.abs(x1 - x2),
-                lineData1 =
+                diffX = Math.abs(x1 - x2),
+                diffY = Math.abs(y1 - y2),
+                lineData =
                 [
                     [x1, y1],
-                    [diff1 > 100 ? x1 + CM.R : x1 + 10, diff1 > 100 ? y1 - CM.R / 3 : (Math.abs(y1 - y2) / 3)],
+                    [diffX > CM.R / 2 ? x1 + CM.R : x1 + 5, diffX > 100 ? y1 - CM.R / 3 : (Math.abs(y1 - y2) / 3)],
                     [x2, y2]
                 ];
 
-
-
         CM.group.append('path')
-                .attr('d', bezierLine(lineData1))
+                .attr('d', bezierLine(lineData))
                 .attr('class', 'spline')
                 .attr('stroke', '#aaa')
                 .attr('stroke-width', 1)
