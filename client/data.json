@@ -157,7 +157,8 @@
             "title": "Subdivision 1",
             "positions": [
                 "p15",
-                "p16"
+                "p16",
+                "p21"
             ]
         },
         {
@@ -276,9 +277,14 @@
         {
             "id": "p20",
             "title": "Position"
+        },
+        {
+            "id": "p21",
+            "title": "Position 5"
         }
     ],
     "colors": [
+        "",
         "#93bdc1",
         "#96c2ae",
         "#97c4a6",

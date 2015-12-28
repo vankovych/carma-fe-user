@@ -4,19 +4,10 @@
         <title>Career map, ELEKS</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
         <link rel="stylesheet" href="css/vendor/normalize.css">
         <link rel="stylesheet" href="css/vendor/jquery-ui.min.css">
         <link rel="stylesheet" href="css/style.css">
-
         <link rel="shortcut icon" href="favicon.ico">
-
-        <script src="js/libs/d3/d3.js"></script>
-        <script src="js/libs/jquery/jquery-2.1.4.min.js"></script>
-        <script src="js/libs/jquery-ui/jquery-ui.min.js"></script>
-
-        <script src="js/app/CareerMap.js"></script>
-        <script src="js/app/main.js"></script>
     </head>
     <body>
         <main>
@@ -30,7 +21,22 @@
             <div id="map">
                 <div class="gradient-white-transparent"></div>
                 <div class="gradient-blue-yellow"></div>
-                <svg></svg>
+                <svg>
+                <defs>
+                <linearGradient id="decoration-arc-top">
+                <stop offset="0%" class="start"/>
+                <stop offset="100%" class="finish"/>
+                </linearGradient>
+                <linearGradient id="decoration-arc-bottom">
+                <stop offset="0%" class="start"/>
+                <stop offset="100%" class="finish"/>
+                </linearGradient>
+                <linearGradient id="gradient-d16-d4">
+                <stop offset="0%" class="start"/>
+                <stop offset="100%" class="finish"/>
+                </linearGradient>
+                </defs>
+                </svg>
                 <form id="form-container">
                     <label>Enter your current position or find it in the circle<br>
                         to discover new career opportunities</label>
@@ -49,7 +55,7 @@
                     <h3>User experience</h3>
                 </div>
                 <ul id="position-requirements">
-                    <li>2+ year of experiance</li>
+                    <li>2+ year of experience</li>
                     <li>English Intermediate</li>
                     <li>Practical use and strong understanding of testing methods, levels and types. metrics. different  tests analyses methods, practical use and strong understanding of test artefacts and their lifecycle (bug reports, test cases, etc.)</li>
                     <li>Practical use and strong understanding of common artefact management system (bug trackers, test and requirement management, etc.) Understanding of automation testing purposes, approaches, benifits, life cycle, levels and types.</li>
@@ -63,5 +69,10 @@
                 </ul>
             </aside>
         </main>
+        <script src="js/libs/d3/d3.js"></script>
+        <script src="js/libs/jquery/jquery-2.1.4.min.js"></script>
+        <script src="js/libs/jquery-ui/jquery-ui.min.js"></script>
+        <script src="js/app/CareerMap.js"></script>
+        <script src="js/app/main.js"></script>
     </body>
 </html>

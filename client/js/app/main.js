@@ -35,8 +35,12 @@ window.onload = function () {
         }
 
         renderTitles(CM.data.divisions, 'division-title');
-
         renderDivisions(CM.data.divisions);
+
+        d3.select('#decoration-arc-top .start').attr('stop-color', CM.color(22));
+        d3.select('#decoration-arc-top .finish').attr('stop-color', CM.color(1));
+        d3.select('#decoration-arc-bottom .start').attr('stop-color', CM.color(13));
+        d3.select('#decoration-arc-bottom .finish').attr('stop-color', CM.color(10));
 
         $('#form-container').fadeIn(750);
 
@@ -89,7 +93,7 @@ window.onload = function () {
     $('#form-container').on('submit', function (e) {
         e.preventDefault();
 
-        selectPosition($('#positionId').val());
+        selectPosition($('#positionId').val(), true);
     });
 
     d3.select('nav h1').on('click', function () {

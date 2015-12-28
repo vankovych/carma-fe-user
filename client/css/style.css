@@ -148,6 +148,10 @@ nav a.active {
     position: relative;
 }
 
+.decoration-arc{
+    stroke-width: 3;
+}
+
 /* DIVISION */
 text {
     fill: #494949;    
@@ -179,16 +183,15 @@ path.division:hover {
 
 .position {
     cursor: pointer;
-    stroke:#666;
-    stroke-width: 0;
+    stroke-width: 1;
 }
 
 .position:hover {
-    /*stroke-width: 1;*/
+    fill: #fff !important;
 }
 
 .position.active {
-    fill-opacity: 1;
+    fill: #fff !important;
 }
 
 /* SEARCH FORM */
@@ -217,7 +220,7 @@ path.division:hover {
 #form-container input {
     display: block;
     float: left;
-    width: 267px;
+    width: 272px;
     height: 48px;
     background: #f0f5fa;
     border: #edf2f7 solid 1px;
@@ -248,9 +251,8 @@ path.division:hover {
 
 .ui-autocomplete {
     max-height: 170px;
-    width: 315px;
+    width: 312px;
     overflow-y: auto;
-    /* prevent horizontal scrollbar */
     overflow-x: hidden;
 }
 

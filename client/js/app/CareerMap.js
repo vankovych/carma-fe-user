@@ -34,7 +34,7 @@ CM.arc = d3.svg.arc()
         .outerRadius(CM.R + 20);
 
 // Draw arc function
-CM.arc1 = d3.svg.arc()
+CM.arcDecoration = d3.svg.arc()
         .startAngle(function (d) {
             return d.initAngle - CM.ArcLen;// + CM.ArcMargin;
         })
@@ -125,6 +125,7 @@ function expandDivision(division) {
     if (division.subdivisions) {
 
         $('#form-container').fadeOut();
+        $('.decoration-arc').fadeTo(CM.duration, 0.2);
 
         // process subs
 
@@ -257,6 +258,9 @@ function expandDivision(division) {
                     .style('fill', function (d, i) {
                         return CM.color(division.i);
                     })
+                    .style('stroke', function (d, i) {
+                        return CM.color(division.i);
+                    })
                     .on('click', function (d) {
                         selectPosition(d.id);
                     })
@@ -282,7 +286,9 @@ function expandDivision(division) {
  */
 function collapseDivision(division) {
 
-    $('#form-container').fadeIn();
+    $('#form-container').fadeIn(CM.duration);
+    $('.decoration-arc').fadeTo(CM.duration, 1);
+    $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
 
     showDivisions(division.id);
 
@@ -325,7 +331,6 @@ function collapseDivision(division) {
  * 
  * @param {type} data
  * @param {type} className
- * @param {type} opacity
  * @returns {undefined}
  */
 function renderTitles(data, className) {
@@ -400,7 +405,7 @@ function renderDivisions() {
             .attr('d', CM.arc)
             .attr('cx', 100)
             .attr('class', 'division')
-            .attr('fill', function (d, i) {
+            .attr('fill', function (d) {
                 return CM.color(d.i);
             })
             .on('click', function (d) {
@@ -426,23 +431,24 @@ function renderDivisions() {
             initAngle: CM.ArcLen * 12
         }];
 
-    // render divisions
-    CM.group.selectAll('path.dc')
+    // render decoration arcs
+    CM.group.selectAll('path.decoration-arc')
             .data(dc).enter()
             // arc
             .append('path')
-//            .attr('class', '')
-//            .attr('id', function (d) {
-//                return d.id;
-//            })
-            .attr('d', CM.arc1)
+            .attr('class', 'decoration-arc')
+            .attr('d', CM.arcDecoration)
             .attr('cx', 100)
-            .attr('class', 'division')
-            .attr('fill', '#ccc');
+            .attr('fill', '#ccc')
+            .attr('fill', function (d) {
+                return d.i ? 'url(#decoration-arc-bottom)' : 'url(#decoration-arc-top)';
+            });
 
 }
 
-function selectPosition(currentId) {
+function selectPosition(currentId, expand) {
+
+    expand = expand || false;
 
     var
             position = CM.data.positions.filter(function (p) {
@@ -465,18 +471,23 @@ function selectPosition(currentId) {
                 }
             })[0];
 
+    if (expand) {
+        expandDivision(division);
+    }
+
     // show requirements
 
     $('#current-position').text(position.title);
     $('#current-position').css('color', CM.color(division.i));
     $('#current-division').text(division.title);
 
-    $('#position-profile').attr('href', '#');
-    $('#competency-matrix').attr('href', '#');
+    $('#position-profile').attr('href', position.profile ? position.profile : '#');
+    $('#competency-matrix').attr('href', position.matrix ? position.matrix : '#');
 
-//    $('#requirements-container').animate({'right': '0'}, 250, 'easeInOutCubic');
+    $('#requirements-container').animate({'right': '0'}, 750, 'easeInOutCubic');
 
-    //    $('#' + currentId).addClass('active');
+    $('.position.active').attr('class', 'position');
+    $('#' + currentId).attr('class', $('#' + currentId).attr('class') + ' active');
 
     // show transitions
     if (CM.mode === 1) {
@@ -491,6 +502,9 @@ function selectPosition(currentId) {
 function renderTransition(currentId, targetId) {
 
     var target = d3.select('#' + targetId);
+
+    d3.select('#gradient-d16-d4 .start').attr('stop-color', CM.color(16));
+    d3.select('#gradient-d16-d4 .finish').attr('stop-color', CM.color(4));
 
     if (target[0][0]) {
 
@@ -523,7 +537,7 @@ function renderTransition(currentId, targetId) {
         CM.group.append('path')
                 .attr('d', bezierLine(lineData))
                 .attr('class', 'spline')
-                .attr('stroke', '#aaa')
+                .attr('stroke', 'url(#gradient-d16-d4)')
                 .attr('stroke-width', 1)
                 .attr('fill', 'none')
                 .transition()
