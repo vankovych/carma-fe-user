@@ -9,13 +9,6 @@ window.onload = function () {
 
         CM.data = json;
 
-        // create custom color scale from predifined colors
-        CM.color = d3.scale.ordinal()
-                .domain(CM.data.divisions.map(function (d) {
-                    return d.i;
-                }))
-                .range(json.colors);
-
         CM.svg = d3.select('#map svg')
                 .attr('width', CM.svgWidth)
                 .attr('height', CM.svgHeight);
@@ -33,6 +26,13 @@ window.onload = function () {
             CM.data.divisions[i].initAngle = 0;
             CM.data.divisions[i].finalAngle = CM.ArcLen * j;
         }
+
+        // create custom color scale from predifined colors
+        CM.color = d3.scale.ordinal()
+                .domain(CM.data.divisions.map(function (d) {
+                    return d.i;
+                }))
+                .range(json.colors);
 
         renderTitles(CM.data.divisions, 'division-title');
         renderDivisions(CM.data.divisions);

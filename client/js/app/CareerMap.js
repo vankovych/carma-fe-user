@@ -1,5 +1,4 @@
 'use strict';
-
 var CM = {
     svgWidth: 1024,
     svgHeight: 900,
@@ -8,20 +7,22 @@ var CM = {
     arcTween: function (transition, newAngle) {
         transition.attrTween("d", function (d) {
             var interpolate = d3.interpolate(d.initAngle, newAngle);
-
             return function (t) {
                 d.initAngle = interpolate(t);
                 return CM.arc(d);
             };
         });
     },
-    duration: 750
+    duration: 750,
+    selected: {
+        division: {},
+        subdivision: {},
+        position: {}
+    }
 };
-
 CM.P = Math.PI * 2;
 CM.ArcLen = CM.P / 24;
 CM.ArcMargin = CM.P / 400;
-
 // Draw arc function
 CM.arc = d3.svg.arc()
         .startAngle(function (d) {
@@ -32,18 +33,16 @@ CM.arc = d3.svg.arc()
         })
         .innerRadius(CM.R)
         .outerRadius(CM.R + 20);
-
 // Draw arc function
 CM.arcDecoration = d3.svg.arc()
         .startAngle(function (d) {
-            return d.initAngle - CM.ArcLen;// + CM.ArcMargin;
+            return d.initAngle - CM.ArcLen; // + CM.ArcMargin;
         })
         .endAngle(function (d) {
             return d.initAngle + CM.ArcLen - CM.ArcMargin;
         })
         .innerRadius(CM.R)
         .outerRadius(CM.R + 3);
-
 // Bezier curve function
 CM.line = d3.svg.line.radial()
         .interpolate('bundle')
@@ -54,7 +53,6 @@ CM.line = d3.svg.line.radial()
         .angle(function (d) {
             return d.x / 180 * Math.PI;
         });
-
 /**
  * 
  * @param {type} arc
@@ -63,7 +61,6 @@ CM.line = d3.svg.line.radial()
  */
 function moveArc(arc, angle) {
     angle = angle || (0.73 * CM.P);
-
     d3.select(arc)
             .transition()
             .duration(CM.duration)
@@ -84,7 +81,6 @@ function hideDivisions(exceptId) {
             .style('opacity', function () {
                 return (this.id === exceptId) ? 1 : .2;
             });
-
     // fade in selected division title             
     CM.group.selectAll('g.division-title')
             .transition()
@@ -106,7 +102,6 @@ function showDivisions() {
             .delay(300)
             .duration(300)
             .style('opacity', '1');
-
     // fade out division title             
     CM.group.selectAll('g.division-title')
             .transition()
@@ -126,24 +121,19 @@ function expandDivision(division) {
 
         $('#form-container').fadeOut();
         $('.decoration-arc').fadeTo(CM.duration, 0.2);
-
         // process subs
 
         var subdivisions = [];
-
         hideDivisions(division.id);
-
         // get subs for selected division
         subdivisions = CM.data.subdivisions.filter(function (s) {
             return division.subdivisions.indexOf(s.id) >= 0;
         });
-
         subdivisions.forEach(function (subdivision, i) {
             var j = division.i < 11 ? division.i + i : division.i - i;
             subdivision.initAngle = division.initAngle;
             subdivision.expandAngle = CM.ArcLen * j;
         });
-
         // render subs
         CM.group.selectAll('path.' + division.id + '-subdivision')
                 .data(subdivisions).enter()
@@ -158,20 +148,17 @@ function expandDivision(division) {
                 .attr('fill', function () {
                     return CM.color(division.i);
                 });
-
         // move division title up
         CM.group.selectAll('g#' + division.id + '-title>text')
                 .transition()
                 .duration(CM.duration)
                 .style('fill', CM.color(division.i))
                 .attr('dy', '-2em');
-
         // move subdivisions
         division.subdivisions.forEach(function (id, i) {
             var j = division.i < 11 ? division.i + i : division.i - i;
             moveArc(d3.select('#' + id)[0][0], CM.ArcLen * j);
         });
-
         // render subdivision titles
 //        renderTitles(subdivisions, 'subdivision-title', 0);
         CM.group.selectAll('g.' + division.id + '-subdivision-title')
@@ -198,13 +185,11 @@ function expandDivision(division) {
                 .text(function (d) {
                     return d.title;
                 });
-
         CM.group.selectAll('g.' + division.id + '-subdivision-title')
                 .transition()
                 .delay(300)
                 .duration(CM.duration)
                 .style('opacity', '1');
-
         // render position trees
         CM.group.selectAll('g.' + division.id + '-position-tree')
                 .data(subdivisions).enter()
@@ -230,7 +215,6 @@ function expandDivision(division) {
                 .attr('fill', function (d, i) {
                     return CM.color(division.i);
                 });
-
         subdivisions.forEach(function (sub) {
             var positions = [];
             if (sub.positions) {
@@ -270,7 +254,6 @@ function expandDivision(division) {
                         return d.title;
                     });
         });
-
         CM.group.selectAll('g.' + division.id + '-position-tree')
                 .transition()
                 .delay(300)
@@ -289,9 +272,9 @@ function collapseDivision(division) {
     $('#form-container').fadeIn(CM.duration);
     $('.decoration-arc').fadeTo(CM.duration, 1);
     $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
-
+     d3.selectAll('.spline').remove();
+    
     showDivisions(division.id);
-
     if (division.subdivisions) {
 
         CM.group.selectAll('g#' + division.id + '-title>text')
@@ -299,11 +282,9 @@ function collapseDivision(division) {
                 .duration(CM.duration)
                 .style('fill', '#494949')
                 .attr('dy', '.31em');
-
         division.subdivisions.forEach(function (id) {
             moveArc(d3.select('#' + id)[0][0], CM.ArcLen * division.i);
         });
-
         // remove subdivisions
         CM.group.selectAll('.subdivision')
                 .transition()
@@ -311,7 +292,6 @@ function collapseDivision(division) {
                 .duration(500)
                 .style('opacity', '0')
                 .remove();
-
         // remove subdivision titles
         CM.group.selectAll('g.subdivision-title')
                 .transition()
@@ -362,7 +342,6 @@ function renderTitles(data, className) {
             .on('click', function (d) {
                 collapseDivision(d);
             });
-
 //    CM.group.selectAll('g.' + className)
 //            .transition()
 //            .delay(CM.duration)
@@ -380,7 +359,6 @@ function renderDivisions() {
     CM.group.selectAll('.subdivision').remove();
     CM.group.selectAll('.subdivision-title').remove();
     CM.group.selectAll('.position-tree').remove();
-
     // add additional data
     for (var i = 0, j = 1; i < CM.data.divisions.length; i++, j++) {
         if (j === 11) {
@@ -393,7 +371,6 @@ function renderDivisions() {
     CM.group.selectAll('g.division-title')
             .transition()
             .style('opacity', '0');
-
     // render divisions
     CM.group.selectAll('path.division')
             .data(CM.data.divisions).enter()
@@ -411,17 +388,14 @@ function renderDivisions() {
             .on('click', function (d) {
                 expandDivision(d);
             });
-
     CM.data.divisions.forEach(function (division, i) {
         moveArc(d3.select('#' + division.id)[0][0], division.finalAngle);
     });
-
     CM.group.selectAll('g.division-title')
             .transition()
             .delay(750)
             .duration(CM.duration)
             .style('opacity', '1');
-
     var dc = [{
             i: 0,
             initAngle: 0
@@ -430,7 +404,6 @@ function renderDivisions() {
             i: 12,
             initAngle: CM.ArcLen * 12
         }];
-
     // render decoration arcs
     CM.group.selectAll('path.decoration-arc')
             .data(dc).enter()
@@ -443,13 +416,11 @@ function renderDivisions() {
             .attr('fill', function (d) {
                 return d.i ? 'url(#decoration-arc-bottom)' : 'url(#decoration-arc-top)';
             });
-
 }
 
 function selectPosition(currentId, expand) {
 
     expand = expand || false;
-
     var
             position = CM.data.positions.filter(function (p) {
                 return p.id === currentId;
@@ -470,7 +441,6 @@ function selectPosition(currentId, expand) {
                     return false;
                 }
             })[0];
-
     if (expand) {
         expandDivision(division);
     }
@@ -480,15 +450,11 @@ function selectPosition(currentId, expand) {
     $('#current-position').text(position.title);
     $('#current-position').css('color', CM.color(division.i));
     $('#current-division').text(division.title);
-
     $('#position-profile').attr('href', position.profile ? position.profile : '#');
     $('#competency-matrix').attr('href', position.matrix ? position.matrix : '#');
-
     $('#requirements-container').animate({'right': '0'}, 750, 'easeInOutCubic');
-
     $('.position.active').attr('class', 'position');
     $('#' + currentId).attr('class', $('#' + currentId).attr('class') + ' active');
-
     // show transitions
     if (CM.mode === 1) {
         $('#target-position-container').show();
@@ -502,10 +468,8 @@ function selectPosition(currentId, expand) {
 function renderTransition(currentId, targetId) {
 
     var target = d3.select('#' + targetId);
-
     d3.select('#gradient-d16-d4 .start').attr('stop-color', CM.color(16));
     d3.select('#gradient-d16-d4 .finish').attr('stop-color', CM.color(4));
-
     if (target[0][0]) {
 
         var c = d3.select('#' + currentId)[0][0].getBoundingClientRect(),
@@ -514,7 +478,6 @@ function renderTransition(currentId, targetId) {
                 y1 = Math.round(c.top) - CM.svgHeight / 2 + c.height / 2,
                 x2 = Math.round(t.left) - CM.svgWidth / 2 - 105 - t.width / 2,
                 y2 = Math.round(t.top) - CM.svgHeight / 2 + t.height / 2;
-
         var bezierLine = d3.svg.line()
                 .x(function (d) {
                     return d[0];
@@ -523,7 +486,6 @@ function renderTransition(currentId, targetId) {
                     return d[1];
                 })
                 .interpolate("basis");
-
         var
                 diffX = Math.abs(x1 - x2),
                 diffY = Math.abs(y1 - y2),
@@ -533,7 +495,6 @@ function renderTransition(currentId, targetId) {
                     [diffX > CM.R / 2 ? x1 + CM.R : x1 + 5, diffX > 100 ? y1 - CM.R / 3 : (Math.abs(y1 - y2) / 3)],
                     [x2, y2]
                 ];
-
         CM.group.append('path')
                 .attr('d', bezierLine(lineData))
                 .attr('class', 'spline')
@@ -554,10 +515,8 @@ function renderTransition(currentId, targetId) {
 function renderTransitions(position) {
 
     d3.selectAll('.spline').remove();
-
     if (position.transition) {
         position.transition.forEach(function (tId) {
-//            console.log(tId);
             renderTransition(position.id, tId);
         });
     }
