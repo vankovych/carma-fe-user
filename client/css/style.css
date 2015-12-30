@@ -139,8 +139,7 @@ nav a.active {
 #map {
     width: 100%;
     text-align: center;
-    position: absolute;
-    /*margin-top: -100px;*/
+    position: relative;
 }
 
 #map svg {
@@ -180,6 +179,8 @@ path.division:hover {
 .division-title text, .subdivision-title text{
     font-family: ProximaNovaRegular;
 }
+
+/* position */
 
 .position {
     cursor: pointer;

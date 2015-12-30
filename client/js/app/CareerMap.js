@@ -121,10 +121,11 @@ function expandDivision(division) {
 
         $('#form-container').fadeOut();
         $('.decoration-arc').fadeTo(CM.duration, 0.2);
-        // process subs
 
+        // process subs
         var subdivisions = [];
         hideDivisions(division.id);
+
         // get subs for selected division
         subdivisions = CM.data.subdivisions.filter(function (s) {
             return division.subdivisions.indexOf(s.id) >= 0;
@@ -134,6 +135,7 @@ function expandDivision(division) {
             subdivision.initAngle = division.initAngle;
             subdivision.expandAngle = CM.ArcLen * j;
         });
+
         // render subs
         CM.group.selectAll('path.' + division.id + '-subdivision')
                 .data(subdivisions).enter()
@@ -148,19 +150,22 @@ function expandDivision(division) {
                 .attr('fill', function () {
                     return CM.color(division.i);
                 });
+
         // move division title up
         CM.group.selectAll('g#' + division.id + '-title>text')
                 .transition()
                 .duration(CM.duration)
                 .style('fill', CM.color(division.i))
                 .attr('dy', '-2em');
+
         // move subdivisions
         division.subdivisions.forEach(function (id, i) {
             var j = division.i < 11 ? division.i + i : division.i - i;
             moveArc(d3.select('#' + id)[0][0], CM.ArcLen * j);
         });
+
         // render subdivision titles
-//        renderTitles(subdivisions, 'subdivision-title', 0);
+        // renderTitles(subdivisions, 'subdivision-title', 0);
         CM.group.selectAll('g.' + division.id + '-subdivision-title')
                 .data(subdivisions).enter()
                 // title group
@@ -253,6 +258,26 @@ function expandDivision(division) {
                     .text(function (d) {
                         return d.title;
                     });
+
+//            CM.group.selectAll('g#' + sub.id + '-position-tree')
+//                    .selectAll('circle.position-c')
+//                    .data(positions).enter()
+//                    // position leaf
+//                    .append('circle')
+//                    .attr('class', 'position-c')
+//                    .attr('cx', function (d) {
+//                        return -1;
+//                    })
+//                    .attr('cy', function (d, i) {
+//                        return -CM.R + 30 * i + 20;
+//                    })
+//                    .attr('r', 5)
+//                    .style('fill', function (d, i) {
+//                        return CM.color(division.i);
+//                    })
+//                    .style('stroke', function (d, i) {
+//                        return CM.color(division.i);
+//                    });
         });
         CM.group.selectAll('g.' + division.id + '-position-tree')
                 .transition()
@@ -272,8 +297,8 @@ function collapseDivision(division) {
     $('#form-container').fadeIn(CM.duration);
     $('.decoration-arc').fadeTo(CM.duration, 1);
     $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
-     d3.selectAll('.spline').remove();
-    
+    d3.selectAll('.spline').remove();
+
     showDivisions(division.id);
     if (division.subdivisions) {
 
@@ -492,7 +517,10 @@ function renderTransition(currentId, targetId) {
                 lineData =
                 [
                     [x1, y1],
-                    [diffX > CM.R / 2 ? x1 + CM.R : x1 + 5, diffX > 100 ? y1 - CM.R / 3 : (Math.abs(y1 - y2) / 3)],
+                    [
+                        diffX > CM.R / 2 ? x1 + CM.R : x1 + 5,
+                        diffX > 100 ? y1 - CM.R / 3 : (Math.abs(y1 - y2) / 4)
+                    ],
                     [x2, y2]
                 ];
         CM.group.append('path')
@@ -506,7 +534,7 @@ function renderTransition(currentId, targetId) {
                 .attrTween('stroke-dasharray', function () {
                     var len = this.getTotalLength();
                     return function (t) {
-                        return (d3.interpolateString('0,' + len, len + ',0'))(t)
+                        return (d3.interpolateString('0,' + len, len + ',0'))(t);
                     };
                 });
     }
