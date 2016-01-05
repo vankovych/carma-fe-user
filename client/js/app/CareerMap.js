@@ -21,7 +21,7 @@ var CM = {
     }
 };
 CM.P = Math.PI * 2;
-CM.ArcLen = CM.P / 24;
+CM.ArcLen = CM.P / 20;
 CM.ArcMargin = CM.P / 400;
 // Draw arc function
 CM.arc = d3.svg.arc()
@@ -33,16 +33,7 @@ CM.arc = d3.svg.arc()
         })
         .innerRadius(CM.R)
         .outerRadius(CM.R + 20);
-// Draw arc function
-CM.arcDecoration = d3.svg.arc()
-        .startAngle(function (d) {
-            return d.initAngle - CM.ArcLen; // + CM.ArcMargin;
-        })
-        .endAngle(function (d) {
-            return d.initAngle + CM.ArcLen - CM.ArcMargin;
-        })
-        .innerRadius(CM.R)
-        .outerRadius(CM.R + 3);
+
 // Bezier curve function
 CM.line = d3.svg.line.radial()
         .interpolate('bundle')
@@ -60,7 +51,7 @@ CM.line = d3.svg.line.radial()
  * @returns {undefined}
  */
 function moveArc(arc, angle) {
-    angle = angle || (0.73 * CM.P);
+//    angle = angle || (0.73 * CM.P);
     d3.select(arc)
             .transition()
             .duration(CM.duration)
@@ -120,7 +111,6 @@ function expandDivision(division) {
     if (division.subdivisions) {
 
         $('#form-container').fadeOut();
-        $('.decoration-arc').fadeTo(CM.duration, 0.2);
 
         // process subs
         var subdivisions = [];
@@ -165,7 +155,6 @@ function expandDivision(division) {
         });
 
         // render subdivision titles
-        // renderTitles(subdivisions, 'subdivision-title', 0);
         CM.group.selectAll('g.' + division.id + '-subdivision-title')
                 .data(subdivisions).enter()
                 // title group
@@ -190,11 +179,13 @@ function expandDivision(division) {
                 .text(function (d) {
                     return d.title;
                 });
+
         CM.group.selectAll('g.' + division.id + '-subdivision-title')
                 .transition()
                 .delay(300)
                 .duration(CM.duration)
                 .style('opacity', '1');
+
         // render position trees
         CM.group.selectAll('g.' + division.id + '-position-tree')
                 .data(subdivisions).enter()
@@ -204,8 +195,8 @@ function expandDivision(division) {
                 .attr('id', function (d) {
                     return d.id + '-position-tree';
                 })
-                .attr('transform', function (d, i) {
-                    return 'rotate(' + (((division.i < 12 ? i : -i) + division.i) * 15 + 7) + ')';
+                .attr('transform', function (d) {
+                    return 'rotate(' + ((d.expandAngle + CM.ArcLen / 2).toDeg()) + ')';
                 })
                 .style('opacity', 0)
                 // tree trunk
@@ -220,6 +211,7 @@ function expandDivision(division) {
                 .attr('fill', function (d, i) {
                     return CM.color(division.i);
                 });
+
         subdivisions.forEach(function (sub) {
             var positions = [];
             if (sub.positions) {
@@ -295,7 +287,6 @@ function expandDivision(division) {
 function collapseDivision(division) {
 
     $('#form-container').fadeIn(CM.duration);
-    $('.decoration-arc').fadeTo(CM.duration, 1);
     $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
     d3.selectAll('.spline').remove();
 
@@ -367,11 +358,6 @@ function renderTitles(data, className) {
             .on('click', function (d) {
                 collapseDivision(d);
             });
-//    CM.group.selectAll('g.' + className)
-//            .transition()
-//            .delay(CM.duration)
-//            .duration(CM.duration)
-//            .style('opacity', '1');
 }
 
 /**
@@ -384,14 +370,6 @@ function renderDivisions() {
     CM.group.selectAll('.subdivision').remove();
     CM.group.selectAll('.subdivision-title').remove();
     CM.group.selectAll('.position-tree').remove();
-    // add additional data
-    for (var i = 0, j = 1; i < CM.data.divisions.length; i++, j++) {
-        if (j === 11) {
-            j += 2;
-        }
-        CM.data.divisions[i].initAngle = 0;
-        CM.data.divisions[i].finalAngle = CM.ArcLen * j;
-    }
 
     CM.group.selectAll('g.division-title')
             .transition()
@@ -413,34 +391,16 @@ function renderDivisions() {
             .on('click', function (d) {
                 expandDivision(d);
             });
+
     CM.data.divisions.forEach(function (division, i) {
         moveArc(d3.select('#' + division.id)[0][0], division.finalAngle);
     });
+
     CM.group.selectAll('g.division-title')
             .transition()
             .delay(750)
             .duration(CM.duration)
             .style('opacity', '1');
-    var dc = [{
-            i: 0,
-            initAngle: 0
-        },
-        {
-            i: 12,
-            initAngle: CM.ArcLen * 12
-        }];
-    // render decoration arcs
-    CM.group.selectAll('path.decoration-arc')
-            .data(dc).enter()
-            // arc
-            .append('path')
-            .attr('class', 'decoration-arc')
-            .attr('d', CM.arcDecoration)
-            .attr('cx', 100)
-            .attr('fill', '#ccc')
-            .attr('fill', function (d) {
-                return d.i ? 'url(#decoration-arc-bottom)' : 'url(#decoration-arc-top)';
-            });
 }
 
 function selectPosition(currentId, expand) {
@@ -471,12 +431,12 @@ function selectPosition(currentId, expand) {
     }
 
     // show requirements
-
     $('#current-position').text(position.title);
     $('#current-position').css('color', CM.color(division.i));
     $('#current-division').text(division.title);
     $('#position-profile').attr('href', position.profile ? position.profile : '#');
     $('#competency-matrix').attr('href', position.matrix ? position.matrix : '#');
+
     $('#requirements-container').animate({'right': '0'}, 750, 'easeInOutCubic');
     $('.position.active').attr('class', 'position');
     $('#' + currentId).attr('class', $('#' + currentId).attr('class') + ' active');

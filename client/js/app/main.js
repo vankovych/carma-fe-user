@@ -19,12 +19,9 @@ window.onload = function () {
 
         // add additional data
         for (var i = 0, j = 1; i < CM.data.divisions.length; i++, j++) {
-            if (j === 11) {
-                j += 2;
-            }
-            CM.data.divisions[i].i = j;
+            CM.data.divisions[i].i = i;
             CM.data.divisions[i].initAngle = 0;
-            CM.data.divisions[i].finalAngle = CM.ArcLen * j;
+            CM.data.divisions[i].finalAngle = CM.ArcLen * i;
         }
 
         // create custom color scale from predifined colors
@@ -36,11 +33,6 @@ window.onload = function () {
 
         renderTitles(CM.data.divisions, 'division-title');
         renderDivisions(CM.data.divisions);
-
-        d3.select('#decoration-arc-top .start').attr('stop-color', CM.color(22));
-        d3.select('#decoration-arc-top .finish').attr('stop-color', CM.color(1));
-        d3.select('#decoration-arc-bottom .start').attr('stop-color', CM.color(13));
-        d3.select('#decoration-arc-bottom .finish').attr('stop-color', CM.color(10));
 
         $('#form-container').fadeIn(750);
 

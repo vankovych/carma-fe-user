@@ -147,10 +147,6 @@ nav a.active {
     position: relative;
 }
 
-.decoration-arc{
-    stroke-width: 3;
-}
-
 /* DIVISION */
 text {
     fill: #494949;    
