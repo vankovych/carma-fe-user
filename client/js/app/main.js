@@ -1,98 +1,72 @@
-'use strict';
+/* main */
 
-window.onload = function () {
+'use strict';
+require([
+    'd3',
+    'jquery',
+    'jqueryui',
+    'app/CareerMap'
+], function (d3, $, jqueryui, CareerMap) {
 
     d3.json('data.json', function (error, json) {
         if (error) {
             return console.warn(error);
         }
 
-        CM.data = json;
+        var CM = new CareerMap(json);
 
-        CM.svg = d3.select('#map svg')
-                .attr('width', CM.svgWidth)
-                .attr('height', CM.svgHeight);
-        CM.group = CM.svg.append('g')
-                .attr('width', CM.svgWidth)
-                .attr('height', CM.svgHeight)
-                .attr('transform', 'translate(' + CM.svgWidth / 2 + ', ' + CM.svgHeight / 2 + ')');
+        // autocomplete form
+        $('#form-container').fadeIn(CM.duration);
 
-        // add additional data
-        for (var i = 0, j = 1; i < CM.data.divisions.length; i++, j++) {
-            CM.data.divisions[i].i = i;
-            CM.data.divisions[i].initAngle = 0;
-            CM.data.divisions[i].finalAngle = CM.ArcLen * i;
-        }
-
-        // create custom color scale from predifined colors
-        CM.color = d3.scale.ordinal()
-                .domain(CM.data.divisions.map(function (d) {
-                    return d.i;
-                }))
-                .range(json.colors);
-
-        renderTitles(CM.data.divisions, 'division-title');
-        renderDivisions(CM.data.divisions);
-
-        $('#form-container').fadeIn(750);
-
-        var positions = CM.data.positions.map(function (position) {
-            return {
-                id: position.id,
-                label: position.title
-            };
-        });
-
-        $('#positionTitle').val('');
-
-        $("#positionTitle").autocomplete({
-            minLength: 0,
-            source: positions,
-            focus: function (event, ui) {
-                $("#positionTitle").val(ui.item.label);
-                return false;
-            },
-            select: function (event, ui) {
-                $("#positionTitle").val(ui.item.label);
-                $("#positionId").val(ui.item.id);
-                return false;
-            }
-        })
-                .autocomplete("instance")._renderItem = function (ul, item) {
-            return $("<li>")
-                    .append("<a>" + item.label + "</a>")
+        $('#positionTitle')
+                .val('')
+                .autocomplete({
+                    minLength: 0,
+                    source: CM.data.positions.map(function (position) {
+                        return {
+                            id: position.id,
+                            label: position.title
+                        };
+                    }),
+                    focus: function (event, ui) {
+                        $("#positionTitle").val(ui.item.label);
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        $("#positionTitle").val(ui.item.label);
+                        $("#positionId").val(ui.item.id);
+                        return false;
+                    }
+                })
+                .autocomplete('instance')._renderItem = function (ul, item) {
+            return $('<li>')
+                    .append('<a>' + item.label + '</a>')
                     .appendTo(ul);
         };
-    });
 
+        // menu navigation
+        var $menuItems = $('nav ul a');
+        $menuItems.on('click', function () {
+            CM.mode = $(this).attr('data-mode');
+            CM.renderDivisions();
 
-    // Events
+            $menuItems.removeClass('active');
+            $(this).addClass('active');
+        });
 
-    // Menu navigation
-    var $menuItems = $('nav ul a');
-    $menuItems.on('click', function () {
-        renderDivisions();
-        $menuItems.removeClass('active');
-        $(this).addClass('active');
+        // close requirements
+        $('#close-requirements').on('click', function () {
+            $('#requirements-container').animate({'right': '-430'}, 250, 'easeInOutCubic');
+        });
 
-        CM.mode = $(this).attr('data-mode');
-    });
-
-    $('#close-requirements').on('click', function () {
-        $('#requirements-container').animate({'right': '-430'}, 250, 'easeInOutCubic');
-    });
-
-    $('#form-container').on('submit', function (e) {
-        e.preventDefault();
-
-        selectPosition($('#positionId').val(), true);
-    });
-
-    d3.select('nav h1').on('click', function () {
+        $('#form-container').on('submit', function (e) {
+            e.preventDefault();
+            CM.selectPosition($('#positionId').val(), true);
+        });
 
     });
 
-};
+});
 
 Number.prototype.toDeg = function () {
     return this * (180 / Math.PI);
