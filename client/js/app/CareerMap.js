@@ -48,6 +48,17 @@ define('app/CareerMap', [
                 .innerRadius(root.R)
                 .outerRadius(root.R + 20);
 
+        // Draw arc function
+        this.arc1 = d3.svg.arc()
+                .startAngle(function (d) {
+                    return d.initAngle;
+                })
+                .endAngle(function (d) {
+                    return d.initAngle + root.ArcLen - root.ArcMargin;
+                })
+                .innerRadius(root.R)
+                .outerRadius(root.R + 5);
+
         this.init();
 
         this.renderTitles(this.data.divisions, 'division-title');
@@ -351,8 +362,13 @@ define('app/CareerMap', [
                 .transition()
                 .style('opacity', '0');
         // render divisions
-        root.group.selectAll('path.division')
+        root.group.selectAll('.division')
                 .data(root.data.divisions).enter()
+                .append('g')
+                .attr('class', 'division')
+                .attr('id', function (d) {
+                    return d.id + 'g';
+                })
                 // arc
                 .append('path')
                 .attr('id', function (d) {
@@ -360,15 +376,26 @@ define('app/CareerMap', [
                 })
                 .attr('d', root.arc)
                 .attr('cx', 100)
-                .attr('class', 'division')
                 .attr('fill', function (d) {
                     return root.color(d.i);
                 })
                 .on('click', function (d) {
                     root.expandDivision(d);
                 });
-        root.data.divisions.forEach(function (division, i) {
-            root.moveArc(d3.select('#' + division.id)[0][0], division.finalAngle);
+
+        // arc in
+        root.group.selectAll('.division')
+                .data(root.data.divisions)
+                .append('path')
+                .attr('class', 'arc-in')
+                .attr('d', root.arc1)
+                .attr('cx', 100)
+                .attr('fill', function (d) {
+                    return 'gray';//root.color(d.i);
+                });
+
+        root.data.divisions.forEach(function (d, i) {
+            root.moveArc(d3.select('#' + d.id)[0][0], d.finalAngle);
         });
         root.group.selectAll('g.division-title')
                 .transition()
@@ -486,15 +513,12 @@ define('app/CareerMap', [
 
                 if (s.positions) {
                     s.positions.forEach(function (pId) {
-//                    target = s.positions.indexOf(tId) >= 0;
                         target = position.transition.some(function (p) {
-                            return p.indexOf(pId) >= 0;
+                            return p === pId;
                         });
 
-//                        console.log(target, s.title);
-
                         if (target) {
-                            console.log(target, s.title);
+//                            console.log(target, s.title);
                             targetSubdivisions.push(s.id);
                             return false;
                         }
@@ -510,15 +534,11 @@ define('app/CareerMap', [
 
                 if (d.subdivisions) {
                     d.subdivisions.forEach(function (sId) {
-//                    target = s.positions.indexOf(tId) >= 0;
                         target = targetSubdivisions.some(function (p) {
-                            return p.indexOf(sId) >= 0;
+                            return p === sId;
                         });
 
-//                        console.log(target, s.title);
-
                         if (target) {
-                            console.log(target, d.title);
                             if (targetDivisions.indexOf(d.id) < 0) {
                                 targetDivisions.push(d);
                             }
@@ -533,7 +553,6 @@ define('app/CareerMap', [
             targetDivisions.forEach(function (d) {
                 root.expandDivision(d);
             });
-
 
             // render transitions
             position.transition.forEach(function (tId) {

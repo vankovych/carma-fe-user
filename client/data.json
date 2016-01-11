@@ -263,7 +263,12 @@
         },
         {
             "id": "p17",
-            "title": "Position 3"
+            "title": "Position 3",
+            "transition": [
+                "p19",
+                "p6",
+                "p15"
+            ]
         },
         {
             "id": "p18",
