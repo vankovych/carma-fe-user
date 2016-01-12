@@ -196,8 +196,10 @@ path.placeholder {
 #form-container {
     position: absolute;
     z-index: 4;
-    left: 450px;
-    top: 400px;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     display: none;
     text-align: center;
 }
@@ -215,8 +217,14 @@ path.placeholder {
     user-select: none;          
 }
 
+#form-container .form-inner {    
+    margin: 0 auto;
+    width: 316px;
+}
+
 #form-container input {
     display: block;
+    margin: 0 auto;
     float: left;
     width: 272px;
     height: 48px;

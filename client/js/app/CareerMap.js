@@ -60,7 +60,6 @@ define('app/CareerMap', [
                 .outerRadius(root.R + 5);
 
         this.init();
-
         this.renderTitles(this.data.divisions, 'division-title');
         this.renderDivisions(this.data.divisions);
     };
@@ -130,8 +129,10 @@ define('app/CareerMap', [
 
     CareerMap.prototype.expandDivision = function (division) {
         var root = this;
+
         if (division.subdivisions) {
             $('#form-container').fadeOut(root.duration);
+
             root.hideDivisions(division.id);
 
             // get subs for selected division
@@ -143,7 +144,7 @@ define('app/CareerMap', [
             subdivisions.forEach(function (subdivision, i) {
                 var j = division.i < 11 ? division.i + i : division.i - i;
                 subdivision.initAngle = division.initAngle;
-                subdivision.expandAngle = root.ArcLen * j;
+                subdivision.finalAngle = root.ArcLen * j;
             });
 
             // render subs
@@ -174,32 +175,9 @@ define('app/CareerMap', [
                 root.moveArc(d3.select('#' + id)[0][0], root.ArcLen * j);
             });
 
-            // render sub titles
-            root.group.selectAll('g.' + division.id + '-subdivision-title')
-                    .data(subdivisions).enter()
-                    // title group
-                    .append('g')
-                    .attr('class', division.id + '-subdivision-title subdivision-title')
-                    .style('opacity', 0)
-                    .attr('transform', function (d) {
-                        return 'rotate(' + ((d.expandAngle + root.ArcLen / 2).toDeg() - 90) + ')translate(' + 300 + ')';
-                    })
-                    // title text
-                    .append('text')
-                    .attr('dx', function (d) {
-                        return d.expandAngle.toDeg() < 180 ? 50 : -50;
-                    })
-                    .attr('dy', '.31em')
-                    .attr('text-anchor', function (d) {
-                        return d.expandAngle.toDeg() < 180 ? 'start' : 'end';
-                    })
-                    .attr('transform', function (d) {
-                        return d.expandAngle.toDeg() < 180 ? null : 'rotate(180)';
-                    })
-                    .text(function (d) {
-                        return d.title;
-                    });
+            root.renderTitles(subdivisions, division.id + '-subdivision-title', 'subdivision-title');
 
+            // fade in divisions
             root.group.selectAll('g.' + division.id + '-subdivision-title')
                     .transition()
                     .delay(300)
@@ -216,7 +194,7 @@ define('app/CareerMap', [
                         return d.id + '-position-tree';
                     })
                     .attr('transform', function (d) {
-                        return 'rotate(' + ((d.expandAngle + root.ArcLen / 2).toDeg()) + ')';
+                        return 'rotate(' + ((d.finalAngle + root.ArcLen / 2).toDeg()) + ')';
                     })
                     .style('opacity', 0)
                     // tree trunk
@@ -232,8 +210,11 @@ define('app/CareerMap', [
                         return root.color(division.i);
                     });
 
+            // render position leafs
             subdivisions.forEach(function (sub) {
                 var positions = [];
+
+                // get positions for specified subdivision
                 if (sub.positions) {
                     positions = root.data.positions.filter(function (p) {
                         return sub.positions.indexOf(p.id) >= 0;
@@ -272,6 +253,7 @@ define('app/CareerMap', [
                         });
             });
 
+            // fade in position trees
             root.group.selectAll('g.' + division.id + '-position-tree')
                     .transition()
                     .delay(300)
@@ -294,33 +276,40 @@ define('app/CareerMap', [
                     .duration(root.duration)
                     .style('fill', '#494949')
                     .attr('dy', '.31em');
+
             division.subdivisions.forEach(function (id) {
                 root.moveArc(d3.select('#' + id)[0][0], root.ArcLen * division.i);
             });
+
             // remove subdivisions
             root.group.selectAll('.subdivision')
                     .transition()
-                    .delay(700)
-                    .duration(500)
+                    .delay(root.duration - 50)
+                    .duration(root.duration * 0.66)
                     .style('opacity', '0')
                     .remove();
+
             // remove subdivision titles
-            root.group.selectAll('g.subdivision-title')
+            root.group.selectAll('.subdivision-title')
                     .transition()
                     .duration(root.duration)
                     .style('opacity', '0')
                     .remove();
-        }
 
-        root.group.selectAll('.position-tree')
-                .transition()
-                .duration(500)
-                .style('opacity', '0')
-                .remove();
+            // remove trees
+            root.group.selectAll('.position-tree')
+                    .transition()
+                    .duration(500)
+                    .style('opacity', '0')
+                    .remove();
+        }
     };
 
-    CareerMap.prototype.renderTitles = function (data, className) {
+    CareerMap.prototype.renderTitles = function (data, className, classNameAdd) {
         var root = this;
+
+        className += classNameAdd ? ' ' + classNameAdd : '';
+
         root.group.selectAll('g.' + className)
                 .data(data).enter()
                 .append('g')
@@ -383,16 +372,16 @@ define('app/CareerMap', [
                     root.expandDivision(d);
                 });
 
-        // arc in
-        root.group.selectAll('.division')
-                .data(root.data.divisions)
-                .append('path')
-                .attr('class', 'arc-in')
-                .attr('d', root.arc1)
-                .attr('cx', 100)
-                .attr('fill', function (d) {
-                    return 'gray';//root.color(d.i);
-                });
+//        // arc in
+//        root.group.selectAll('.division')
+//                .data(root.data.divisions)
+//                .append('path')
+//                .attr('class', 'arc-in')
+//                .attr('d', root.arc1)
+//                .attr('cx', 100)
+//                .attr('fill', function (d) {
+//                    return 'gray';//root.color(d.i);
+//                });
 
         root.data.divisions.forEach(function (d, i) {
             root.moveArc(d3.select('#' + d.id)[0][0], d.finalAngle);
@@ -443,20 +432,22 @@ define('app/CareerMap', [
 
     CareerMap.prototype.renderTransition = function (currentId, targetId) {
         var root = this;
-        var target = d3.select('#' + targetId);
+        var targetPos = d3.select('#' + targetId);
 
         // set colors
         d3.select('#gradient-d16-d4 .start').attr('stop-color', root.color(16));
         d3.select('#gradient-d16-d4 .finish').attr('stop-color', root.color(4));
 
-        if (target[0][0]) {
+        if (targetPos[0][0]) {
 
-            var c = d3.select('#' + currentId)[0][0].getBoundingClientRect(),
-                    t = target[0][0].getBoundingClientRect(),
-                    x1 = Math.round(c.left) - root.svgWidth / 2 - 105 - c.width / 2,
-                    y1 = Math.round(c.top) - root.svgHeight / 2 + c.height / 2,
-                    x2 = Math.round(t.left) - root.svgWidth / 2 - 105 - t.width / 2,
-                    y2 = Math.round(t.top) - root.svgHeight / 2 + t.height / 2;
+            var currentBounding, targetBounding, x1, x2, y1, y2;
+            currentBounding = d3.select('#' + currentId)[0][0].getBoundingClientRect();
+            targetBounding = targetPos[0][0].getBoundingClientRect();
+            x1 = Math.round(currentBounding.left) - root.svgWidth / 2 - 105 - currentBounding.width / 2;
+            y1 = Math.round(currentBounding.top) - root.svgHeight / 2 + currentBounding.height / 2;
+            x2 = Math.round(targetBounding.left) - root.svgWidth / 2 - 105 - targetBounding.width / 2;
+            y2 = Math.round(targetBounding.top) - root.svgHeight / 2 + targetBounding.height / 2;
+
             var bezierLine = d3.svg.line()
                     .x(function (d) {
                         return d[0];

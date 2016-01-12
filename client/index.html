@@ -18,7 +18,7 @@
                     <li><a href="#" data-mode="2">Browse positions</a></li>
                 </ul>                
             </nav>
-            <div id="map">
+            <section id="map">
                 <div class="gradient-white-transparent"></div>
                 <div class="gradient-blue-yellow"></div>
                 <svg>
@@ -32,11 +32,13 @@
                 <form id="form-container">
                     <label>Enter your current position or find it in the circle<br>
                         to discover new career opportunities</label>
-                    <input type="text" placeholder="I am..." id="positionTitle" value="">
-                    <input type="hidden" id="positionId" value="">
-                    <button type="submit">GO</button>
+                    <div class="form-inner">
+                        <input type="text" placeholder="I am..." id="positionTitle" value="">
+                        <input type="hidden" id="positionId" value="">
+                        <button type="submit">GO</button>                        
+                    </div>
                 </form>
-            </div>
+            </section>
             <aside id="requirements-container">
                 <div id="close-requirements">&times;</div>
                 <h2 id="current-position">Intermediate Test Automation Engineer</h2>
