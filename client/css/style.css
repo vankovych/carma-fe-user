@@ -184,12 +184,10 @@ path.placeholder {
     stroke-width: 1;
 }
 
-.position:hover {
-    fill: #fff !important;
-}
-
-.position.active {
-    fill: #fff !important;
+.position:hover, .position.active {
+    /*fill: #fff !important;*/
+    stroke-width: 5;
+    /*stroke: #ccc !important;*/
 }
 
 /* SEARCH FORM */

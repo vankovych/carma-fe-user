@@ -102,7 +102,8 @@ define('app/CareerMap', [
                 .style('opacity', function () {
                     return (this.id === exceptId) ? 1 : .2;
                 });
-        // fade in selected division title             
+
+        // fade out selected division title             
         root.group.selectAll('g.division-title')
                 .transition()
                 .duration(root.duration)
@@ -159,14 +160,16 @@ define('app/CareerMap', [
                     .attr('d', root.arc)
                     .attr('cx', 100)
                     .attr('fill', function () {
-                        return root.color(division.i);
+                        return root.color(division.i).m;
                     });
 
             // move division title up
+            root.group.selectAll('g#' + division.id + '-title')
+                    .attr('class', 'division-title-moved');
             root.group.selectAll('g#' + division.id + '-title>text')
                     .transition()
                     .duration(root.duration)
-                    .style('fill', root.color(division.i))
+                    .style('fill', root.color(division.i).d)
                     .attr('dy', '-2em');
 
             // move subs
@@ -177,7 +180,7 @@ define('app/CareerMap', [
 
             root.renderTitles(subdivisions, division.id + '-subdivision-title', 'subdivision-title');
 
-            // fade in divisions
+            // fade in subdivision titles
             root.group.selectAll('g.' + division.id + '-subdivision-title')
                     .transition()
                     .delay(300)
@@ -206,8 +209,8 @@ define('app/CareerMap', [
                     .attr('height', function (d) {
                         return d.positions ? d.positions.length * 27 : 0;
                     })
-                    .attr('fill', function (d, i) {
-                        return root.color(division.i);
+                    .attr('fill', function () {
+                        return root.color(division.i).m;
                     });
 
             // render position leafs
@@ -238,10 +241,10 @@ define('app/CareerMap', [
                         })
                         .attr('r', 7)
                         .style('fill', function (d, i) {
-                            return root.color(division.i);
+                            return root.color(division.i).m;
                         })
                         .style('stroke', function (d, i) {
-                            return root.color(division.i);
+                            return root.color(division.i).m;
                         })
                         .on('click', function (d) {
                             root.selectPosition(d.id);
@@ -269,17 +272,23 @@ define('app/CareerMap', [
         $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
         d3.selectAll('.spline').remove();
         root.showDivisions(division.id);
+
         if (division.subdivisions) {
 
+            // move division title down
             root.group.selectAll('g#' + division.id + '-title>text')
                     .transition()
                     .duration(root.duration)
                     .style('fill', '#494949')
                     .attr('dy', '.31em');
+            root.group.selectAll('g#' + division.id + '-title')
+                    .attr('class', 'division-title');
 
             division.subdivisions.forEach(function (id) {
                 root.moveArc(d3.select('#' + id)[0][0], root.ArcLen * division.i);
-            });
+            });            
+            
+            console.log(root.group.selectAll('.division-title-moved').size());
 
             // remove subdivisions
             root.group.selectAll('.subdivision')
@@ -290,7 +299,7 @@ define('app/CareerMap', [
                     .remove();
 
             // remove subdivision titles
-            root.group.selectAll('.subdivision-title')
+            root.group.selectAll('.' + division.id + '-subdivision-title.subdivision-title')
                     .transition()
                     .duration(root.duration)
                     .style('opacity', '0')
@@ -310,6 +319,8 @@ define('app/CareerMap', [
 
         className += classNameAdd ? ' ' + classNameAdd : '';
 
+        root.group.selectAll('g.' + className).remove();
+
         root.group.selectAll('g.' + className)
                 .data(data).enter()
                 .append('g')
@@ -322,18 +333,19 @@ define('app/CareerMap', [
                 })
                 .style('opacity', 0)
                 .append('text')
+                .text(function (d) {
+                    return d.title;
+                })
                 .attr('dx', function (d) {
                     return d.finalAngle.toDeg() < 180 ? 50 : -50;
                 })
                 .attr('dy', '.31em')
+//                .call(wrap, 150)
                 .attr('text-anchor', function (d) {
                     return d.finalAngle.toDeg() < 180 ? 'start' : 'end';
                 })
                 .attr('transform', function (d) {
                     return d.finalAngle.toDeg() < 180 ? null : 'rotate(180)';
-                })
-                .text(function (d) {
-                    return d.title;
                 })
                 .on('click', function (d) {
                     root.collapseDivision(d);
@@ -343,13 +355,21 @@ define('app/CareerMap', [
     CareerMap.prototype.renderDivisions = function () {
         var root = this;
 
+        // add additional data
+        for (var i = 0, j = 1; i < this.data.divisions.length; i++, j++) {
+            this.data.divisions[i].i = i;
+            this.data.divisions[i].initAngle = 0;
+            this.data.divisions[i].finalAngle = this.ArcLen * i;
+        }
+
         root.group.selectAll('.division').remove();
         root.group.selectAll('.subdivision').remove();
         root.group.selectAll('.subdivision-title').remove();
         root.group.selectAll('.position-tree').remove();
-        root.group.selectAll('g.division-title')
+        root.group.selectAll('.division-title')
                 .transition()
                 .style('opacity', '0');
+
         // render divisions
         root.group.selectAll('.division')
                 .data(root.data.divisions).enter()
@@ -366,7 +386,7 @@ define('app/CareerMap', [
                 .attr('d', root.arc)
                 .attr('cx', 100)
                 .attr('fill', function (d) {
-                    return root.color(d.i);
+                    return root.color(d.i).m;
                 })
                 .on('click', function (d) {
                     root.expandDivision(d);
@@ -421,7 +441,7 @@ define('app/CareerMap', [
 
         // show requirements
         $('#current-position').text(position.title);
-        $('#current-position').css('color', root.color(division.i));
+        $('#current-position').css('color', root.color(division.i).m);
         $('#current-division').text(division.title);
         $('#position-profile').attr('href', position.profile ? position.profile : '#');
         $('#competency-matrix').attr('href', position.matrix ? position.matrix : '#');
@@ -431,21 +451,23 @@ define('app/CareerMap', [
     };
 
     CareerMap.prototype.renderTransition = function (currentId, targetId) {
-        var root = this;
-        var targetPos = d3.select('#' + targetId);
+        var root = this,
+                targetPos;
+
+        targetPos = d3.select('#' + targetId);
 
         // set colors
-        d3.select('#gradient-d16-d4 .start').attr('stop-color', root.color(16));
-        d3.select('#gradient-d16-d4 .finish').attr('stop-color', root.color(4));
+        d3.select('#gradient-d16-d4 .start').attr('stop-color', root.color(16).m);
+        d3.select('#gradient-d16-d4 .finish').attr('stop-color', root.color(4).m);
 
         if (targetPos[0][0]) {
 
             var currentBounding, targetBounding, x1, x2, y1, y2;
             currentBounding = d3.select('#' + currentId)[0][0].getBoundingClientRect();
             targetBounding = targetPos[0][0].getBoundingClientRect();
-            x1 = Math.round(currentBounding.left) - root.svgWidth / 2 - 105 - currentBounding.width / 2;
+            x1 = Math.round(currentBounding.left) - root.svgWidth / 2 - 250 - currentBounding.width / 2;
             y1 = Math.round(currentBounding.top) - root.svgHeight / 2 + currentBounding.height / 2;
-            x2 = Math.round(targetBounding.left) - root.svgWidth / 2 - 105 - targetBounding.width / 2;
+            x2 = Math.round(targetBounding.left) - root.svgWidth / 2 - 250 - targetBounding.width / 2;
             y2 = Math.round(targetBounding.top) - root.svgHeight / 2 + targetBounding.height / 2;
 
             var bezierLine = d3.svg.line()
@@ -466,8 +488,13 @@ define('app/CareerMap', [
                             diffX < root.R / 2 ? x1 + 5 : x1 + root.R,
                             diffX > 100 ? y1 - root.R / 3 : (Math.abs(y1 - y2) / 4)
                         ],
+//                        [
+//                            root.R / 2 - 250,
+//                            root.R / 2
+//                        ],
                         [x2, y2]
                     ];
+
             root.group.append('path')
                     .attr('d', bezierLine(lineData))
                     .attr('class', 'spline')
@@ -497,6 +524,10 @@ define('app/CareerMap', [
                     targetDivisions = [],
                     targetDivisions1 = [];
 
+            var currentSubdivision, currentDivision = {
+                id: ''
+            };
+
             // find target subs
             // TODO crap !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             targetSubdivisions1 = root.data.subdivisions.filter(function (s) {
@@ -508,8 +539,14 @@ define('app/CareerMap', [
                             return p === pId;
                         });
 
+                        // subdivision of selected position
+                        if (position.id === pId) {
+                            currentSubdivision = s;
+//                            console.log(position.id, pId, s.id);
+//                            target = true;
+                        }
+
                         if (target) {
-//                            console.log(target, s.title);
                             targetSubdivisions.push(s.id);
                             return false;
                         }
@@ -529,8 +566,12 @@ define('app/CareerMap', [
                             return p === sId;
                         });
 
+                        if (currentSubdivision.id === sId || d.subdivisions.indexOf(currentSubdivision.id) >= 0) {
+                            currentDivision = d;
+                        }
+
                         if (target) {
-                            if (targetDivisions.indexOf(d.id) < 0) {
+                            if (targetDivisions.indexOf(d) < 0 && d.id !== currentDivision.id) {
                                 targetDivisions.push(d);
                             }
                             return false;
@@ -557,3 +598,37 @@ define('app/CareerMap', [
 
     return CareerMap;
 });
+
+function wrap(text, width) {
+    text.each(function () {
+        var text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = 1.1, // ems
+                y = text.attr("y"),
+                dy = parseFloat(text.attr("dy")),
+                tspan;
+        tspan = text.text(null)
+                .append("tspan");
+//                .attr("x", 0)
+//                .attr("y", y)
+//                .attr("dy", dy + "em");
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text
+                        .append("tspan")
+                        .attr("x", '3em')
+                        .attr("y", y)
+                        .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                        .text(word);
+            }
+        }
+    });
+}
