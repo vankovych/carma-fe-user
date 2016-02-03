@@ -1,12 +1,12 @@
 /* main */
 
-'use strict';
 require([
     'd3',
     'jquery',
     'jqueryui',
     'app/CareerMap'
 ], function (d3, $, jqueryui, CareerMap) {
+    'use strict';
 
     d3.json('data.json', function (error, json) {
         if (error) {
@@ -52,13 +52,16 @@ require([
 
             $menuItems.removeClass('active');
             $(this).addClass('active');
+
+//            CM.moveArc('d4', 1);            
         });
 
         // close requirements
         $('#close-requirements').on('click', function () {
-            $('#requirements-container').animate({'right': '-430'}, 250, 'easeInOutCubic');
+            CM.collapseAll();
         });
 
+        // form submit
         $('#form-container').on('submit', function (e) {
             e.preventDefault();
             CM.selectPosition($('#positionId').val(), true);

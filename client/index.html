@@ -10,59 +10,50 @@
         <link rel="shortcut icon" href="favicon.ico">
     </head>
     <body>
-        <main>
-            <nav>
-                <h1><a href="#">eleks<sup>&reg;</sup> Career map</a></h1>
-                <ul>
-                    <li><a href="#" class="active" data-mode="1">Build my career</a></li>
-                    <li><a href="#" data-mode="2">Browse positions</a></li>
-                </ul>                
-            </nav>
-            <section id="map">
-                <div class="gradient-white-transparent"></div>
-                <div class="gradient-blue-yellow"></div>
-                <svg>
-                <defs>
-                <linearGradient id="gradient-d16-d4">
-                <stop offset="0%" class="start"/>
-                <stop offset="100%" class="finish"/>
-                </linearGradient>
-                </defs>
-                </svg>
-                <form id="form-container">
-                    <label>Enter your current position or find it in the circle<br>
-                        to discover new career opportunities</label>
-                    <div class="form-inner">
-                        <input type="text" placeholder="I am..." id="positionTitle" value="">
-                        <input type="hidden" id="positionId" value="">
-                        <button type="submit">GO</button>                        
-                    </div>
-                </form>
-            </section>
-            <aside id="requirements-container">
-                <div id="close-requirements">&times;</div>
-                <h2 id="current-position">Intermediate Test Automation Engineer</h2>
-                <h3 id="current-division">Software testing</h3>
-                <div id="target-position-container">
-                    <span class="arrow-down">&darr;</span>
-                    <h2>Intermediate Mobile Designer</h2>
-                    <h3>User experience</h3>
+        <nav>
+            <h1><a href="#">eleks<sup>&reg;</sup> Career map</a></h1>
+            <ul>
+                <li><a href="#" class="active" data-mode="1">Build my career</a></li>
+                <li><a href="#" data-mode="2">Browse positions</a></li>
+            </ul>
+        </nav>
+        <main id="map">
+            <div class="gradient-white-transparent"></div>
+            <div class="gradient-blue-yellow"></div>
+            <svg>
+            <defs>
+            <!-- gradients -->
+            </defs>
+            </svg>
+            <form id="form-container">
+                <label>Enter your current position or find it in the circle<br>
+                    to discover new career opportunities</label>
+                <div class="form-inner">
+                    <input type="text" placeholder="I am..." id="positionTitle" value="">
+                    <input type="hidden" id="positionId" value="">
+                    <button type="submit">GO</button>
                 </div>
-                <ul id="position-requirements">
-                    <li>2+ year of experience</li>
-                    <li>English Intermediate</li>
-                    <li>Practical use and strong understanding of testing methods, levels and types. metrics. different  tests analyses methods, practical use and strong understanding of test artefacts and their lifecycle (bug reports, test cases, etc.)</li>
-                    <li>Practical use and strong understanding of common artefact management system (bug trackers, test and requirement management, etc.) Understanding of automation testing purposes, approaches, benifits, life cycle, levels and types.</li>
-                    <li>Practical use and strong understanding of automation script structure (framework, preconditions, asserts, logging etc.)</li>
-                    <li>Practical use and strong understanding of automation testware (continuous integration, version control, visualization, build automation tools etc.), Practical use and strong understanding OOP language syntax, Practical use and understanding DB fundament</li>
-                    <li>Practical use and understanding network basics, practical use and understanding of software development methodologies, Understanding of web service and load/performance testing</li>
-                </ul>
-                <ul id="position-links">
-                    <li><a href="#" id="position-profile">View Job Profile</a></li>
-                    <li><a href="#" id="competency-matrix">View Competency Matrix</a></li>
-                </ul>
-            </aside>
+            </form>
         </main>
+        <aside id="requirements-container">
+            <div id="close-requirements">&times;</div>
+            <h2 id="current-position">Intermediate Test Automation Engineer</h2>
+            <h3 id="current-division">Software testing</h3>
+            <div id="target-position-container">
+                <span class="arrow-down">&darr;</span>
+                <h2 id="target-position">Intermediate Mobile Designer</h2>
+                <h3 id="target-division">User experience</h3>
+            </div>
+            <ul id="position-list">
+            </ul>
+            <ul id="position-requirements">
+            </ul>
+            <ul id="position-links">
+                <li><a href="#" id="position-profile">View Job Profile</a></li>
+                <li><a href="#" id="competency-matrix">View Competency Matrix</a></li>
+            </ul>
+        </aside>
+
         <script data-main="js/app/config" src="js/vendor/require/require.min.js"></script>
     </body>
 </html>

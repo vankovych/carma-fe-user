@@ -3,17 +3,20 @@
         {
             "id": "d1",
             "title": "Project Management",
+            "abbreviation": "PM",
             "subdivisions": [
                 "s10"
             ]
         },
         {
             "id": "d2",
-            "title": "Business Analysis"
+            "title": "Business Analysis",
+            "abbreviation": "BA"
         },
         {
             "id": "d3",
             "title": "User Experience",
+            "abbreviation": "UX",
             "subdivisions": [
                 "s11"
             ]
@@ -21,6 +24,7 @@
         {
             "id": "d4",
             "title": "Software Engineering & Development",
+            "abbreviation": "SEDO",
             "subdivisions": [
                 "s1",
                 "s2",
@@ -31,11 +35,13 @@
         },
         {
             "id": "d5",
-            "title": "Information Development"
+            "title": "Information Development",
+            "abbreviation": "InfoDev"
         },
         {
             "id": "d6",
             "title": "Quality Assurance",
+            "abbreviation": "QA",
             "subdivisions": [
                 "s6",
                 "s7"
@@ -43,7 +49,8 @@
         },
         {
             "id": "d7",
-            "title": "Localization"
+            "title": "Localization",
+            "abbreviation": "L10N"
         },
         {
             "id": "d8",
@@ -63,10 +70,12 @@
         },
         {
             "id": "d12",
+            "abbreviation": "Staffing",
             "title": "Talent Management"
         },
         {
             "id": "d13",
+            "abbreviation": "Staffing",
             "title": "Talent Staffing"
         },
         {
@@ -75,6 +84,7 @@
         },
         {
             "id": "d15",
+            "abbreviation": "Human",
             "title": "Human Capital Administration"
         },
         {
@@ -91,14 +101,17 @@
         },
         {
             "id": "d18",
+            "abbreviation": "Marketing",
             "title": "Marketing &Communication"
         },
         {
             "id": "d19",
+            "abbreviation": "Products",
             "title": "Products &Services"
         },
         {
             "id": "d20",
+            "abbreviation": "Solutions",
             "title": "Solution Management"
         }
     ],
@@ -124,7 +137,10 @@
         },
         {
             "id": "s3",
-            "title": "DevOps"
+            "title": "DevOps",
+            "positions": [
+                "p22"
+            ]
         },
         {
             "id": "s4",
@@ -272,7 +288,7 @@
         },
         {
             "id": "p18",
-            "title": "Position 4"
+            "title": "Competency Manager"
         },
         {
             "id": "p19",
@@ -285,87 +301,185 @@
         {
             "id": "p21",
             "title": "Position 5"
+        },
+        {
+            "id": "p22",
+            "title": "DevOps Engineer"
+        }
+    ],
+    "englishLevels": [
+        {
+            "id": "en1",
+            "title": "Beginner"
+        },
+        {
+            "id": "en2",
+            "title": "Elementary"
+        },
+        {
+            "id": "en3",
+            "title": "Pre-Intermediate"
+        },
+        {
+            "id": "en4",
+            "title": "Low Intermediate"
+        },
+        {
+            "id": "en5",
+            "title": "Intermediate"
+        },
+        {
+            "id": "en6",
+            "title": "Upper Intermediate"
+        },
+        {
+            "id": "en7",
+            "title": "Pre-advanced"
+        },
+        {
+            "id": "en8",
+            "title": "Advanced"
+        },
+        {
+            "id": "en9",
+            "title": "Very Advanced"
+        }
+    ],
+    "requirements": [
+        {
+            "id": "r1",
+            "description": "Practical use and strong understanding of testing methods, levels and types. metrics. different tests analyses methods, practical use and strong understanding of test artefacts and their lifecycle (bug reports, test cases, etc.)"
+        },
+        {
+            "id": "r2",
+            "description": "Practical use and strong understanding of common artefact management system (bug trackers, test and requirement management, etc.) Understanding of automation testing purposes, approaches, benifits, life cycle, levels and types."
+        },
+        {
+            "id": "r3",
+            "description": "Practical use and strong understanding of automation script structure (framework, preconditions, asserts, logging etc.)"
+        },
+        {
+            "id": "r4",
+            "description": "Practical use and strong understanding of automation testware (continuous integration, version control, visualization, build automation tools etc.)"
+        }
+    ],
+    "experiences": [
+        {
+            "id": "ex1",
+            "title": "1"
+        },
+        {
+            "id": "ex2",
+            "title": "2"
+        },
+        {
+            "id": "ex3",
+            "title": "3"
+        }
+    ],
+    "positionRequirementsMap": [
+        {
+            "positionId": "p16",
+            "englishLevelId": "en5",
+            "experienceId": "ex2",
+            "requirementsIds": [
+                "r1",
+                "r2",
+                "r3",
+                "r4"
+            ]
+        },
+        {
+            "positionId": "p17",
+            "englishLevelId": "en2",
+            "experienceId": "ex1",
+            "requirementsIds": [
+                "r1",
+                "r2",
+                "r3",
+                "r4"
+            ]
         }
     ],
     "colors": [
         {
-            "d": "7a9da0",
+            "d": "#7a9da0",
             "m": "#93bdc1"
         },
         {
-            "d": "7da191",
+            "d": "#7da191",
             "m": "#96c2ae"
         },
         {
-            "d": "7ea38a",
+            "d": "#7ea38a",
             "m": "#97c4a6"
         },
         {
-            "d": "81a878",
+            "d": "#81a878",
             "m": "#9bca90"
         },
         {
-            "d": "94af72",
+            "d": "#94af72",
             "m": "#b2d289"
         },
         {
-            "d": "b2aa68",
+            "d": "#a6ad6a",
             "m": "#c8d082"
         },
         {
-            "d": "b2aa68",
+            "d": "#b2aa68",
             "m": "#d6cc7d"
         },
         {
-            "d": "b9a566",
+            "d": "#b9a566",
             "m": "#dfc67b"
         },
         {
-            "d": "bc9464",
+            "d": "#bc9464",
             "m": "#e2b278"
         },
         {
-            "d": "bb8b65",
+            "d": "#bb8b65",
             "m": "#e1a77a"
         },
         {
-            "d": "b87374",
+            "d": "#b87374",
             "m": "#dd8a8b"
         },
         {
-            "d": "b7657d",
+            "d": "#b7657d",
             "m": "#dc7a96"
         },
         {
-            "d": "af6388",
+            "d": "#af6388",
             "m": "#d377a3"
         },
         {
-            "d": "a8658c",
+            "d": "#a8658c",
             "m": "#ca79a8"
         },
         {
-            "d": "9d6792",
+            "d": "#9d6792",
             "m": "#bd7cb0"
         },
         {
-            "d": "866f99",
+            "d": "#866f99",
             "m": "#a185b8"
         },
         {
-            "d": "7b739a",
+            "d": "#7b739a",
             "m": "#948ab9"
         },
         {
-            "d": "71779e",
+            "d": "#71779e",
             "m": "#888fbe"
         },
         {
-            "d": "6c83a6",
+            "d": "#6c83a6",
             "m": "#829ec8"
         },
         {
-            "d": "6d88a3",
+            "d": "#6d88a3",
             "m": "#83a4c4"
         }
     ]
