@@ -1,6 +1,10 @@
-var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var jshint = require('gulp-jshint');
+var gulp = require('gulp'),
+        uglify = require('gulp-uglify'),
+        jshint = require('gulp-jshint'),
+        input = {
+            'javascript': 'client/js/app/*.js'
+        },
+output = {};
 
 //
 gulp.task('default', [/*'compress',*/ 'jshint'], function () {
@@ -12,14 +16,14 @@ gulp.task('default', [/*'compress',*/ 'jshint'], function () {
 
 //
 gulp.task('compress', function () {
-    return gulp.src('client/js/app/*.js')
+    return gulp.src(input.javascript)
             .pipe(uglify())
             .pipe(gulp.dest('client/js/app.min'));
 });
 
 // JS hint task
 gulp.task('jshint', function () {
-    gulp.src('client/js/app/*.js')
+    gulp.src(input.javascript)
             .pipe(jshint())
             .pipe(jshint.reporter('default'));
 });

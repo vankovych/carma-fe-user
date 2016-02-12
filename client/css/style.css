@@ -182,7 +182,7 @@ path.placeholder {
 
 .position {
     cursor: pointer;
-    stroke-width: 1;
+    stroke-width: 0;
 }
 
 .position:hover,
@@ -193,7 +193,7 @@ path.placeholder {
 
 .spline {
     stroke-width: 1;
-    /*opacity: .5;*/
+    opacity: .5;
 }
 
 /*.spline:hover,*/
@@ -291,8 +291,92 @@ path.placeholder {
     position: fixed;
     right: -430px;
     z-index: 5;
-    padding: 20px 20px 10px 40px;
+    padding: 0;
     box-sizing: border-box;
+    box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.2);
+}
+
+#positions-accordion {
+    box-shadow: 0px -5px 5px 0px rgba(0,0,0,0.2);
+}
+
+#positions-accordion .accordion-header {
+    background: none;
+    border: none;
+    margin: 0;
+    border-bottom: 1px solid #dcdcdc;
+    border-left: 0 solid #fff;
+    padding-left: 20px;
+    border-radius: 0;
+    height: 60px;
+}
+
+#positions-accordion .accordion-header:hover {
+    /*border-bottom-color: #fff;*/
+    border-left-width: 5px;
+    padding-left: 15px;
+    box-shadow: 0 5px 5px 0 rgba(0,0,0,0.2), 0 -2px 5px 0 rgba(0,0,0,0.2);
+}
+
+#positions-accordion div.ui-accordion-content {
+    border: none;
+    padding: 0 0 5px 15px;
+}
+
+#requirements-container ul {
+    list-style: none;
+    padding: 0;
+    font-family: ProximaNovaLight;
+}
+
+/*#position-requirements li{
+    font-size: 15px;
+    color: #383838;
+    border-bottom: 1px solid #dcdcdc;
+    padding: 15px 0;
+}*/
+
+.position-requirements li {
+    font-size: 15px;
+    color: #383838;
+    border-bottom: 1px solid #dcdcdc;
+    padding: 15px 0;
+}
+
+.position-links li {
+    padding: 5px 0;
+}
+
+.position-links li a {    
+    font-size: 15px;
+    color: #33599A;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.requirements-position-title {
+    display: block;
+}
+
+.requirements-division-title {
+    display: block;
+    text-transform: uppercase;
+}
+
+#current-container {
+    padding: 5px 0 5px 20px;;
+}
+
+.change-button {
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    color: #b3b3b3;
+    cursor: pointer;
+}
+
+.change-button a {
+    color: #3A63B2;
 }
 
 #close-requirements {
@@ -306,52 +390,7 @@ path.placeholder {
     color: #494949;
 }
 
-.arrow-down {
+/*.arrow-down {
     color: #b3b3b3;
     font-weight: bold;
-}
-
-#requirements-container ul {
-    list-style: none;
-    padding: 0;
-    font-family: ProximaNovaLight;
-}
-
-#position-requirements li{
-    font-size: 15px;
-    color: #383838;
-    border-top: 1px solid #dcdcdc;
-    padding: 15px 0;
-}
-
-/*#position-requirements li:before {
-    color: #ccc;
-    content: '× \0000a0';
-    font-size: 1.2em;
-    font-weight: bold;
 }*/
-
-#position-links li {
-    padding: 5px 0;
-}
-
-
-#position-links li a {    
-    font-size: 15px;
-    color: #33599A;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-#position-list li {
-    border-bottom: 1px solid #dcdcdc;
-}
-
-.requirements-position-title {
-    display: block;
-}
-
-.requirements-division-title {
-    display: block;
-    text-transform: uppercase;
-}

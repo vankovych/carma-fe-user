@@ -85,7 +85,7 @@ define('app/CareerMap', [
         var root = this;
 
         // add additional data
-        // TODO remove repeate
+        // TODO remove repeate of additional data recalculation
         for (var i = 0, j = 1; i < this.data.divisions.length; i++, j++) {
             this.data.divisions[i].i = i;
             this.data.divisions[i].initAngle = 0;
@@ -154,11 +154,12 @@ define('app/CareerMap', [
                 // group
                 .append('g')
                 .attr('class', 'division')
-//                .attr('id', function (d) {
-//                    return d.id + 'g';
-//                })
                 .on('click', function (d) {
-                    root.expandDivision(d);
+                    // allow manual expand of only single division
+                    if (!root.selected.divisionIds.length) {
+                        root.selected.divisionIds.push(d.id);
+                        root.expandDivision(d);
+                    }
                 })
                 // arc
                 .append('path')
@@ -232,6 +233,10 @@ define('app/CareerMap', [
     CareerMap.prototype.expandDivision = function (division, targets) {
         var root = this;
 
+        if (d3.event) {
+            d3.event.stopPropagation();
+        }
+
         targets = targets || [];
 
         if (division.subdivisions) {
@@ -239,10 +244,6 @@ define('app/CareerMap', [
             root.selected.divisionIds.push(division.id);
 
             root.hideDivisions(division.id);
-
-//            var targets = ["p11", "p1", "p17", "p18", "p13"];
-
-//            console.log(root.data.subdivisions);
 
             // get subs for selected division
             var subdivisions = root.data.subdivisions.filter(function (s) {
@@ -293,7 +294,6 @@ define('app/CareerMap', [
                     })
                     // arc
                     .append('path')
-//                    .attr('class', division.id + '-subdivision subdivision')
                     .attr('id', function (d) {
                         return d.id;
                     })
@@ -366,17 +366,16 @@ define('app/CareerMap', [
 
             // render position leafs
             subdivisions.forEach(function (sub) {
-                var positions = [];
 
                 // get positions for specified subdivision
+                var positions = [];
                 if (sub.positions) {
                     positions = root.data.positions.filter(function (p) {
                         return sub.positions.indexOf(p.id) >= 0;
                     });
                 }
 
-                // TODO: render disabled positions
-
+                var enabled = true, enabledClass = '';
                 root.group.selectAll('g#' + sub.id + '-position-tree')
                         .selectAll('circle.position')
                         .data(positions).enter()
@@ -385,18 +384,33 @@ define('app/CareerMap', [
                         .attr('id', function (d) {
                             return d.id;
                         })
-                        .attr('class', 'position')
                         .attr('cx', function (d) {
                             return -1;
                         })
                         .attr('cy', function (d, i) {
                             return -root.R + 30 * i + 20;
                         })
-                        .attr('r', 7)
-                        .style('fill', function (d, i) {
-                            return root.color(division.i).m;
+                        .attr('r', 8)
+                        .style('fill', function (d) {
+                            // define color for enabled position,
+                            // render position as disabled after target position is rendered
+                            var color;
+                            if (enabled) {
+                                color = !enabled ? root.color(division.i).l : root.color(division.i).m;
+                                enabled = targets.indexOf(d.id) >= 0 ? false : true;
+                                enabledClass = 'enabled ';
+                            } else {
+                                color = root.color(division.i).l;
+                                enabledClass = '';
+                            }
+
+                            return color;
                         })
-                        .style('stroke', function (d, i) {
+                        .attr('class', function (d) {
+                            var classValue = targets.indexOf(d.id) >= 0 ? 'position active' : 'position';
+                            return enabledClass + classValue;
+                        })
+                        .style('stroke', function () {
                             return root.color(division.i).m;
                         })
                         .on('click', function (d) {
@@ -500,18 +514,25 @@ define('app/CareerMap', [
                     return d.finalAngle1 < 180 ? null : 'rotate(180)';
                 })
                 .on('click', function (d) {
-                    root.collapseDivision(d);
+                    // allow manual expand of only single division
+                    if (!root.selected.divisionIds.length) {
+                        root.selected.divisionIds.push(d.id);
+                        root.expandDivision(d);
+                    }
                 })
                 // tooltip with title
                 .append('title')
                 .text(function (d) {
                     return d.title;
                 });
-        ;
     };
 
     CareerMap.prototype.selectPosition = function (currentId, expand) {
         expand = expand || false;
+
+        if (d3.event) {
+            d3.event.stopPropagation();
+        }
 
         var root = this, position, subdivision, division;
 
@@ -519,99 +540,192 @@ define('app/CareerMap', [
         if (root.selected.positionId !== currentId) {
             root.selected.positionId = currentId;
 
-            position = root.data.positions.filter(function (p) {
+            position = root.data.positions.find(function (p) {
                 return p.id === currentId;
-            })[0];
+            });
 
-            subdivision = root.data.subdivisions.filter(function (s) {
+            subdivision = root.data.subdivisions.find(function (s) {
                 return s.positions ? s.positions.indexOf(currentId) >= 0 : false;
-            })[0];
+            });
 
-            division = root.data.divisions.filter(function (s) {
-                return s.subdivisions ? s.subdivisions.indexOf(subdivision.id) >= 0 : false;
-            })[0];
+            division = root.data.divisions.find(function (d) {
+                return d.subdivisions ? d.subdivisions.indexOf(subdivision.id) >= 0 : false;
+            });
 
             if (expand) {
                 root.expandDivision(division);
             }
 
-            // show transitions
-            if (root.mode === 1) {
-                $('#target-position-container').show();
-                root.renderTransitions(position);
+            var $positionsAccordion = $('#positions-accordion').empty();
 
-                var positionsData = [];
-                position.transition.forEach(function (tId) {
-
-                    var pos = root.data.positions.find(function (p) {
-                        return p.id === tId;
-                    });
-
-                    var positionData = {
-                        positionTitle: pos.title,
-                        divisionTitle: 'Quality Assurance',
-                        divisionColor: 4
-                    };
-
-                    positionsData.push(positionData);
-                });
-
-                var rli = '';
-                positionsData.forEach(function (positionData) {
-                    rli += '<li>'
-                            + '<h2 style="color:' + root.color(positionData.divisionColor).d + '">'
-                            + positionData.positionTitle + '</h2>'
-                            + '<h3>' + positionData.divisionTitle + '<h3>'
-                            + '</li>';
-                });
-
-                $('#position-list').empty().html(rli);
-
-            }
-            else {
-                $('#target-position-container').hide();
-            }
-
-            // show requirements
             $('#current-position').text(position.title)
                     .css('color', root.color(division.i).m);
             $('#current-division').text(division.title);
 
-//        $('#target-position').text(position.title)
-//                .css('color', root.color(division.i).m);
-//        $('#target-division').text(division.title);
+            if (root.mode === 1) {
 
-            var positionData = root.data.positionRequirementsMap.find(function (p) {
-                return p.positionId === currentId;
-            });
+                if (position.transition) {
 
-            var rli = '';
-            if (positionData) {
+                    // disable positions on current subdivision
+                    var enabled = true;
+                    subdivision.positions.forEach(function (pId) {
+                        if (!enabled) {
+                            d3.select('#' + pId).style('fill', root.color(division.i).l);
+                        }
 
-                var englishLevel = root.data.englishLevels.find(function (e) {
-                    return e.id === positionData.englishLevelId;
+                        if (enabled && currentId === pId) {
+                            enabled = false;
+                        }
+                    });
+
+                    // show transitions
+//                    $('#target-position-container').show();
+                    root.renderTransitions(position);
+
+                    var positionsData = [];
+                    position.transition.forEach(function (tId) {
+
+                        var pos, sub, div, positionData;
+
+                        pos = root.data.positions.find(function (p) {
+                            return p.id === tId;
+                        });
+
+                        sub = root.data.subdivisions.find(function (s) {
+                            return s.positions ? s.positions.indexOf(tId) >= 0 : false;
+                        });
+
+                        div = root.data.divisions.find(function (d) {
+                            return d.subdivisions ? d.subdivisions.indexOf(sub.id) >= 0 : false;
+                        });
+
+                        positionData = {
+                            positionTitle: pos.title,
+                            divisionTitle: div.title,
+                            divisionColor: div.i,
+                            id: tId
+                        };
+
+                        positionsData.push(positionData);
+                    });
+
+                    var rli = '', posHtml = '';
+
+                    positionsData.forEach(function (positionData) {
+
+                        var positionRequirements = root.data.positionRequirementsMap.find(function (p) {
+                            return p.positionId === positionData.id;
+                        });
+
+                        var $accordionHeader = $('<div>', {
+                            class: 'accordion-header',
+                            style: 'border-left-color: ' + root.color(positionData.divisionColor).d
+                        })
+                                .html('<h2 style="color:' + root.color(positionData.divisionColor).d + '">' +
+                                        positionData.positionTitle + '</h2>' +
+                                        '<h3>' + positionData.divisionTitle + '</h3>'
+                                        )
+                                .hover(
+                                        // highlight corresponding spline and position on circle
+                                                function () {
+                                                    var splineId = '#' + currentId + '-' + positionData.id + '-spline';
+                                                    d3.select(splineId).attr('style', 'opacity: 1');
+                                                    d3.select('#' + positionData.id).classed('active', true);
+                                                },
+                                                function () {
+                                                    var splineId = '#' + currentId + '-' + positionData.id + '-spline';
+                                                    d3.select(splineId).attr('style', 'opacity: 0.5');
+                                                    d3.select('#' + positionData.id).classed('active', false);
+                                                }
+                                        );
+
+                                        $positionsAccordion.append($accordionHeader);
+
+                                        // List of requirements
+                                        var rli = '';
+                                        if (positionRequirements) {
+
+                                            var englishLevel = root.data.englishLevels.find(function (e) {
+                                                return e.id === positionRequirements.englishLevelId;
+                                            });
+
+                                            // English level
+                                            rli += '<li>English ' + englishLevel.title + '</li>';
+
+                                            var experience = root.data.experiences.find(function (e) {
+                                                return e.id === positionRequirements.experienceId;
+                                            });
+
+                                            // Experience
+                                            rli += '<li>' + experience.title + '+ years of experience</li>';
+
+                                            // Requirements
+                                            root.data.requirements.forEach(function (r) {
+                                                rli += '<li>' + r.description + '</li>';
+                                            });
+
+                                        } else {
+                                            rli += '<li>(no requirements specified)</li>';
+                                        }
+
+                                        posHtml =
+                                                '<div><p><ul class="position-requirements">' + rli + '</ul>' +
+                                                '<ul class="position-links">' +
+                                                '<li><a href="' + (position.profile ? position.profile : '#') + '">View Job Profile</a></li>' +
+                                                '<li><a href="' + (position.matrix ? position.matrix : '#') + '">View Competency Matrix</a></li>' +
+                                                '</ul></p></div>';
+
+                                        $positionsAccordion.append(posHtml);
+                                    });
+
+                    $positionsAccordion.accordion('refresh');
+                }
+            } else if (root.mode === 2) {
+
+                var positionRequirements = root.data.positionRequirementsMap.find(function (p) {
+                    return p.positionId === currentId;
                 });
 
-                rli += '<li>English ' + englishLevel.title + '</li>';
+                console.log(positionRequirements);
 
-                var experience = root.data.experiences.find(function (e) {
-                    return e.id === positionData.experienceId;
-                });
+                // List of requirements
+                var rli = '';
+                if (positionRequirements) {
 
-                rli += '<li>' + experience.title + '+ years of experience</li>';
+                    var englishLevel = root.data.englishLevels.find(function (e) {
+                        return e.id === positionRequirements.englishLevelId;
+                    });
 
-                root.data.requirements.forEach(function (r) {
-                    rli += '<li>' + r.description + '</li>';
-                });
+                    // English level
+                    rli += '<li>English ' + englishLevel.title + '</li>';
 
-            } else {
-                rli += '<li>(no requirements specified)</li>';
+                    var experience = root.data.experiences.find(function (e) {
+                        return e.id === positionRequirements.experienceId;
+                    });
+
+                    // Experience
+                    rli += '<li>' + experience.title + '+ years of experience</li>';
+
+                    // Requirements
+                    root.data.requirements.forEach(function (r) {
+                        rli += '<li>' + r.description + '</li>';
+                    });
+
+                } else {
+                    rli += '<li>(no requirements specified)</li>';
+                }
+
+                var posHtml =
+                        '<div><p><ul class="position-requirements">' + rli + '</ul>' +
+                        '<ul class="position-links">' +
+                        '<li><a href="' + (position.profile ? position.profile : '#') + '">View Job Profile</a></li>' +
+                        '<li><a href="' + (position.matrix ? position.matrix : '#') + '">View Competency Matrix</a></li>' +
+                        '</ul></p></div>';
+
+
+                $('#positions-accordion1').empty().append(posHtml);
             }
 
-            $('#position-requirements').empty().html(rli);
-
-            $('#position-profile').attr('href', position.profile ? position.profile : '#');
-            $('#competency-matrix').attr('href', position.matrix ? position.matrix : '#');
             $('#requirements-container').animate({'right': '0'}, 750, 'easeInOutCubic');
             $('.position.active').attr('class', 'position');
             $('#' + currentId).attr('class', $('#' + currentId).attr('class') + ' active');
@@ -627,11 +741,15 @@ define('app/CareerMap', [
 
         if (targetPos[0][0]) {
 
+            // FIXME: Drawing positions connections
+
             var currentBounding, targetBounding, x1, x2, y1, y2,
                     offsetX = 290;
 //            offsetX = 0;
             currentBounding = d3.select('#' + currentId)[0][0].getBoundingClientRect();
             targetBounding = targetPos[0][0].getBoundingClientRect();
+
+            // TODO: Improve spline drawing algorithm
 
             //x1 = Math.round(currentBounding.left) - root.svgWidth / 2 - offsetX - currentBounding.width / 2;
             x1 = Math.round(currentBounding.left) - root.svgWidth / 2 - offsetX;
@@ -666,6 +784,7 @@ define('app/CareerMap', [
 
             root.group.append('path')
                     .attr('d', bezierLine(lineData))
+                    .attr('id', currentId + '-' + targetId + '-spline')
                     .attr('class', 'spline')
                     .attr('stroke', 'url(#gradient-' + gradientId + ')')
                     .attr('fill', 'none')
@@ -757,7 +876,7 @@ define('app/CareerMap', [
 
             // expand divisions, add gradients
             targetDivisions.forEach(function (d) {
-                root.expandDivision(d, ["p11", "p1", "p17", "p18", "p13"]);
+                root.expandDivision(d, position.transition);
 
                 gradientId = 'gradient-' + currentDivision.id + '-' + d.id;
 
@@ -815,49 +934,13 @@ define('app/CareerMap', [
         root.selected.positionId = '';
     };
 
-    CareerMap.prototype.wrapTitle = function (text, width) {
-        text.each(function () {
-            var text = d3.select(this),
-                    words = text.text().split(/\s+/).reverse(),
-                    word,
-                    line = [],
-                    lineNumber = 0,
-                    lineHeight = 1.1, // ems
-                    y = text.attr("y"),
-                    dy = parseFloat(text.attr("dy")),
-                    tspan;
-            tspan = text.text(null)
-                    .append("tspan");
-//                .attr("x", 0)
-//                .attr("y", y)
-//                .attr("dy", dy + "em");
-            while (word = words.pop()) {
-                line.push(word);
-                tspan.text(line.join(" "));
-                if (tspan.node().getComputedTextLength() > width) {
-                    line.pop();
-                    tspan.text(line.join(" "));
-                    line = [word];
-                    tspan = text
-                            .append("tspan")
-                            .attr("x", '3em')
-                            .attr("y", y)
-                            .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                            .text(word);
-                }
-            }
-        });
-    };
-
     return CareerMap;
 });
 
 /**
  * TODO: Style tooltips
- * FIXME: Drawing positions connections
- * TODO: Improve spline drawing algorithm
- * TODO: Show only subs with transitions
  * TODO: Move subs in case of overlapping
- * TODO: collapse on background click
  * TODO: finish div/sub arc
+ * TODO: add light colors
+ * TODO: add bool variable to check before collapse
  */

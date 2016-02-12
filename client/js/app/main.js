@@ -47,7 +47,7 @@ require([
         // menu navigation
         var $menuItems = $('nav ul a');
         $menuItems.on('click', function () {
-            CM.mode = $(this).attr('data-mode');
+            CM.mode = 1 * $(this).attr('data-mode');
             CM.renderDivisions();
 
             $menuItems.removeClass('active');
@@ -65,6 +65,17 @@ require([
         $('#form-container').on('submit', function (e) {
             e.preventDefault();
             CM.selectPosition($('#positionId').val(), true);
+        });
+
+        $('#positions-accordion').accordion({
+            collapsible: true,
+            active: false,
+            icons: false,
+            header: 'div.accordion-header'
+        });
+
+        $('main').on('click', function (){
+            CM.collapseAll();
         });
 
     });
