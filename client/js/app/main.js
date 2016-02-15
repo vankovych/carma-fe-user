@@ -4,14 +4,17 @@ require([
     'd3',
     'jquery',
     'jqueryui',
+    'html5tooltips',
     'app/CareerMap'
-], function (d3, $, jqueryui, CareerMap) {
+], function (d3, $, jqueryui, html5tooltips, CareerMap) {
     'use strict';
 
     d3.json('data.json', function (error, json) {
         if (error) {
             return console.warn(error);
         }
+        
+        html5tooltips.autoinit();
 
         var CM = new CareerMap(json);
 
@@ -48,6 +51,7 @@ require([
         var $menuItems = $('nav ul a');
         $menuItems.on('click', function () {
             CM.mode = 1 * $(this).attr('data-mode');
+            CM.collapseAll();
             CM.renderDivisions();
 
             $menuItems.removeClass('active');
@@ -74,11 +78,21 @@ require([
             header: 'div.accordion-header'
         });
 
-        $('main').on('click', function (){
+        $('main').on('click', function () {
             CM.collapseAll();
         });
 
     });
+    
+    
+
+//    html5tooltips({
+//        animateFunction: "spin",
+//        color: "bamboo",
+//        contentText: "Refresh",
+//        stickTo: "right",
+//        targetSelector: "#refresh"
+//    });
 
 });
 

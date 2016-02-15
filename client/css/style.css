@@ -323,6 +323,10 @@ path.placeholder {
     padding: 0 0 5px 15px;
 }
 
+#positions-accordion div.single-position-requirements {
+    padding-left: 20px;
+}
+
 #requirements-container ul {
     list-style: none;
     padding: 0;
@@ -394,3 +398,18 @@ path.placeholder {
     color: #b3b3b3;
     font-weight: bold;
 }*/
+
+.html5tooltip-bottom{
+    z-index: 100;
+}
+
+.html5tooltip-box
+{
+    background-color: #2A2A2A;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.15), 0 0 10px rgba(255,255,255,.15);
+    color: #F7F7F7;
+    font-family: ProximaNovaRegular;
+    font-size: 14px;
+    font-weight: bold;
+}

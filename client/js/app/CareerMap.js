@@ -3,8 +3,9 @@
 define('app/CareerMap', [
     'd3',
     'jquery',
-    'jqueryui'
-], function (d3, $) {
+    'jqueryui',
+    'html5tooltips'
+], function (d3, $, $ui, html5tooltips) {
     'use strict';
 
     var CareerMap = function (json) {
@@ -249,27 +250,23 @@ define('app/CareerMap', [
             var subdivisions = root.data.subdivisions.filter(function (s) {
                 var filter = division.subdivisions.indexOf(s.id) >= 0;
 
-                if (s.id !== 's8' && s.id !== 's9') {
+                if (targets.length) {
 
-                    if (targets.length) {
-
-                        if (filter) {
-                            // for mode 1 display only subdivisions with positions where transitions is possible
-                            if (root.mode === 1) {
-                                filter = false;
-                                if (s.positions) {
-                                    s.positions.forEach(function (p) {
-                                        if (targets.indexOf(p) >= 0) {
-                                            filter = true;
-                                            return false;
-                                        }
-                                    });
-                                }
+                    if (filter) {
+                        // for mode 1 display only subdivisions with positions where transitions is possible
+                        if (root.mode === 1) {
+                            filter = false;
+                            if (s.positions) {
+                                s.positions.forEach(function (p) {
+                                    if (targets.indexOf(p) >= 0) {
+                                        filter = true;
+                                        return false;
+                                    }
+                                });
                             }
                         }
                     }
                 }
-
                 return filter;
             });
 
@@ -375,7 +372,8 @@ define('app/CareerMap', [
                     });
                 }
 
-                var enabled = true, enabledClass = '';
+                // TODO mark as enabled next position
+                var enabled = true, enabledClass = '', next = 2;
                 root.group.selectAll('g#' + sub.id + '-position-tree')
                         .selectAll('circle.position')
                         .data(positions).enter()
@@ -384,7 +382,7 @@ define('app/CareerMap', [
                         .attr('id', function (d) {
                             return d.id;
                         })
-                        .attr('cx', function (d) {
+                        .attr('cx', function () {
                             return -1;
                         })
                         .attr('cy', function (d, i) {
@@ -395,13 +393,20 @@ define('app/CareerMap', [
                             // define color for enabled position,
                             // render position as disabled after target position is rendered
                             var color;
+
+//                            if(!enabled){
+//                                enabled = next;
+//                            }
+
                             if (enabled) {
-                                color = !enabled ? root.color(division.i).l : root.color(division.i).m;
+                                color = root.color(division.i).m;
                                 enabled = targets.indexOf(d.id) >= 0 ? false : true;
                                 enabledClass = 'enabled ';
+//                                next = 2;
                             } else {
                                 color = root.color(division.i).l;
                                 enabledClass = '';
+                                next--;
                             }
 
                             return color;
@@ -416,11 +421,16 @@ define('app/CareerMap', [
                         .on('click', function (d) {
                             root.selectPosition(d.id);
                         })
-                        // tooltip with position title
-                        .append('title')
-                        .text(function (d) {
+                        .attr('data-tooltip', function (d) {
                             return d.title;
                         });
+                // tooltip with position title
+//                        .append('title')
+//                        .text(function (d) {
+//                            return d.title;
+//                        });
+
+                html5tooltips.autoinit();
             });
 
             // fade in position trees
@@ -434,13 +444,18 @@ define('app/CareerMap', [
         }
     };
 
-    CareerMap.prototype.collapseDivision = function (division) {
+    CareerMap.prototype.collapseDivision = function (division, partly) {
         var root = this;
 
-        $('#form-container').fadeIn(root.duration);
-        $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
+        partly = partly || false;
+
+        if (!partly) {
+            $('#form-container').fadeIn(root.duration);
+            $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
+        }
+
         d3.selectAll('.spline').remove();
-        root.showDivisions(division.id);
+        root.showDivisions();
 
         if (division.subdivisions) {
 
@@ -458,7 +473,7 @@ define('app/CareerMap', [
             });
 
             // remove subdivisions
-            root.group.selectAll('.subdivision')
+            root.group.selectAll('.' + division.id + '-subdivision')
                     .transition()
                     .delay(root.duration - 50)
                     .duration(root.duration * 0.66)
@@ -473,7 +488,7 @@ define('app/CareerMap', [
                     .remove();
 
             // remove trees
-            root.group.selectAll('.position-tree')
+            root.group.selectAll('.' + division.id + '-position-tree')
                     .transition()
                     .duration(500)
                     .style('opacity', '0')
@@ -520,11 +535,33 @@ define('app/CareerMap', [
                         root.expandDivision(d);
                     }
                 })
-                // tooltip with title
-                .append('title')
-                .text(function (d) {
+                .attr('data-tooltip', function (d) {
                     return d.title;
                 });
+        // tooltip with title
+        /*.append('title')
+         .text(function (d) {
+         return d.title;
+         });*/
+        html5tooltips({
+            animateFunction: "spin",
+            color: "bamboo",
+            contentText: "Refresh",
+            stickTo: "right",
+            targetSelector: "#refresh"
+        });
+
+
+        html5tooltips.autoinit();
+
+        html5tooltips({
+            animateFunction: "spin",
+            color: "bamboo",
+            contentText: "Refresh",
+            stickTo: "right",
+            targetSelector: "#refresh"
+        });
+
     };
 
     CareerMap.prototype.selectPosition = function (currentId, expand) {
@@ -555,6 +592,10 @@ define('app/CareerMap', [
             if (expand) {
                 root.expandDivision(division);
             }
+
+//            root.selected.divisionIds.push(division.id);
+
+            root.collapseAll(division.id);
 
             var $positionsAccordion = $('#positions-accordion').empty();
 
@@ -686,8 +727,6 @@ define('app/CareerMap', [
                     return p.positionId === currentId;
                 });
 
-                console.log(positionRequirements);
-
                 // List of requirements
                 var rli = '';
                 if (positionRequirements) {
@@ -716,20 +755,18 @@ define('app/CareerMap', [
                 }
 
                 var posHtml =
-                        '<div><p><ul class="position-requirements">' + rli + '</ul>' +
+                        '<div class="single-position-requirements"><p><ul class="position-requirements">' + rli + '</ul>' +
                         '<ul class="position-links">' +
                         '<li><a href="' + (position.profile ? position.profile : '#') + '">View Job Profile</a></li>' +
                         '<li><a href="' + (position.matrix ? position.matrix : '#') + '">View Competency Matrix</a></li>' +
                         '</ul></p></div>';
 
-
-                $('#positions-accordion1').empty().append(posHtml);
+                $('#positions-accordion').empty().append(posHtml);
             }
 
             $('#requirements-container').animate({'right': '0'}, 750, 'easeInOutCubic');
             $('.position.active').attr('class', 'position');
             $('#' + currentId).attr('class', $('#' + currentId).attr('class') + ' active');
-
         }
     };
 
@@ -919,19 +956,31 @@ define('app/CareerMap', [
         }
     };
 
-    CareerMap.prototype.collapseAll = function () {
+    CareerMap.prototype.collapseAll = function (exceptDivisionId) {
         var root = this;
 
-        root.selected.divisionIds.forEach(function (dId) {
-            var division = root.data.divisions.find(function (d) {
-                return dId === d.id;
-            });
+        exceptDivisionId = exceptDivisionId || false;
 
-            root.collapseDivision(division);
+        root.selected.divisionIds.forEach(function (dId) {
+
+            // collapse all divisions (except for exceptDivisionId)
+            if (exceptDivisionId !== dId) {
+                var division = root.data.divisions.find(function (d) {
+                    return dId === d.id;
+                });
+
+                root.collapseDivision(division, true);
+            }
         });
 
-        root.selected.divisionIds = [];
-        root.selected.positionId = '';
+        if (exceptDivisionId) {
+
+        } else {
+            $('#form-container').fadeIn(root.duration);
+            $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
+            root.selected.divisionIds = [];
+            root.selected.positionId = '';
+        }
     };
 
     return CareerMap;
@@ -940,7 +989,6 @@ define('app/CareerMap', [
 /**
  * TODO: Style tooltips
  * TODO: Move subs in case of overlapping
- * TODO: finish div/sub arc
+ * TODO: finish div/sub arc drawing
  * TODO: add light colors
- * TODO: add bool variable to check before collapse
  */
