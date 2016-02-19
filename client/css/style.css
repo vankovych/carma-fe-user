@@ -413,3 +413,9 @@ path.placeholder {
     font-size: 14px;
     font-weight: bold;
 }
+
+.button-collapse{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}

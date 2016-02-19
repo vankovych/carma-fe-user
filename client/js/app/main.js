@@ -78,7 +78,7 @@ require([
             header: 'div.accordion-header'
         });
 
-        $('main').on('click', function () {
+        $('#button-collapse').on('click', function () {
             CM.collapseAll();
         });
 

@@ -77,6 +77,15 @@ define('app/CareerMap', [
                 .innerRadius(root.R)
                 .outerRadius(root.R + 5);
 
+        this.bezierLine = d3.svg.line()
+                .x(function (d) {
+                    return d[0];
+                })
+                .y(function (d) {
+                    return d[1];
+                })
+                .interpolate('basis');
+
         this.init();
         this.renderTitles(this.data.divisions, 'division-title');
         this.renderDivisions(this.data.divisions);
@@ -234,9 +243,9 @@ define('app/CareerMap', [
     CareerMap.prototype.expandDivision = function (division, targets) {
         var root = this;
 
-        if (d3.event) {
-            d3.event.stopPropagation();
-        }
+//        if (d3.event) {
+//            d3.event.stopPropagation();
+//        }
 
         targets = targets || [];
 
@@ -567,9 +576,9 @@ define('app/CareerMap', [
     CareerMap.prototype.selectPosition = function (currentId, expand) {
         expand = expand || false;
 
-        if (d3.event) {
-            d3.event.stopPropagation();
-        }
+//        if (d3.event) {
+//            d3.event.stopPropagation();
+//        }
 
         var root = this, position, subdivision, division;
 
@@ -772,68 +781,55 @@ define('app/CareerMap', [
 
     CareerMap.prototype.renderTransition = function (currentId, targetId, gradientId) {
         var root = this,
-                targetPos;
+                selectedPosition,
+                targetPosition,
+                selectedCoordinates,
+                targetCoordinates;
 
-        targetPos = d3.select('#' + targetId);
+        selectedPosition = d3.select('#' + currentId)[0][0];
+        targetPosition = d3.select('#' + targetId)[0][0];
 
-        if (targetPos[0][0]) {
+        selectedCoordinates = root.getElementCoordinates(selectedPosition);
+        targetCoordinates = root.getElementCoordinates(targetPosition);
 
-            // FIXME: Drawing positions connections
+//        if (targetPos[0][0]) {
 
-            var currentBounding, targetBounding, x1, x2, y1, y2,
-                    offsetX = 290;
-//            offsetX = 0;
-            currentBounding = d3.select('#' + currentId)[0][0].getBoundingClientRect();
-            targetBounding = targetPos[0][0].getBoundingClientRect();
+        var x1, x2, y1, y2, xC, yC;
 
-            // TODO: Improve spline drawing algorithm
+        // TODO: Improve spline drawing algorithm   
 
-            //x1 = Math.round(currentBounding.left) - root.svgWidth / 2 - offsetX - currentBounding.width / 2;
-            x1 = Math.round(currentBounding.left) - root.svgWidth / 2 - offsetX;
-            y1 = Math.round(currentBounding.top) - root.svgHeight / 2 + currentBounding.height / 2;
-            x2 = Math.round(targetBounding.left) - root.svgWidth / 2 - offsetX - targetBounding.width / 2;
-            y2 = Math.round(targetBounding.top) - root.svgHeight / 2 + targetBounding.height / 2;
-
-            var bezierLine = d3.svg.line()
-                    .x(function (d) {
-                        return d[0];
-                    })
-                    .y(function (d) {
-                        return d[1];
-                    })
-                    .interpolate("basis");
-            var
-                    diffX = Math.abs(x1 - x2),
-                    diffY = Math.abs(y1 - y2),
-                    lineData =
-                    [
-                        [x1, y1],
-                        [
-                            diffX < root.R / 2 ? x1 + 5 : x1 + root.R,
-                            diffX > 100 ? y1 - root.R / 3 : (Math.abs(y1 - y2) / 4)
-                        ],
+        var
+                diffX = Math.abs(x1 - x2),
+                diffY = Math.abs(y1 - y2),
+                lineData =
+                [
+                    selectedCoordinates,
 //                        [
-//                            root.R / 2 - 250,
-//                            root.R / 2
+//                            diffX < root.R / 2 ? x1 + 5 : x1 + root.R,
+//                            diffX > 100 ? y1 - root.R / 3 : (Math.abs(y1 - y2) / 4)
 //                        ],
-                        [x2, y2]
-                    ];
+//                        [
+//                            root.R / 2 - root.svgWidth / 2,
+//                            root.R / 2 - root.svgHeight / 2
+//                        ],
+                    targetCoordinates
+                ];
 
-            root.group.append('path')
-                    .attr('d', bezierLine(lineData))
-                    .attr('id', currentId + '-' + targetId + '-spline')
-                    .attr('class', 'spline')
-                    .attr('stroke', 'url(#gradient-' + gradientId + ')')
-                    .attr('fill', 'none')
-                    .transition()
-                    .duration(root.duration)
-                    .attrTween('stroke-dasharray', function () {
-                        var len = this.getTotalLength();
-                        return function (t) {
-                            return (d3.interpolateString('0,' + len, len + ',0'))(t);
-                        };
-                    });
-        }
+        root.group.append('path')
+                .attr('d', root.bezierLine(lineData))
+                .attr('id', currentId + '-' + targetId + '-spline')
+                .attr('class', 'spline')
+                .attr('stroke', 'url(#gradient-' + gradientId + ')')
+                .attr('fill', 'none')
+                .transition()
+                .duration(root.duration)
+                .attrTween('stroke-dasharray', function () {
+                    var len = this.getTotalLength();
+                    return function (t) {
+                        return (d3.interpolateString('0,' + len, len + ',0'))(t);
+                    };
+                });
+//        }
     };
 
     CareerMap.prototype.renderTransitions = function (position) {
@@ -983,12 +979,44 @@ define('app/CareerMap', [
         }
     };
 
+    CareerMap.prototype.makeAbsoluteContext = function (element) {
+        var svgDocument = document.querySelector('svg');
+
+        return function (x, y) {
+            var offset = svgDocument.getBoundingClientRect(),
+                    matrix = element.getScreenCTM();
+            return {
+                x: (matrix.a * x) + (matrix.c * y) + matrix.e - offset.left,
+                y: (matrix.b * x) + (matrix.d * y) + matrix.f - offset.top
+            };
+        };
+    };
+
+    CareerMap.prototype.getElementCoordinates = function (element) {
+        var root = this,
+                currentBBox,
+                convertCurrent,
+                absoluteCurrent,
+                x, y;
+
+        currentBBox = element.getBBox();
+        convertCurrent = root.makeAbsoluteContext(element);
+        absoluteCurrent = convertCurrent(currentBBox.x, currentBBox.y);
+        x = Math.round(absoluteCurrent.x - root.svgWidth / 2);
+        y = Math.round(absoluteCurrent.y - root.svgHeight / 2);
+
+//        x = x > root.svgWidth / 2 ? x + 15 : x - 15;
+
+        return [x, y];
+    };
+
     return CareerMap;
 });
 
 /**
  * TODO: Style tooltips
  * TODO: Move subs in case of overlapping
- * TODO: finish div/sub arc drawing
+ * TODO: Add restart button
  * TODO: add light colors
+ * TODO: positions like stickers
  */
