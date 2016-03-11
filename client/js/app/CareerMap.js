@@ -15,6 +15,7 @@ define('app/CareerMap', [
         this.svgWidth = 1024;
         this.svgHeight = 900;
         this.R = 325;
+        this.positionR = 8;
         // 1 - Build my career
         // 2 - Browse positions
         this.mode = 1;
@@ -77,6 +78,7 @@ define('app/CareerMap', [
                 .innerRadius(root.R)
                 .outerRadius(root.R + 5);
 
+        // Draw bezier curve
         this.bezierLine = d3.svg.line()
                 .x(function (d) {
                     return d[0];
@@ -87,7 +89,6 @@ define('app/CareerMap', [
                 .interpolate('basis');
 
         this.init();
-        this.renderTitles(this.data.divisions, 'division-title');
         this.renderDivisions(this.data.divisions);
     };
 
@@ -95,7 +96,7 @@ define('app/CareerMap', [
         var root = this;
 
         // add additional data
-        // TODO remove repeate of additional data recalculation
+        // FIXME remove repeate of additional data recalculation
         for (var i = 0, j = 1; i < this.data.divisions.length; i++, j++) {
             this.data.divisions[i].i = i;
             this.data.divisions[i].initAngle = 0;
@@ -112,26 +113,35 @@ define('app/CareerMap', [
                 .attr('width', this.svgWidth)
                 .attr('height', this.svgHeight)
                 .attr('transform', 'translate(' + this.svgWidth / 2 + ', ' + this.svgHeight / 2 + ')');
+
+        // center point to draw splines
+        root.group
+                .append('circle')
+                .attr('id', 'cntr')
+                .attr('cx', -1)
+                .attr('cy', -1)
+                .attr('r', 0)
+                .style('fill', 'red');
     };
 
     /**
-     * Move arc to angle
+     * Move arc to position
      * 
      * @param {String} id Arc id
-     * @param {Number} angle Target angle
+     * @param {Number} pos Target pos
      */
-    CareerMap.prototype.moveArc = function (id, angle) {
+    CareerMap.prototype.moveArc = function (id, pos) {
         var root = this;
 
         d3.select('#' + id)
                 .transition()
                 .duration(root.duration)
-                .call(root.arcTween, angle * root.ArcLen);
+                .call(root.arcTween, pos * root.ArcLen);
 
         d3.select('#' + id + '-in')
                 .transition()
                 .duration(root.duration)
-                .call(root.arcTweenIn, angle * root.ArcLen);
+                .call(root.arcTweenIn, pos * root.ArcLen);
     };
 
     /**
@@ -198,11 +208,7 @@ define('app/CareerMap', [
             root.moveArc(d.id, d.finalAngle);
         });
 
-        root.group.selectAll('g.division-title')
-                .transition()
-                .delay(750)
-                .duration(root.duration)
-                .style('opacity', '1');
+        root.renderTitles(divisionSelection, 'division-title');
     };
 
     CareerMap.prototype.hideDivisions = function (exceptId) {
@@ -243,10 +249,6 @@ define('app/CareerMap', [
     CareerMap.prototype.expandDivision = function (division, targets) {
         var root = this;
 
-//        if (d3.event) {
-//            d3.event.stopPropagation();
-//        }
-
         targets = targets || [];
 
         if (division.subdivisions) {
@@ -281,7 +283,7 @@ define('app/CareerMap', [
 
             // calculate angles for subs
             subdivisions.forEach(function (subdivision, i) {
-                var j = division.i < 11 ? division.i + i : division.i - i;
+                var j = division.finalAngle < 11 ? division.finalAngle + i : division.finalAngle - i;
                 subdivision.initAngle = division.initAngle;
                 subdivision.finalAngle = j;
                 subdivision.finalAngle1 = (j * root.ArcLen).toDeg();
@@ -331,11 +333,11 @@ define('app/CareerMap', [
                     .attr('dy', '-2em');
 
             // move subs
-            subdivisions.forEach(function (s, i) {
+            subdivisions.forEach(function (s) {
                 root.moveArc(s.id, s.finalAngle);
             });
 
-            root.renderTitles(subdivisions, division.id + '-subdivision-title', 'subdivision-title');
+            root.renderTitles(subdivisionSelection, division.id + '-subdivision-title', 'subdivision-title');
 
             // fade in subdivision titles
             root.group.selectAll('g.' + division.id + '-subdivision-title')
@@ -370,7 +372,7 @@ define('app/CareerMap', [
                         return root.color(division.i).m;
                     });
 
-            // render position leafs
+            // render position leafs            
             subdivisions.forEach(function (sub) {
 
                 // get positions for specified subdivision
@@ -381,8 +383,10 @@ define('app/CareerMap', [
                     });
                 }
 
-                // TODO mark as enabled next position
-                var enabled = true, enabledClass = '', next = 2;
+                var enabled = true,
+                        enabledClass = '',
+                        next = 0;
+
                 root.group.selectAll('g#' + sub.id + '-position-tree')
                         .selectAll('circle.position')
                         .data(positions).enter()
@@ -397,25 +401,28 @@ define('app/CareerMap', [
                         .attr('cy', function (d, i) {
                             return -root.R + 30 * i + 20;
                         })
-                        .attr('r', 8)
+                        .attr('r', root.positionR)
                         .style('fill', function (d) {
                             // define color for enabled position,
-                            // render position as disabled after target position is rendered
+                            // render positions as disabled after one more position
+                            // after target position
                             var color;
-
-//                            if(!enabled){
-//                                enabled = next;
-//                            }
 
                             if (enabled) {
                                 color = root.color(division.i).m;
                                 enabled = targets.indexOf(d.id) >= 0 ? false : true;
                                 enabledClass = 'enabled ';
-//                                next = 2;
+                                next = 0;
                             } else {
-                                color = root.color(division.i).l;
-                                enabledClass = '';
-                                next--;
+                                next++;
+
+                                if (next === 1) {
+                                    color = root.color(division.i).m;
+                                    enabledClass = 'enabled ';
+                                } else {
+                                    color = root.color(division.i).l;
+                                    enabledClass = '';
+                                }
                             }
 
                             return color;
@@ -433,13 +440,6 @@ define('app/CareerMap', [
                         .attr('data-tooltip', function (d) {
                             return d.title;
                         });
-                // tooltip with position title
-//                        .append('title')
-//                        .text(function (d) {
-//                            return d.title;
-//                        });
-
-                html5tooltips.autoinit();
             });
 
             // fade in position trees
@@ -505,16 +505,15 @@ define('app/CareerMap', [
         }
     };
 
-    CareerMap.prototype.renderTitles = function (data, className, classNameAdd) {
-        var root = this;
+    CareerMap.prototype.renderTitles = function (selection, className, classNameAdd) {
+        var root = this, selector;
 
+        selector = '.' + className + (classNameAdd ? ' .' + classNameAdd : '');
         className += classNameAdd ? ' ' + classNameAdd : '';
 
         root.group.selectAll('g.' + className).remove();
 
-        root.group.selectAll('g.' + className)
-                .data(data).enter()
-                .append('g')
+        selection.append('g')
                 .attr('class', className)
                 .attr('id', function (d) {
                     return d.id + '-title';
@@ -537,48 +536,21 @@ define('app/CareerMap', [
                 .attr('transform', function (d) {
                     return d.finalAngle1 < 180 ? null : 'rotate(180)';
                 })
-                .on('click', function (d) {
-                    // allow manual expand of only single division
-                    if (!root.selected.divisionIds.length) {
-                        root.selected.divisionIds.push(d.id);
-                        root.expandDivision(d);
-                    }
-                })
                 .attr('data-tooltip', function (d) {
                     return d.title;
                 });
-        // tooltip with title
-        /*.append('title')
-         .text(function (d) {
-         return d.title;
-         });*/
-        html5tooltips({
-            animateFunction: "spin",
-            color: "bamboo",
-            contentText: "Refresh",
-            stickTo: "right",
-            targetSelector: "#refresh"
-        });
 
+        html5tooltips.refresh();
 
-        html5tooltips.autoinit();
-
-        html5tooltips({
-            animateFunction: "spin",
-            color: "bamboo",
-            contentText: "Refresh",
-            stickTo: "right",
-            targetSelector: "#refresh"
-        });
-
+        root.group.selectAll(selector)
+                .transition()
+                .delay(750)
+                .duration(root.duration)
+                .style('opacity', '1');
     };
 
     CareerMap.prototype.selectPosition = function (currentId, expand) {
         expand = expand || false;
-
-//        if (d3.event) {
-//            d3.event.stopPropagation();
-//        }
 
         var root = this, position, subdivision, division;
 
@@ -601,8 +573,6 @@ define('app/CareerMap', [
             if (expand) {
                 root.expandDivision(division);
             }
-
-//            root.selected.divisionIds.push(division.id);
 
             root.collapseAll(division.id);
 
@@ -781,42 +751,41 @@ define('app/CareerMap', [
 
     CareerMap.prototype.renderTransition = function (currentId, targetId, gradientId) {
         var root = this,
-                selectedPosition,
-                targetPosition,
-                selectedCoordinates,
-                targetCoordinates;
+                selectedPos,
+                targetPos,
+                centerPos,
+                p1, p2, pC,
+                diff = {x: 0, y: 0},
+        points = [];
 
-        selectedPosition = d3.select('#' + currentId)[0][0];
-        targetPosition = d3.select('#' + targetId)[0][0];
+        selectedPos = d3.select('#' + currentId);
+        centerPos = d3.select('#cntr');
+        targetPos = d3.select('#' + targetId);
 
-        selectedCoordinates = root.getElementCoordinates(selectedPosition);
-        targetCoordinates = root.getElementCoordinates(targetPosition);
-
-//        if (targetPos[0][0]) {
-
-        var x1, x2, y1, y2, xC, yC;
+        p1 = root.getElementCoordinates(selectedPos);
+        pC = root.getElementCoordinates(centerPos);
+        p2 = root.getElementCoordinates(targetPos);
 
         // TODO: Improve spline drawing algorithm   
 
-        var
-                diffX = Math.abs(x1 - x2),
-                diffY = Math.abs(y1 - y2),
-                lineData =
-                [
-                    selectedCoordinates,
-//                        [
-//                            diffX < root.R / 2 ? x1 + 5 : x1 + root.R,
-//                            diffX > 100 ? y1 - root.R / 3 : (Math.abs(y1 - y2) / 4)
-//                        ],
-//                        [
-//                            root.R / 2 - root.svgWidth / 2,
-//                            root.R / 2 - root.svgHeight / 2
-//                        ],
-                    targetCoordinates
-                ];
+        diff.x = Math.abs(p1[0] - p2[0]);
+        diff.y = Math.abs(p1[1] - p2[1]);
+
+//        console.log('--', targetId, '--');
+//        console.log(p1, p2, diff);
+
+        if (diff.x < 100) {
+            if (p1[0] > 0) {
+                pC[0] = pC[0] + Math.min(Math.abs(p1[0]), Math.abs(p2[0])) - 20;
+            } else {
+                pC[0] = -Math.min(Math.abs(p1[0]), Math.abs(p2[0])) + 20;
+            }
+        }
+
+        points = [p1, pC, p2];
 
         root.group.append('path')
-                .attr('d', root.bezierLine(lineData))
+                .attr('d', root.bezierLine(points))
                 .attr('id', currentId + '-' + targetId + '-spline')
                 .attr('class', 'spline')
                 .attr('stroke', 'url(#gradient-' + gradientId + ')')
@@ -829,7 +798,6 @@ define('app/CareerMap', [
                         return (d3.interpolateString('0,' + len, len + ',0'))(t);
                     };
                 });
-//        }
     };
 
     CareerMap.prototype.renderTransitions = function (position) {
@@ -993,19 +961,16 @@ define('app/CareerMap', [
     };
 
     CareerMap.prototype.getElementCoordinates = function (element) {
-        var root = this,
-                currentBBox,
+        var currentBBox,
                 convertCurrent,
                 absoluteCurrent,
                 x, y;
 
-        currentBBox = element.getBBox();
-        convertCurrent = root.makeAbsoluteContext(element);
-        absoluteCurrent = convertCurrent(currentBBox.x, currentBBox.y);
-        x = Math.round(absoluteCurrent.x - root.svgWidth / 2);
-        y = Math.round(absoluteCurrent.y - root.svgHeight / 2);
-
-//        x = x > root.svgWidth / 2 ? x + 15 : x - 15;
+        currentBBox = element[0][0].getBBox();
+        convertCurrent = this.makeAbsoluteContext(element[0][0]);
+        absoluteCurrent = convertCurrent(currentBBox.x + this.positionR, currentBBox.y + this.positionR);
+        x = Math.round(absoluteCurrent.x - this.svgWidth / 2);
+        y = Math.round(absoluteCurrent.y - this.svgHeight / 2);
 
         return [x, y];
     };
@@ -1013,10 +978,8 @@ define('app/CareerMap', [
     return CareerMap;
 });
 
-/**
- * TODO: Style tooltips
- * TODO: Move subs in case of overlapping
- * TODO: Add restart button
- * TODO: add light colors
+/** 
  * TODO: positions like stickers
+ * TODO: Move subs in case of overlapping
+ * TODO: Complete restart button style
  */

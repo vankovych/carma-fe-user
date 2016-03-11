@@ -160,7 +160,6 @@ path.placeholder {
 
 .division {
     cursor: pointer;
-    //fill-opacity: .8;
     transition: all .2s;
 }
 
@@ -399,12 +398,11 @@ path.placeholder {
     font-weight: bold;
 }*/
 
-.html5tooltip-bottom{
+.html5tooltip-bottom {
     z-index: 100;
 }
 
-.html5tooltip-box
-{
+.html5tooltip-box {
     background-color: #2A2A2A;
     border-radius: 2px;
     box-shadow: 0 0 0 1px rgba(255,255,255,.15), 0 0 10px rgba(255,255,255,.15);
@@ -414,8 +412,17 @@ path.placeholder {
     font-weight: bold;
 }
 
-.button-collapse{
+.button-collapse-container {
+
+}
+
+.button-collapse {
+    font-family: ProximaNovaLight;
+    color: #738EAC;
+    background: none;
+    border: none;
+    z-index: 200;
     position: absolute;
-    bottom: 0;
-    left: 0;
+    margin-left: -40px;
+    margin-top: -40px;
 }

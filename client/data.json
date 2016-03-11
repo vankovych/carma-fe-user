@@ -79,7 +79,7 @@
         {
             "id": "d13",
             "abbreviation": "Staffing",
-            "title": "Talent Staffing"            
+            "title": "Talent Staffing"
         },
         {
             "id": "d14",
@@ -261,7 +261,10 @@
         },
         {
             "id": "p12",
-            "title": "Solution Architect"
+            "title": "Solution Architect",
+            "transition": [
+                "p3"
+            ]
         },
         {
             "id": "p13",
@@ -453,102 +456,102 @@
         {
             "d": "#7a9da0",
             "m": "#93bdc1",
-            "l": "#ccc"
+            "l": "#C8DDDF"
         },
         {
             "d": "#7da191",
             "m": "#96c2ae",
-            "l": "#ccc"
+            "l": "#CAE0D6"
         },
         {
             "d": "#7ea38a",
             "m": "#97c4a6",
-            "l": "#ccc"
+            "l": "#CAE1D2"
         },
         {
             "d": "#81a878",
             "m": "#9bca90",
-            "l": "#ccc"
+            "l": "#CCE4C7"
         },
         {
             "d": "#94af72",
             "m": "#b2d289",
-            "l": "#D9E9C4"
+            "l": "#D9E8C5"
         },
         {
             "d": "#a6ad6a",
             "m": "#c8d082",
-            "l": "#ccc"
+            "l": "#E3E7C0"
         },
         {
             "d": "#b2aa68",
             "m": "#d6cc7d",
-            "l": "#ccc"
+            "l": "#EAE5BD"
         },
         {
             "d": "#b9a566",
             "m": "#dfc67b",
-            "l": "#ccc"
+            "l": "#EEE2BC"
         },
         {
             "d": "#bc9464",
             "m": "#e2b278",
-            "l": "#ccc"
+            "l": "#F0D8BB"
         },
         {
             "d": "#bb8b65",
             "m": "#e1a77a",
-            "l": "#ccc"
+            "l": "#EFD2BC"
         },
         {
             "d": "#b87374",
             "m": "#dd8a8b",
-            "l": "#ccc"
+            "l": "#EDC4C4"
         },
         {
             "d": "#b7657d",
             "m": "#dc7a96",
-            "l": "#ccc"
+            "l": "#EDBCCA"
         },
         {
             "d": "#af6388",
             "m": "#d377a3",
-            "l": "#ccc"
+            "l": "#E8BAD0"
         },
         {
             "d": "#a8658c",
             "m": "#ca79a8",
-            "l": "#ccc"
+            "l": "#E4BBD3"
         },
         {
             "d": "#9d6792",
             "m": "#bd7cb0",
-            "l": "#ccc"
+            "l": "#DDBDD7"
         },
         {
             "d": "#866f99",
             "m": "#a185b8",
-            "l": "#ccc"
+            "l": "#CFC1DB"
         },
         {
             "d": "#7b739a",
             "m": "#948ab9",
-            "l": "#ccc"
+            "l": "#AEA6C9"
         },
         {
             "d": "#71779e",
             "m": "#888fbe",
-            "l": "#ccc"
+            "l": "#C3C6DE"
         },
         {
             "d": "#6c83a6",
             "m": "#829ec8",
-            "l": "#ccc"
+            "l": "#C0CEE3"
         },
         {
             "d": "#6d88a3",
             "m": "#83a4c4",
-            "l": "#ccc"
+            "l": "#C0D1E1"
         }
     ]
 }

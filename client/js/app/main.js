@@ -13,13 +13,13 @@ require([
         if (error) {
             return console.warn(error);
         }
-        
+
         html5tooltips.autoinit();
 
         var CM = new CareerMap(json);
 
         // autocomplete form
-        $('#form-container').fadeIn(CM.duration);
+        $('#form-container').delay(750).fadeIn(CM.duration);
 
         $('#positionTitle')
                 .val('')
@@ -56,8 +56,20 @@ require([
 
             $menuItems.removeClass('active');
             $(this).addClass('active');
+        });
 
-//            CM.moveArc('d4', 1);            
+        $('#move-arc').on('click', function (e) {
+            CM.moveArc('d4', 1);
+            
+            var division = CM.data.divisions.find(function (d) {
+                return d.id === 'd4';
+            });
+            
+            division.finalAngle = 1;
+            
+            console.log(division);
+
+            CM.expandDivision(division);
         });
 
         // close requirements
@@ -83,16 +95,6 @@ require([
         });
 
     });
-    
-    
-
-//    html5tooltips({
-//        animateFunction: "spin",
-//        color: "bamboo",
-//        contentText: "Refresh",
-//        stickTo: "right",
-//        targetSelector: "#refresh"
-//    });
 
 });
 

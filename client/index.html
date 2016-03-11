@@ -16,8 +16,9 @@
             <h1><a href="#">eleks<sup>&reg;</sup> Career map</a></h1>
             <ul>
                 <li><a href="#" class="active" data-mode="1">Build my career</a></li>
-                <li><a href="#" data-mode="2">Browse positions</a></li>
+                <li><a href="#" data-mode="2">Browse positions</a></li>                
             </ul>
+            <!--<a href="#" id="move-arc">Move arc</a>-->
         </nav>
         <main id="map">
             <div class="gradient-white-transparent"></div>
@@ -35,12 +36,13 @@
                     <button type="submit">GO</button>
                     <input type="hidden" id="positionId" value="">
                 </div>
-            </form>            
-            <button type="button" id="button-collapse" class="button-collapse">Collapse</button>
+            </form>
+            <div class="button-collapse-container">
+                <button type="button" id="button-collapse" class="button-collapse">Collapse</button>
+            </div>
         </main>        
         <aside id="requirements-container">
             <!--<div id="close-requirements">&times;</div>-->
-            <div class="change-button"><a href="#">Change</a></div>
             <div id="current-container">
                 <h2 id="current-position"></h2>
                 <h3 id="current-division"></h3>
