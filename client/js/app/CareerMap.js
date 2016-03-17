@@ -638,10 +638,12 @@ define('app/CareerMap', [
                         });
 
                         var $accordionHeader = $('<div>', {
+                            id: 'accordion-header-' + position.id + '-' + positionData.id,
                             class: 'accordion-header',
                             style: 'border-left-color: ' + root.color(positionData.divisionColor).d
                         })
-                                .html('<h2 style="color:' + root.color(positionData.divisionColor).d + '">' +
+                                .html('<div class="close-requirements">&times;</div>' +
+                                        '<h2 style="color:' + root.color(positionData.divisionColor).d + '">' +
                                         positionData.positionTitle + '</h2>' +
                                         '<h3>' + positionData.divisionTitle + '</h3>'
                                         )
@@ -696,6 +698,15 @@ define('app/CareerMap', [
                                                 '</ul></p></div>';
 
                                         $positionsAccordion.append(posHtml);
+
+                                        $('.close-requirements').on('click', function (e) {
+                                            e.stopPropagation();
+                                            $(this).parent().fadeOut().remove();
+                                            
+                                            $(this).attr('id');
+                                            // TODO delete spline
+                                        });
+
                                     });
 
                     $positionsAccordion.accordion('refresh');

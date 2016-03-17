@@ -60,22 +60,22 @@ require([
 
         $('#move-arc').on('click', function (e) {
             CM.moveArc('d4', 1);
-            
+
             var division = CM.data.divisions.find(function (d) {
                 return d.id === 'd4';
             });
-            
+
             division.finalAngle = 1;
-            
+
             console.log(division);
 
             CM.expandDivision(division);
         });
 
         // close requirements
-        $('#close-requirements').on('click', function () {
-            CM.collapseAll();
-        });
+//        $('#close-requirements').on('click', function () {
+//            CM.collapseAll();
+//        });
 
         // form submit
         $('#form-container').on('submit', function (e) {
@@ -87,7 +87,42 @@ require([
             collapsible: true,
             active: false,
             icons: false,
-            header: 'div.accordion-header'
+            header: 'div.accordion-header',
+            heightStyle: 'content',
+            beforeActivate: function (event, ui) {
+                console.log(ui);
+                if (ui.newHeader[0]) {
+                    var selectedId = ui.newHeader[0].id,
+                            transition = selectedId.replace('accordion-header-', '');
+                    console.log(transition);
+
+                    $('#' + transition + '-spline').addClass('active');
+
+                    $('.accordion-header').each(function (header) {
+                        if (selectedId !== $(this).attr('id')) {
+                            $(this).hide();
+
+                            $("#accordion-header-p16-p17").animate({
+                                width: "70%",
+                                opacity: 0.4
+//                                marginLeft: "0.6in",
+//                                fontSize: "3em",
+//                                borderWidth: "10px"
+                            }, CM.duration);
+                            
+                            return false;
+                        }
+                    });
+
+
+                    $('#requirements-container').css('height', '100%');
+                } else {
+                    $('.accordion-header').each(function (header) {
+                        $(this).show();
+                    });
+                    $('#requirements-container').css('height', '');
+                }
+            }
         });
 
         $('#button-collapse').on('click', function () {
