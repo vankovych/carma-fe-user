@@ -67,8 +67,6 @@ require([
 
             division.finalAngle = 1;
 
-            console.log(division);
-
             CM.expandDivision(division);
         });
 
@@ -90,37 +88,35 @@ require([
             header: 'div.accordion-header',
             heightStyle: 'content',
             beforeActivate: function (event, ui) {
-                console.log(ui);
+//                console.log(ui);
                 if (ui.newHeader[0]) {
                     var selectedId = ui.newHeader[0].id,
                             transition = selectedId.replace('accordion-header-', '');
-                    console.log(transition);
+//                    console.log(transition);
 
                     $('#' + transition + '-spline').addClass('active');
 
                     $('.accordion-header').each(function (header) {
+//                        console.log(selectedId, header);
                         if (selectedId !== $(this).attr('id')) {
                             $(this).hide();
 
-                            $("#accordion-header-p16-p17").animate({
-                                width: "70%",
-                                opacity: 0.4
-//                                marginLeft: "0.6in",
-//                                fontSize: "3em",
-//                                borderWidth: "10px"
-                            }, CM.duration);
-                            
-                            return false;
+//                            $("#accordion-header-p16-p17").animate({
+//                                width: "70%",
+//                                opacity: 0.4
+//                            }, CM.duration);
+
+//                            return false;
                         }
                     });
 
 
-                    $('#requirements-container').css('height', '100%');
+//                    $('#requirements-container').css('height', '100%');
                 } else {
                     $('.accordion-header').each(function (header) {
                         $(this).show();
                     });
-                    $('#requirements-container').css('height', '');
+//                    $('#requirements-container').css('height', '');
                 }
             }
         });

@@ -288,7 +288,7 @@ path.placeholder {
     /*height: 100%;*/
     background: #fff;
     position: fixed;
-    right: -430px;
+    right: 0px;
     z-index: 5;
     padding: 0;
     box-sizing: border-box;

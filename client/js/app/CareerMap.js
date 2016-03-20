@@ -754,7 +754,7 @@ define('app/CareerMap', [
                 $('#positions-accordion').empty().append(posHtml);
             }
 
-            $('#requirements-container').animate({'right': '0'}, 750, 'easeInOutCubic');
+//            $('#requirements-container').animate({'right': '0'}, 750, 'easeInOutCubic');
             $('.position.active').attr('class', 'position');
             $('#' + currentId).attr('class', $('#' + currentId).attr('class') + ' active');
         }
@@ -952,7 +952,8 @@ define('app/CareerMap', [
 
         } else {
             $('#form-container').fadeIn(root.duration);
-            $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
+//            $('#positions-accordion').remove();
+//            $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
             root.selected.divisionIds = [];
             root.selected.positionId = '';
         }
