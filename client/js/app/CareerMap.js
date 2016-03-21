@@ -701,8 +701,10 @@ define('app/CareerMap', [
 
                                         $('.close-requirements').on('click', function (e) {
                                             e.stopPropagation();
-                                            $(this).parent().fadeOut().remove();
-                                            
+                                            $(this).parent().fadeOut(250, function () {
+                                                $(this).remove();
+                                            });
+
                                             $(this).attr('id');
                                             // TODO delete spline
                                         });
@@ -710,6 +712,12 @@ define('app/CareerMap', [
                                     });
 
                     $positionsAccordion.accordion('refresh');
+                    $('#requirements-container').show();
+
+                    $(".accordion-header").animate({
+                        'margin-top': 0,
+                        'opacity': 1
+                    }, root.duration , 'easeInOutCubic');
                 }
             } else if (root.mode === 2) {
 

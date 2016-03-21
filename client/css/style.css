@@ -285,19 +285,18 @@ path.placeholder {
 
 #requirements-container {
     width: 430px;
-    /*height: 100%;*/
-    background: #fff;
     position: fixed;
     right: 0px;
     z-index: 5;
     padding: 0;
     box-sizing: border-box;
-    box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.2);
+    display: none;
+    /*box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.2);*/
 }
 
-#positions-accordion {
+/*#positions-accordion {
     box-shadow: 0px -5px 5px 0px rgba(0,0,0,0.2);
-}
+}*/
 
 #positions-accordion .accordion-header {
     background: #fff;
@@ -305,13 +304,14 @@ path.placeholder {
     margin: 0;
     border-bottom: 1px solid #dcdcdc;
     border-left: 0 solid #fff;
-    padding-left: 20px;
+    padding-left: 21px;
     border-radius: 0;
     height: 60px;
+    margin-top: 300px;
+    opacity: 0;
 }
 
 #positions-accordion .accordion-header:hover {
-    /*border-bottom-color: #fff;*/
     border-left-width: 5px;
     padding-left: 16px;
     box-shadow: 0 5px 5px 0 rgba(0,0,0,0.2), 0 -2px 5px 0 rgba(0,0,0,0.2);
@@ -331,13 +331,6 @@ path.placeholder {
     padding: 0;
     font-family: ProximaNovaLight;
 }
-
-/*#position-requirements li{
-    font-size: 15px;
-    color: #383838;
-    border-bottom: 1px solid #dcdcdc;
-    padding: 15px 0;
-}*/
 
 .position-requirements li {
     font-size: 15px;
@@ -393,11 +386,6 @@ path.placeholder {
 .close-requirements:hover {
     color: #494949;
 }
-
-/*.arrow-down {
-    color: #b3b3b3;
-    font-weight: bold;
-}*/
 
 .html5tooltip-bottom {
     z-index: 100;
