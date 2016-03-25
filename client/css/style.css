@@ -290,7 +290,7 @@ path.placeholder {
     z-index: 5;
     padding: 0;
     box-sizing: border-box;
-    display: none;
+    /*display: none;*/
     /*box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.2);*/
 }
 
@@ -309,17 +309,18 @@ path.placeholder {
     height: 60px;
     margin-top: 300px;
     opacity: 0;
+    box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.2);
 }
 
 #positions-accordion .accordion-header:hover {
     border-left-width: 5px;
     padding-left: 16px;
-    box-shadow: 0 5px 5px 0 rgba(0,0,0,0.2), 0 -2px 5px 0 rgba(0,0,0,0.2);
 }
 
 #positions-accordion div.ui-accordion-content {
     border: none;
     padding: 0 0 5px 15px;
+    box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.2);
 }
 
 #positions-accordion div.single-position-requirements {
@@ -362,6 +363,8 @@ path.placeholder {
 #current-container {
     padding: 5px 0 5px 20px;
     background: #fff;
+    display: none;
+    box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.2);
 }
 
 .change-button {

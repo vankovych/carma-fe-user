@@ -698,26 +698,15 @@ define('app/CareerMap', [
                                                 '</ul></p></div>';
 
                                         $positionsAccordion.append(posHtml);
-
-                                        $('.close-requirements').on('click', function (e) {
-                                            e.stopPropagation();
-                                            $(this).parent().fadeOut(250, function () {
-                                                $(this).remove();
-                                            });
-
-                                            $(this).attr('id');
-                                            // TODO delete spline
-                                        });
-
                                     });
 
                     $positionsAccordion.accordion('refresh');
-                    $('#requirements-container').show();
+                    $('#current-container').fadeIn();
 
-                    $(".accordion-header").animate({
+                    $('.accordion-header').animate({
                         'margin-top': 0,
                         'opacity': 1
-                    }, root.duration , 'easeInOutCubic');
+                    }, root.duration, 'easeInOutCubic');
                 }
             } else if (root.mode === 2) {
 
@@ -765,6 +754,24 @@ define('app/CareerMap', [
 //            $('#requirements-container').animate({'right': '0'}, 750, 'easeInOutCubic');
             $('.position.active').attr('class', 'position');
             $('#' + currentId).attr('class', $('#' + currentId).attr('class') + ' active');
+
+            $('.close-requirements').on('click', function (e) {
+                e.stopPropagation();
+                $(this).parent().fadeOut(250, function () {
+                    $(this).remove();
+                });
+
+                console.log($(this).parent().attr('id'));
+
+                var id = $(this).parent().attr('id');
+
+                id.replace('accordion-header-', '');
+
+                console.log(id.replace('accordion-header-', ''));
+
+                $(this).attr('id');
+                // TODO delete spline
+            });
         }
     };
 
@@ -962,6 +969,14 @@ define('app/CareerMap', [
             $('#form-container').fadeIn(root.duration);
 //            $('#positions-accordion').remove();
 //            $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
+
+            $('.accordion-header').animate({
+                'margin-top': 300,
+                'opacity': 0
+            }, root.duration, 'easeInOutCubic');
+
+            $('#current-container').fadeOut();
+
             root.selected.divisionIds = [];
             root.selected.positionId = '';
         }
