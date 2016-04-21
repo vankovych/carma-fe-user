@@ -1,53 +1,56 @@
 ﻿<!DOCTYPE html>
 <html>
-    <head>
-        <title>Career map, ELEKS</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/vendor/normalize.css">
-        <link rel="stylesheet" href="css/vendor/jquery-ui.min.css">
-        <link rel="stylesheet" href="css/vendor/html5tooltips.css">
-        <link rel="stylesheet" href="css/vendor/html5tooltips.animation.css">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="shortcut icon" href="favicon.ico">
-    </head>
-    <body>
-        <nav>
-            <h1><a href="#">eleks<sup>&reg;</sup> Career map</a></h1>
-            <ul>
-                <li><a href="#" class="active" data-mode="1">Build my career</a></li>
-                <li><a href="#" data-mode="2">Browse positions</a></li>                
-            </ul>
-            <!--<a href="#" id="move-arc">Move arc</a>-->
-        </nav>
-        <main id="map">
-            <div class="gradient-white-transparent"></div>
-            <div class="gradient-blue-yellow"></div>
-            <svg>
+
+<head>
+    <title>Career map, ELEKS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/vendor/normalize.css">
+    <link rel="stylesheet" href="css/vendor/jquery-ui.min.css">
+    <link rel="stylesheet" href="css/vendor/html5tooltips.css">
+    <link rel="stylesheet" href="css/vendor/html5tooltips.animation.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="favicon.ico">
+</head>
+
+<body>
+    <nav>
+        <h1><a href="#">eleks<sup>&reg;</sup> Career map</a></h1>
+        <ul>
+            <li><a href="#" class="active" data-mode="1">Build my career</a></li>
+            <li><a href="#" data-mode="2">Browse positions</a></li>
+        </ul>
+        <!--<a href="#" id="move-arc">Move arc</a>-->
+    </nav>
+    <main id="map">
+        <div class="gradient-white-transparent"></div>
+        <div class="gradient-blue-yellow"></div>
+        <svg>
             <defs>
-            <!-- gradients -->
+                <!-- gradients -->
             </defs>
-            </svg>
-            <form id="form-container">
-                <label>Enter your current position or find it in the circle<br>
-                    to discover new career opportunities</label>
-                <div class="form-inner">
-                    <input type="text" placeholder="I am..." id="positionTitle" value="">                    
-                    <button type="submit">GO</button>
-                    <input type="hidden" id="positionId" value="">
-                </div>
-            </form>
-            <div class="button-collapse-container">
-                <button type="button" id="button-collapse" class="button-collapse">Collapse</button>
+        </svg>
+        <form id="form-container">
+            <label>Enter your current position or find it in the circle
+                <br> to discover new career opportunities</label>
+            <div class="form-inner">
+                <input type="text" placeholder="I am..." id="positionTitle" value="">
+                <button type="submit">GO</button>
+                <input type="hidden" id="positionId" value="">
             </div>
-        </main>        
-        <aside id="requirements-container">
-            <div id="current-container">
-                <h2 id="current-position"></h2>
-                <h3 id="current-division"></h3>
-            </div>
-            <div id="positions-accordion"></div>
-        </aside>
-        <script data-main="js/app/config" src="js/vendor/require/require.min.js"></script>
-    </body>
+        </form>
+        <div class="button-collapse-container">
+            <button type="button" id="button-collapse" class="button-collapse">Collapse</button>
+        </div>
+    </main>
+    <aside id="requirements-container">
+        <div id="current-container">
+            <h2 id="current-position"></h2>
+            <h3 id="current-division"></h3>
+        </div>
+        <div id="positions-accordion"></div>
+    </aside>
+    <script data-main="js/app/config" src="js/vendor/require/require.min.js"></script>
+</body>
+
 </html>
