@@ -759,6 +759,11 @@ define('app/CareerMap', [
         return posHtml;
     };
 
+    /**
+     * [removeTransition description]
+     * @param  {[type]} e [description]
+     * @return {[type]}   [description]
+     */
     CareerMap.prototype.removeTransition = function(e) {
         e.stopPropagation();
         $(this).parent().fadeOut(250, function() {
