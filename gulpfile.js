@@ -1,29 +1,54 @@
 var gulp = require('gulp'),
-        uglify = require('gulp-uglify'),
-        jshint = require('gulp-jshint'),
-        input = {
-            'javascript': 'client/js/app/*.js'
-        },
-output = {};
+    uglify = require('gulp-uglify'),
+    jshint = require('gulp-jshint'),
+    compress = require('gulp-compress'),
+    cleanCSS = require('gulp-clean-css'),
+    tinylr;
 
-//
-gulp.task('default', [/*'compress',*/ 'jshint'], function () {
-    // watch for JS changes
-    gulp.watch('client/js/app/*.js', function () {
-        gulp.run('jshint', 'jshint');
+//express
+gulp.task('express', function() {
+    var express = require('express');
+    var app = express();
+    app.use(require('connect-livereload')({ port: 35729 }));
+    app.use(express.static(__dirname));
+    app.listen(4000, '0.0.0.0');
+});
+
+// livereload
+gulp.task('livereload', function() {
+    tinylr = require('tiny-lr')();
+    tinylr.listen(35729);
+});
+
+// jshint
+gulp.task('jshint', function() {
+    gulp.src('./client/js/app/*')
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
+});
+
+// watch
+gulp.task('watch', function() {
+    gulp.watch('client/js/app/*.js', ['jshint']);
+    gulp.watch('client/js/app/*.js', notifyLiveReload);
+});
+
+// default
+gulp.task('default', ['express', 'livereload', 'watch'], function() {
+
+});
+
+/**
+ * Notify live reload
+ * @param  {Object} event Event Object
+ * @return {[type]}       [description]
+ */
+function notifyLiveReload(event) {
+    var fileName = require('path').relative(__dirname, event.path);
+
+    tinylr.changed({
+        body: {
+            files: [fileName]
+        }
     });
-});
-
-//
-gulp.task('compress', function () {
-    return gulp.src(input.javascript)
-            .pipe(uglify())
-            .pipe(gulp.dest('client/js/app.min'));
-});
-
-// JS hint task
-gulp.task('jshint', function () {
-    gulp.src(input.javascript)
-            .pipe(jshint())
-            .pipe(jshint.reporter('default'));
-});
+}
