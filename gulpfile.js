@@ -1,4 +1,5 @@
-var gulp = require('gulp'),
+var PORT = '4000',
+    gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     jshint = require('gulp-jshint'),
     compress = require('gulp-compress'),
@@ -11,8 +12,10 @@ gulp.task('express', function() {
     var app = express();
     app.use(require('connect-livereload')({ port: 35729 }));
     app.use(express.static(__dirname));
-    app.listen(4000, '0.0.0.0');
+    app.listen(PORT, '0.0.0.0');
 });
+
+console.log('Listening to port: ' + PORT);
 
 // livereload
 gulp.task('livereload', function() {
@@ -31,6 +34,8 @@ gulp.task('jshint', function() {
 gulp.task('watch', function() {
     gulp.watch('client/js/app/*.js', ['jshint']);
     gulp.watch('client/js/app/*.js', notifyLiveReload);
+    gulp.watch('client/css/style.css', notifyLiveReload);
+    gulp.watch('client/index.html', notifyLiveReload);
 });
 
 // default
