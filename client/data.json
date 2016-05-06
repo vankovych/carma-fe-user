@@ -1,557 +1,453 @@
 {
-    "divisions": [
-        {
-            "id": "d1",
-            "title": "Project Management",
-            "abbreviation": "PM",
-            "subdivisions": [
-                "s10"
-            ]
-        },
-        {
-            "id": "d2",
-            "title": "Business Analysis",
-            "abbreviation": "BA"
-        },
-        {
-            "id": "d3",
-            "title": "User Experience",
-            "abbreviation": "UX",
-            "subdivisions": [
-                "s11"
-            ]
-        },
-        {
-            "id": "d4",
-            "title": "Software Engineering & Development",
-            "abbreviation": "SEDO",
-            "subdivisions": [
-                "s1",
-                "s2",
-                "s3",
-                "s4",
-                "s5"
-            ]
-        },
-        {
-            "id": "d5",
-            "title": "Information Development",
-            "abbreviation": "InfoDev"
-        },
-        {
-            "id": "d6",
-            "title": "Quality Assurance",
-            "abbreviation": "QA",
-            "subdivisions": [
-                "s6",
-                "s7"
-            ]
-        },
-        {
-            "id": "d7",
-            "title": "Localization",
-            "abbreviation": "L10N"
-        },
-        {
-            "id": "d8",
-            "title": "IT"
-        },
-        {
-            "id": "d9",
-            "title": "Finance",
-            "subdivisions": [
-                "s12"
-            ]
-        },
-        {
-            "id": "d10",
-            "title": "Legal"
-        },
-        {
-            "id": "d11",
-            "title": "BD"
-        },
-        {
-            "id": "d12",
-            "abbreviation": "Talent",
-            "title": "Talent Management"
-        },
-        {
-            "id": "d13",
-            "abbreviation": "Staffing",
-            "title": "Talent Staffing"
-        },
-        {
-            "id": "d14",
-            "title": "University"
-        },
-        {
-            "id": "d15",
-            "abbreviation": "HCA",
-            "title": "Human Capital Administration"
-        },
-        {
-            "id": "d16",
-            "title": "PMG",
-            "subdivisions": [
-                "s8",
-                "s9"
-            ]
-        },
-        {
-            "id": "d17",
-            "title": "A&F"
-        },
-        {
-            "id": "d18",
-            "abbreviation": "Marketing",
-            "title": "Marketing &Communication"
-        },
-        {
-            "id": "d19",
-            "abbreviation": "Products",
-            "title": "Products &Services"
-        },
-        {
-            "id": "d20",
-            "abbreviation": "Solutions",
-            "title": "Solution Management"
-        }
-    ],
-    "subdivisions": [
-        {
-            "id": "s1",
-            "title": "Software Development",
-            "positions": [
-                "p1",
-                "p2",
-                "p3",
-                "p4",
-                "p5"
-            ]
-        },
-        {
-            "id": "s2",
-            "title": "Software Architecture",
-            "positions": [
-                "p11",
-                "p12"
-            ]
-        },
-        {
-            "id": "s3",
-            "title": "DevOps",
-            "positions": [
-                "p22"
-            ]
-        },
-        {
-            "id": "s4",
-            "title": "Competency Management",
-            "positions": [
-                "p18"
-            ]
-        },
-        {
-            "id": "s5",
-            "title": "Technical Leadership"
-        },
-        {
-            "id": "s6",
-            "title": "Test Engineer",
-            "positions": [
-                "p6",
-                "p7",
-                "p8",
-                "p9",
-                "p10"
-            ]
-        },
-        {
-            "id": "s7",
-            "title": "Automation Test Engineer"
-        },
-        {
-            "id": "s8",
-            "title": "Subdivision 1",
-            "positions": [
-                "p15",
-                "p16",
-                "p21"
-            ]
-        },
-        {
-            "id": "s9",
-            "title": "Subdivision 2",
-            "positions": [
-                "p17"
-            ]
-        },
-        {
-            "id": "s10",
-            "title": "Project Management",
-            "positions": [
-                "p13",
-                "p14"
-            ]
+    "divisions": [{
+        "id": "d1",
+        "title": "Project Management",
+        "abbreviation": "PM",
+        "subdivisions": [
+            "s10"
+        ]
+    }, {
+        "id": "d2",
+        "title": "Business Analysis",
+        "abbreviation": "BA"
+    }, {
+        "id": "d3",
+        "title": "User Experience",
+        "abbreviation": "UX",
+        "subdivisions": [
+            "s11"
+        ]
+    }, {
+        "id": "d4",
+        "title": "Software Engineering & Development",
+        "abbreviation": "SEDO",
+        "subdivisions": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5"
+        ]
+    }, {
+        "id": "d5",
+        "title": "Information Development",
+        "abbreviation": "InfoDev"
+    }, {
+        "id": "d6",
+        "title": "Quality Assurance",
+        "abbreviation": "QA",
+        "subdivisions": [
+            "s6",
+            "s7"
+        ]
+    }, {
+        "id": "d7",
+        "title": "Localization",
+        "abbreviation": "L10N"
+    }, {
+        "id": "d8",
+        "title": "IT"
+    }, {
+        "id": "d9",
+        "title": "Finance",
+        "subdivisions": [
+            "s12"
+        ]
+    }, {
+        "id": "d10",
+        "title": "Legal"
+    }, {
+        "id": "d11",
+        "title": "BD"
+    }, {
+        "id": "d12",
+        "abbreviation": "Talent",
+        "title": "Talent Management"
+    }, {
+        "id": "d13",
+        "abbreviation": "Staffing",
+        "title": "Talent Staffing"
+    }, {
+        "id": "d14",
+        "title": "University"
+    }, {
+        "id": "d15",
+        "abbreviation": "HCA",
+        "title": "Human Capital Administration"
+    }, {
+        "id": "d16",
+        "title": "PMG",
+        "subdivisions": [
+            "s8",
+            "s9"
+        ]
+    }, {
+        "id": "d17",
+        "title": "A&F"
+    }, {
+        "id": "d18",
+        "abbreviation": "Marketing",
+        "title": "Marketing &Communication"
+    }, {
+        "id": "d19",
+        "abbreviation": "Products",
+        "title": "Products &Services"
+    }, {
+        "id": "d20",
+        "abbreviation": "Solutions",
+        "title": "Solution Management"
+    }],
+    "subdivisions": [{
+        "id": "s1",
+        "title": "Software Development",
+        "positions": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5"
+        ]
+    }, {
+        "id": "s2",
+        "title": "Software Architecture",
+        "positions": [
+            "p11",
+            "p12"
+        ]
+    }, {
+        "id": "s3",
+        "title": "DevOps",
+        "positions": [
+            "p22"
+        ]
+    }, {
+        "id": "s4",
+        "title": "Competency Management",
+        "positions": [
+            "p18"
+        ]
+    }, {
+        "id": "s5",
+        "title": "Technical Leadership"
+    }, {
+        "id": "s6",
+        "title": "Test Engineer",
+        "positions": [
+            "p6",
+            "p7",
+            "p8",
+            "p9",
+            "p10"
+        ]
+    }, {
+        "id": "s7",
+        "title": "Automation Test Engineer"
+    }, {
+        "id": "s8",
+        "title": "Subdivision 1",
+        "positions": [
+            "p15",
+            "p16",
+            "p21"
+        ]
+    }, {
+        "id": "s9",
+        "title": "Subdivision 2",
+        "positions": [
+            "p17"
+        ]
+    }, {
+        "id": "s10",
+        "title": "Project Management",
+        "positions": [
+            "p13",
+            "p14"
+        ]
 
-        },
-        {
-            "id": "s11",
-            "title": "Subdivision",
-            "positions": [
-                "p19",
-                "p20"
-            ]
+    }, {
+        "id": "s11",
+        "title": "Subdivision",
+        "positions": [
+            "p19",
+            "p20"
+        ]
 
-        },
-        {
-            "id": "s12",
-            "title": "Some div",
-            "positions": [
-                "p23"
-            ]
+    }, {
+        "id": "s12",
+        "title": "Some div",
+        "positions": [
+            "p23"
+        ]
 
-        }
-    ],
-    "positions": [
-        {
-            "id": "p1",
-            "title": "Junior Software Developer"
-        },
-        {
-            "id": "p2",
-            "title": "Intermediate Software Developer"
-        },
-        {
-            "id": "p3",
-            "title": "Full Competent Software Developer"
-        },
-        {
-            "id": "p4",
-            "title": "Superior Software Developer"
-        },
-        {
-            "id": "p5",
-            "title": "Principal Software Developer"
-        },
-        {
-            "id": "p6",
-            "title": "Junior Test Engineer"
-        },
-        {
-            "id": "p7",
-            "title": "Intermediate Test Engineer"
-        },
-        {
-            "id": "p8",
-            "title": "Full Competent Test Engineer"
-        },
-        {
-            "id": "p9",
-            "title": "Senior Software Developer"
-        },
-        {
-            "id": "p10",
-            "title": "Test Leader"
-        },
-        {
-            "id": "p11",
-            "title": "Application Architect"
-        },
-        {
-            "id": "p12",
-            "title": "Solution Architect",
-            "transition": [
-                "p3"
-            ]
-        },
-        {
-            "id": "p13",
-            "title": "Project Coordinator"
-        },
-        {
-            "id": "p14",
-            "title": "Project Manager"
-        },
-        {
-            "id": "p15",
-            "title": "Position 1"
-        },
-        {
-            "id": "p16",
-            "title": "Application Architect",
-            "transition": [
-                "p14",
-                "p11",
-                "p2",
-                "p23",
-                "p17"
-            ],
-            "profile": "#",
-            "matrix": "#"
-        },
-        {
-            "id": "p17",
-            "title": "Position 3",
-            "transition": [
-                "p19",
-                "p6",
-                "p15"
-            ]
-        },
-        {
-            "id": "p18",
-            "title": "Competency Manager"
-        },
-        {
-            "id": "p19",
-            "title": "Position"
-        },
-        {
-            "id": "p20",
-            "title": "Position"
-        },
-        {
-            "id": "p21",
-            "title": "Position 5"
-        },
-        {
-            "id": "p22",
-            "title": "DevOps Engineer"
-        },
-        {
-            "id": "p23",
-            "title": "Some dude"
-        }
-    ],
-    "englishLevels": [
-        {
-            "id": "en1",
-            "title": "Beginner"
-        },
-        {
-            "id": "en2",
-            "title": "Elementary"
-        },
-        {
-            "id": "en3",
-            "title": "Pre-Intermediate"
-        },
-        {
-            "id": "en4",
-            "title": "Low Intermediate"
-        },
-        {
-            "id": "en5",
-            "title": "Intermediate"
-        },
-        {
-            "id": "en6",
-            "title": "Upper Intermediate"
-        },
-        {
-            "id": "en7",
-            "title": "Pre-advanced"
-        },
-        {
-            "id": "en8",
-            "title": "Advanced"
-        },
-        {
-            "id": "en9",
-            "title": "Very Advanced"
-        }
-    ],
-    "requirements": [
-        {
-            "id": "r1",
-            "description": "Practical use and strong understanding of testing methods, levels and types. metrics. different tests analyses methods, practical use and strong understanding of test artefacts and their lifecycle (bug reports, test cases, etc.)"
-        },
-        {
-            "id": "r2",
-            "description": "Practical use and strong understanding of common artefact management system (bug trackers, test and requirement management, etc.)"
-        },
-        {
-            "id": "r3",
-            "description": "Practical use and strong understanding of automation script structure (framework, preconditions, asserts, logging etc.)"
-        },
-        {
-            "id": "r4",
-            "description": "Practical use and strong understanding of automation testware (continuous integration, version control, visualization, build automation tools etc.)"
-        }
-    ],
-    "experiences": [
-        {
-            "id": "ex1",
-            "title": "1"
-        },
-        {
-            "id": "ex2",
-            "title": "2"
-        },
-        {
-            "id": "ex3",
-            "title": "3"
-        }
-    ],
-    "positionRequirementsMap": [
-        {
-            "positionId": "p16",
-            "englishLevelId": "en5",
-            "experienceId": "ex2",
-            "requirementsIds": [
-                "r1",
-                "r2",
-                "r3",
-                "r4"
-            ]
-        },
-        {
-            "positionId": "p17",
-            "englishLevelId": "en2",
-            "experienceId": "ex1",
-            "requirementsIds": [
-                "r1",
-                "r2",
-                "r3",
-                "r4"
-            ]
-        },
-        {
-            "positionId": "p3",
-            "englishLevelId": "en2",
-            "experienceId": "ex1",
-            "requirementsIds": [
-                "r1",
-                "r2",
-                "r3",
-                "r4"
-            ]
-        },
-        {
-            "positionId": "p14",
-            "englishLevelId": "en2",
-            "experienceId": "ex1",
-            "requirementsIds": [
-                "r1",
-                "r2",
-                "r3",
-                "r4"
-            ]
-        },
-        {
-            "positionId": "p23",
-            "englishLevelId": "en2",
-            "experienceId": "ex1",
-            "requirementsIds": [
-                "r1",
-                "r2",
-                "r3",
-                "r4"
-            ]
-        }
-    ],
-    "colors": [
-        {
-            "d": "#7a9da0",
-            "m": "#93bdc1",
-            "l": "#C8DDDF"
-        },
-        {
-            "d": "#7da191",
-            "m": "#96c2ae",
-            "l": "#CAE0D6"
-        },
-        {
-            "d": "#7ea38a",
-            "m": "#97c4a6",
-            "l": "#CAE1D2"
-        },
-        {
-            "d": "#81a878",
-            "m": "#9bca90",
-            "l": "#CCE4C7"
-        },
-        {
-            "d": "#94af72",
-            "m": "#b2d289",
-            "l": "#D9E8C5"
-        },
-        {
-            "d": "#a6ad6a",
-            "m": "#c8d082",
-            "l": "#E3E7C0"
-        },
-        {
-            "d": "#b2aa68",
-            "m": "#d6cc7d",
-            "l": "#EAE5BD"
-        },
-        {
-            "d": "#b9a566",
-            "m": "#dfc67b",
-            "l": "#EEE2BC"
-        },
-        {
-            "d": "#bc9464",
-            "m": "#e2b278",
-            "l": "#F0D8BB"
-        },
-        {
-            "d": "#bb8b65",
-            "m": "#e1a77a",
-            "l": "#EFD2BC"
-        },
-        {
-            "d": "#b87374",
-            "m": "#dd8a8b",
-            "l": "#EDC4C4"
-        },
-        {
-            "d": "#b7657d",
-            "m": "#dc7a96",
-            "l": "#EDBCCA"
-        },
-        {
-            "d": "#af6388",
-            "m": "#d377a3",
-            "l": "#E8BAD0"
-        },
-        {
-            "d": "#a8658c",
-            "m": "#ca79a8",
-            "l": "#E4BBD3"
-        },
-        {
-            "d": "#9d6792",
-            "m": "#bd7cb0",
-            "l": "#DDBDD7"
-        },
-        {
-            "d": "#866f99",
-            "m": "#a185b8",
-            "l": "#CFC1DB"
-        },
-        {
-            "d": "#7b739a",
-            "m": "#948ab9",
-            "l": "#AEA6C9"
-        },
-        {
-            "d": "#71779e",
-            "m": "#888fbe",
-            "l": "#C3C6DE"
-        },
-        {
-            "d": "#6c83a6",
-            "m": "#829ec8",
-            "l": "#C0CEE3"
-        },
-        {
-            "d": "#6d88a3",
-            "m": "#83a4c4",
-            "l": "#C0D1E1"
-        }
-    ]
+    }],
+    "positions": [{
+        "id": "p1",
+        "title": "Junior Software Developer"
+    }, {
+        "id": "p2",
+        "title": "Intermediate Software Developer"
+    }, {
+        "id": "p3",
+        "title": "Full Competent Software Developer"
+    }, {
+        "id": "p4",
+        "title": "Superior Software Developer"
+    }, {
+        "id": "p5",
+        "title": "Principal Software Developer"
+    }, {
+        "id": "p6",
+        "title": "Junior Test Engineer"
+    }, {
+        "id": "p7",
+        "title": "Intermediate Test Engineer"
+    }, {
+        "id": "p8",
+        "title": "Full Competent Test Engineer"
+    }, {
+        "id": "p9",
+        "title": "Senior Software Developer"
+    }, {
+        "id": "p10",
+        "title": "Test Leader"
+    }, {
+        "id": "p11",
+        "title": "Application Architect"
+    }, {
+        "id": "p12",
+        "title": "Solution Architect",
+        "transition": [
+            "p3"
+        ]
+    }, {
+        "id": "p13",
+        "title": "Project Coordinator"
+    }, {
+        "id": "p14",
+        "title": "Project Manager"
+    }, {
+        "id": "p15",
+        "title": "Position 1"
+    }, {
+        "id": "p16",
+        "title": "Application Architect",
+        "transition": [
+            "p14",
+            "p11",
+            "p2",
+            "p23",
+            "p17"
+        ],
+        "profile": "#",
+        "matrix": "#"
+    }, {
+        "id": "p17",
+        "title": "Position 3",
+        "transition": [
+            "p19",
+            "p6",
+            "p15"
+        ]
+    }, {
+        "id": "p18",
+        "title": "Competency Manager"
+    }, {
+        "id": "p19",
+        "title": "Position"
+    }, {
+        "id": "p20",
+        "title": "Position"
+    }, {
+        "id": "p21",
+        "title": "Position 5"
+    }, {
+        "id": "p22",
+        "title": "DevOps Engineer"
+    }, {
+        "id": "p23",
+        "title": "Some dude"
+    }],
+    "englishLevels": [{
+        "id": "en1",
+        "title": "Beginner"
+    }, {
+        "id": "en2",
+        "title": "Elementary"
+    }, {
+        "id": "en3",
+        "title": "Pre-Intermediate"
+    }, {
+        "id": "en4",
+        "title": "Low Intermediate"
+    }, {
+        "id": "en5",
+        "title": "Intermediate"
+    }, {
+        "id": "en6",
+        "title": "Upper Intermediate"
+    }, {
+        "id": "en7",
+        "title": "Pre-advanced"
+    }, {
+        "id": "en8",
+        "title": "Advanced"
+    }, {
+        "id": "en9",
+        "title": "Very Advanced"
+    }],
+    "requirements": [{
+        "id": "r1",
+        "description": "Practical use and strong understanding of testing methods, levels and types. metrics. different tests analyses methods, practical use and strong understanding of test artefacts and their lifecycle (bug reports, test cases, etc.)"
+    }, {
+        "id": "r2",
+        "description": "Practical use and strong understanding of common artefact management system (bug trackers, test and requirement management, etc.)"
+    }, {
+        "id": "r3",
+        "description": "Practical use and strong understanding of automation script structure (framework, preconditions, asserts, logging etc.)"
+    }, {
+        "id": "r4",
+        "description": "Practical use and strong understanding of automation testware (continuous integration, version control, visualization, build automation tools etc.)"
+    }],
+    "experiences": [{
+        "id": "ex1",
+        "title": "1"
+    }, {
+        "id": "ex2",
+        "title": "2"
+    }, {
+        "id": "ex3",
+        "title": "3"
+    }],
+    "positionRequirementsMap": [{
+        "positionId": "p16",
+        "englishLevelId": "en5",
+        "experienceId": "ex2",
+        "requirementsIds": [
+            "r1",
+            "r2",
+            "r3",
+            "r4"
+        ]
+    }, {
+        "positionId": "p17",
+        "englishLevelId": "en2",
+        "experienceId": "ex1",
+        "requirementsIds": [
+            "r1",
+            "r2",
+            "r3",
+            "r4"
+        ]
+    }, {
+        "positionId": "p3",
+        "englishLevelId": "en2",
+        "experienceId": "ex1",
+        "requirementsIds": [
+            "r1",
+            "r2",
+            "r3",
+            "r4"
+        ]
+    }, {
+        "positionId": "p14",
+        "englishLevelId": "en2",
+        "experienceId": "ex1",
+        "requirementsIds": [
+            "r1",
+            "r2",
+            "r3",
+            "r4"
+        ]
+    }, {
+        "positionId": "p23",
+        "englishLevelId": "en2",
+        "experienceId": "ex1",
+        "requirementsIds": [
+            "r1",
+            "r2",
+            "r3",
+            "r4"
+        ]
+    }],
+    "colors": [{
+        "d": "#7a9da0",
+        "m": "#93bdc1",
+        "l": "#C8DDDF"
+    }, {
+        "d": "#7da191",
+        "m": "#96c2ae",
+        "l": "#CAE0D6"
+    }, {
+        "d": "#7ea38a",
+        "m": "#97c4a6",
+        "l": "#CAE1D2"
+    }, {
+        "d": "#81a878",
+        "m": "#9bca90",
+        "l": "#CCE4C7"
+    }, {
+        "d": "#94af72",
+        "m": "#b2d289",
+        "l": "#D9E8C5"
+    }, {
+        "d": "#a6ad6a",
+        "m": "#c8d082",
+        "l": "#E3E7C0"
+    }, {
+        "d": "#b2aa68",
+        "m": "#d6cc7d",
+        "l": "#EAE5BD"
+    }, {
+        "d": "#b9a566",
+        "m": "#dfc67b",
+        "l": "#EEE2BC"
+    }, {
+        "d": "#bc9464",
+        "m": "#e2b278",
+        "l": "#F0D8BB"
+    }, {
+        "d": "#bb8b65",
+        "m": "#e1a77a",
+        "l": "#EFD2BC"
+    }, {
+        "d": "#b87374",
+        "m": "#dd8a8b",
+        "l": "#EDC4C4"
+    }, {
+        "d": "#b7657d",
+        "m": "#dc7a96",
+        "l": "#EDBCCA"
+    }, {
+        "d": "#af6388",
+        "m": "#d377a3",
+        "l": "#E8BAD0"
+    }, {
+        "d": "#a8658c",
+        "m": "#ca79a8",
+        "l": "#E4BBD3"
+    }, {
+        "d": "#9d6792",
+        "m": "#bd7cb0",
+        "l": "#DDBDD7"
+    }, {
+        "d": "#866f99",
+        "m": "#a185b8",
+        "l": "#CFC1DB"
+    }, {
+        "d": "#7b739a",
+        "m": "#948ab9",
+        "l": "#AEA6C9"
+    }, {
+        "d": "#71779e",
+        "m": "#888fbe",
+        "l": "#C3C6DE"
+    }, {
+        "d": "#6c83a6",
+        "m": "#829ec8",
+        "l": "#C0CEE3"
+    }, {
+        "d": "#6d88a3",
+        "m": "#83a4c4",
+        "l": "#C0D1E1"
+    }]
 }

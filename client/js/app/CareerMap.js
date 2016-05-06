@@ -716,7 +716,10 @@ define('app/CareerMap', [
             $('#' + currentId).attr('class', $('#' + currentId).attr('class') + ' active');
 
             // remove target position event
-            $('.close-requirements').on('click', root.removeTransition);
+            $('.close-requirements').on('click', function(e) {
+                e.stopPropagation();
+                root.removeTransition(this);
+            });
         }
     };
 
@@ -760,26 +763,48 @@ define('app/CareerMap', [
     };
 
     /**
-     * [removeTransition description]
+     * Remove transition
      * @param  {[type]} e [description]
      * @return {[type]}   [description]
      */
-    CareerMap.prototype.removeTransition = function(e) {
-        e.stopPropagation();
-        $(this).parent().fadeOut(250, function() {
+    CareerMap.prototype.removeTransition = function(elem) {
+        var id,
+            root = this,
+            $header = $(elem).parent(),
+            re = /-(.*)/,
+            division,
+            subdivision,
+            positionId;
+
+        id = $header.attr('id').replace('accordion-header-', '');
+
+        positionId = re.exec(id)[1];
+
+        subdivision = root.data.subdivisions.find(function(sub) {
+            return sub.positions ? sub.positions.indexOf(positionId) >= 0 : false;
+        });
+
+        division = root.data.divisions.find(function(div) {
+            return div.subdivisions ? div.subdivisions.indexOf(subdivision.id) >= 0 : false;
+        });
+
+        $header.fadeOut(250, function() {
             $(this).remove();
         });
 
-        console.log($(this).parent().attr('id'));
+        // remove elements related to target position
+        [
+            $('#' + id + '-spline'),
+            $('#' + subdivision.id + '-position-tree'),
+            $('#' + subdivision.id + 'g')
+        ].forEach(function($elem) {
+            $elem.fadeOut(250, function() {
+                $elem.remove();
+            });
+        });
 
-        var id = $(this).parent().attr('id');
+        // TODO hide division title
 
-        id.replace('accordion-header-', '');
-
-        console.log(id.replace('accordion-header-', ''));
-
-        $(this).attr('id');
-        // TODO delete spline
     };
 
     CareerMap.prototype.renderTransition = function(currentId, targetId, gradientId) {
