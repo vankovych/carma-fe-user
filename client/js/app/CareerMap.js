@@ -331,6 +331,7 @@ define('app/CareerMap', [
             // move division title up
             root.group.select('g#' + division.id + '-title')
                 .attr('class', 'division-title-moved');
+
             root.group.select('g#' + division.id + '-title>text')
                 .transition()
                 .duration(root.duration)
@@ -550,9 +551,10 @@ define('app/CareerMap', [
 
         html5tooltips.refresh();
 
+        // fade in titles
         root.group.selectAll(selector)
             .transition()
-            .delay(750)
+            .delay(root.duration)
             .duration(root.duration)
             .style('opacity', '1');
     };
@@ -570,6 +572,11 @@ define('app/CareerMap', [
             position = root.data.positions.find(function(p) {
                 return p.id === currentId;
             });
+
+            // select only position with transitions
+            if (!position.transition || position.transition.length === 0) {
+                return false;
+            }
 
             subdivision = root.data.subdivisions.find(function(s) {
                 return s.positions ? s.positions.indexOf(currentId) >= 0 : false;
@@ -804,7 +811,6 @@ define('app/CareerMap', [
         });
 
         // TODO hide division title
-
     };
 
     CareerMap.prototype.renderTransition = function(currentId, targetId, gradientId) {

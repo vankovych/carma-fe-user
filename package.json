@@ -1,24 +1,21 @@
 {
-  "name": "carma",
-  "version": "1.0.0",
-  "license": "MIT",
-  "repository": "https://github.com/vankovych/carma",
-  "description": "Eleks Career Map",
-  "dependencies": {
-    "tiny-lr": "^0.2.1"
-  },
-  "devDependencies": {
-    "clean-css": "^3.4.12",
-    "connect-livereload": "^0.5.4",
-    "express": "^4.13.4",
-    "gulp": "^3.9.0",
-    "gulp-clean-css": "^2.0.6",
-    "gulp-compress": "0.0.8",
-    "gulp-jshint": "^2.0.0",
-    "gulp-livereload": "^3.8.1",
-    "gulp-server-livereload": "^1.7.4",
-    "gulp-uglify": "^1.5.1",
-    "jshint": "^2.9.1",
-    "tiny-lr": "^0.2.1"
-  }
+    "name": "carma",
+    "version": "1.0.0",
+    "license": "MIT",
+    "repository": "https://github.com/vankovych/carma",
+    "description": "Eleks Career Map",
+    "devDependencies": {
+        "clean-css": "^3.4.12",
+        "connect-livereload": "^0.5.4",
+        "express": "^4.13.4",
+        "gulp": "^3.9.0",
+        "gulp-clean-css": "^2.0.6",
+        "gulp-compress": "0.0.8",
+        "gulp-jshint": "^2.0.0",
+        "gulp-livereload": "^3.8.1",
+        "gulp-server-livereload": "^1.7.4",
+        "gulp-uglify": "^1.5.1",
+        "jshint": "^2.9.1",
+        "tiny-lr": "^0.2.1"
+    }
 }
