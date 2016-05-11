@@ -184,7 +184,12 @@
         "title": "Junior Software Developer"
     }, {
         "id": "p2",
-        "title": "Intermediate Software Developer"
+        "title": "Intermediate Software Developer",
+        "transition": [
+            "p12",
+            "p22",
+            "p16"
+        ]
     }, {
         "id": "p3",
         "title": "Full Competent Software Developer"
@@ -235,7 +240,6 @@
             "p11",
             "p2",
             "p23",
-            "p21",
             "p17"
         ],
         "profile": "#",
