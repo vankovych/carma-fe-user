@@ -218,15 +218,16 @@ define('app/CareerMap', [
      */
     CareerMap.prototype.hideDivisions = function(exceptId) {
         var root = this;
+
         // fade in all divisions except for selected
-        root.group.selectAll('.division')
+        root.group.selectAll('.division path')
             .transition()
             .duration(300)
             .style('opacity', function() {
-                return (this.id === exceptId) ? 1 : 0.2;
+                return (this.id === exceptId) ? 1 : 0.1;
             });
 
-        // fade out selected division title
+        // fade out not selected division title
         root.group.selectAll('g.division-title')
             .transition()
             .duration(root.duration)
@@ -238,7 +239,7 @@ define('app/CareerMap', [
     CareerMap.prototype.showDivisions = function() {
         var root = this;
         // fade out all divisions
-        root.group.selectAll('.division')
+        root.group.selectAll('.division path')
             .transition()
             .delay(300)
             .duration(300)
@@ -421,6 +422,7 @@ define('app/CareerMap', [
                             next = 0;
                         } else {
                             next++;
+                            // TODO Fix - remove making next as enable
 
                             if (next === 1) {
                                 color = root.color(division.i).m;
@@ -599,27 +601,36 @@ define('app/CareerMap', [
             $('#current-division').text(division.title);
 
             if (root.mode === 1) {
+                // Build my career
 
                 // if position has transitions
                 if (position.transition) {
                     var enabled = true,
+                        next = false,
                         positionsData = [];
 
-                    // disable positions on current subdivision
+                    // disable positions on current subdivision after current plus next one                    
                     subdivision.positions.forEach(function(pId) {
                         if (!enabled) {
-                            d3.select('#' + pId).style('fill', root.color(division.i).l);
+                            if (next) {
+                                d3.select('#' + pId).style('fill', root.color(division.i).l);
+                            } else {
+                                // add next position on current subdivision to transitions
+                                if (position.transition.indexOf(pId) === -1) {
+                                    position.transition.unshift(pId);
+                                }
+                            }
+                            next = true;
                         }
 
-                        if (enabled && currentId === pId) {
+                        if (currentId === pId) {
                             enabled = false;
                         }
                     });
 
                     // get target positions data
-                    position.transition.forEach(function(tId) {
-
-                        var pos, sub, div, positionData;
+                    positionsData = position.transition.map(function(tId) {
+                        var pos, sub, div;
 
                         pos = root.data.positions.find(function(p) {
                             return p.id === tId;
@@ -633,14 +644,12 @@ define('app/CareerMap', [
                             return d.subdivisions ? d.subdivisions.indexOf(sub.id) >= 0 : false;
                         });
 
-                        positionData = {
+                        return {
                             positionTitle: pos.title,
                             divisionTitle: div.title,
                             divisionColor: div.i,
                             id: tId
                         };
-
-                        positionsData.push(positionData);
                     });
 
                     root.renderTransitions(position);
@@ -689,7 +698,14 @@ define('app/CareerMap', [
                         'opacity': 1
                     }, root.duration, 'easeInOutCubic');
                 }
+
+                // remove target position event
+                $('.close-requirements').on('click', function(e) {
+                    e.stopPropagation();
+                    root.removeTransition(this);
+                });
             } else if (root.mode === 2) {
+                //Browse positions
 
                 var positionRequirements = root.data.positionRequirementsMap.find(function(p) {
                     return p.positionId === currentId;
@@ -721,12 +737,6 @@ define('app/CareerMap', [
 
             $('.position.active').attr('class', 'position');
             $('#' + currentId).attr('class', $('#' + currentId).attr('class') + ' active');
-
-            // remove target position event
-            $('.close-requirements').on('click', function(e) {
-                e.stopPropagation();
-                root.removeTransition(this);
-            });
         }
     };
 
@@ -775,6 +785,8 @@ define('app/CareerMap', [
      * @return {[type]}   [description]
      */
     CareerMap.prototype.removeTransition = function(elem) {
+        // TODO do not remove sub of current pos
+
         var id,
             root = this,
             $header = $(elem).parent(),
@@ -811,57 +823,6 @@ define('app/CareerMap', [
         });
 
         // TODO hide division title
-    };
-
-    CareerMap.prototype.renderTransition = function(currentId, targetId, gradientId) {
-        var root = this,
-            selectedPos,
-            targetPos,
-            centerPos,
-            p1, p2, pC,
-            diff = { x: 0, y: 0 },
-            points = [];
-
-        selectedPos = d3.select('#' + currentId);
-        centerPos = d3.select('#cntr');
-        targetPos = d3.select('#' + targetId);
-
-        p1 = root.getElementCoordinates(selectedPos);
-        pC = root.getElementCoordinates(centerPos);
-        p2 = root.getElementCoordinates(targetPos);
-
-        // TODO: Improve spline drawing algorithm   
-
-        diff.x = Math.abs(p1[0] - p2[0]);
-        diff.y = Math.abs(p1[1] - p2[1]);
-
-        //        console.log('--', targetId, '--');
-        //        console.log(p1, p2, diff);
-
-        if (diff.x < 100) {
-            if (p1[0] > 0) {
-                pC[0] = pC[0] + Math.min(Math.abs(p1[0]), Math.abs(p2[0])) - 20;
-            } else {
-                pC[0] = -Math.min(Math.abs(p1[0]), Math.abs(p2[0])) + 20;
-            }
-        }
-
-        points = [p1, pC, p2];
-
-        root.group.append('path')
-            .attr('d', root.bezierLine(points))
-            .attr('id', currentId + '-' + targetId + '-spline')
-            .attr('class', 'spline')
-            .attr('stroke', 'url(#gradient-' + gradientId + ')')
-            .attr('fill', 'none')
-            .transition()
-            .duration(root.duration)
-            .attrTween('stroke-dasharray', function() {
-                var len = this.getTotalLength();
-                return function(t) {
-                    return (d3.interpolateString('0,' + len, len + ',0'))(t);
-                };
-            });
     };
 
     CareerMap.prototype.renderTransitions = function(position) {
@@ -923,7 +884,6 @@ define('app/CareerMap', [
                         }
 
                         if (target) {
-
                             poss.forEach(function(e) {
                                 if (e.sId === sId) {
                                     e.dId = d.id;
@@ -979,10 +939,61 @@ define('app/CareerMap', [
             // render transitions
             poss.forEach(function(e) {
                 var id = currentDivision.id + '-' + e.dId;
-                root.renderTransition(position.id, e.pId, id);
+                root.renderTransitionSpline(position.id, e.pId, id);
             });
 
         }
+    };
+
+    CareerMap.prototype.renderTransitionSpline = function(currentId, targetId, gradientId) {
+        var root = this,
+            selectedPos,
+            targetPos,
+            centerPos,
+            p1, p2, pC,
+            diff = { x: 0, y: 0 },
+            points = [];
+
+        selectedPos = d3.select('#' + currentId);
+        centerPos = d3.select('#cntr');
+        targetPos = d3.select('#' + targetId);
+
+        p1 = root.getElementCoordinates(selectedPos);
+        pC = root.getElementCoordinates(centerPos);
+        p2 = root.getElementCoordinates(targetPos);
+
+        // TODO: Improve spline drawing algorithm   
+
+        diff.x = Math.abs(p1[0] - p2[0]);
+        diff.y = Math.abs(p1[1] - p2[1]);
+
+        //        console.log('--', targetId, '--');
+        //        console.log(p1, p2, diff);
+
+        if (diff.x < 100) {
+            if (p1[0] > 0) {
+                pC[0] = pC[0] + Math.min(Math.abs(p1[0]), Math.abs(p2[0])) - 20;
+            } else {
+                pC[0] = -Math.min(Math.abs(p1[0]), Math.abs(p2[0])) + 20;
+            }
+        }
+
+        points = [p1, pC, p2];
+
+        root.group.append('path')
+            .attr('d', root.bezierLine(points))
+            .attr('id', currentId + '-' + targetId + '-spline')
+            .attr('class', 'spline')
+            .attr('stroke', 'url(#gradient-' + gradientId + ')')
+            .attr('fill', 'none')
+            .transition()
+            .duration(root.duration)
+            .attrTween('stroke-dasharray', function() {
+                var len = this.getTotalLength();
+                return function(t) {
+                    return (d3.interpolateString('0,' + len, len + ',0'))(t);
+                };
+            });
     };
 
     CareerMap.prototype.collapseAll = function(exceptDivisionId) {
