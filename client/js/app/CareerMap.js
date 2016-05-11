@@ -158,6 +158,7 @@ define('app/CareerMap', [
             this.data.divisions[i].finalAngle1 = (i * root.ArcLen).toDeg();
         }
 
+        // clean existing elements
         root.group.selectAll('.division').remove();
         root.group.selectAll('.subdivision').remove();
         root.group.selectAll('.subdivision-title').remove();
@@ -181,7 +182,7 @@ define('app/CareerMap', [
                     root.expandDivision(d);
                 }
             })
-            // arc
+            // outer arc
             .append('path')
             .attr('id', function(d) {
                 return d.id;
@@ -192,7 +193,7 @@ define('app/CareerMap', [
                 return root.color(d.i).m;
             });
 
-        // arc in
+        // inner arc
         divisionSelection.append('path')
             .attr('id', function(d) {
                 return d.id + '-in';
@@ -204,6 +205,7 @@ define('app/CareerMap', [
                 return root.color(d.i).d;
             });
 
+        // animate divisions expanding from top start point
         root.data.divisions.forEach(function(d) {
             root.moveArc(d.id, d.finalAngle);
         });
@@ -212,9 +214,28 @@ define('app/CareerMap', [
     };
 
     /**
-     * Hide divisions except for provided
+     * Show all divisions
+     */
+    CareerMap.prototype.showDivisions = function() {
+        var root = this;
+
+        // fade out all divisions
+        root.group.selectAll('.division path')
+            .transition()
+            .delay(300)
+            .duration(300)
+            .style('opacity', '1');
+        // fade out division title
+        root.group.selectAll('g.division-title')
+            .transition()
+            .delay(500)
+            .duration(300)
+            .style('opacity', '1');
+    };
+
+    /**
+     * Hide divisions except for provided Id
      * @param  {String} exceptId Id of excepted division
-     * @return {[type]}          [description]
      */
     CareerMap.prototype.hideDivisions = function(exceptId) {
         var root = this;
@@ -236,52 +257,38 @@ define('app/CareerMap', [
             });
     };
 
-    CareerMap.prototype.showDivisions = function() {
-        var root = this;
-        // fade out all divisions
-        root.group.selectAll('.division path')
-            .transition()
-            .delay(300)
-            .duration(300)
-            .style('opacity', '1');
-        // fade out division title
-        root.group.selectAll('g.division-title')
-            .transition()
-            .delay(500)
-            .duration(300)
-            .style('opacity', '1');
-    };
-
+    /**
+     * Expand division
+     * @param  Object division Division
+     * @param  {Array} targets  Target positions
+     */
     CareerMap.prototype.expandDivision = function(division, targets) {
         var root = this;
 
         targets = targets || [];
 
         if (division.subdivisions) {
+            var subdivisions;
 
             root.selected.divisionIds.push(division.id);
-
             root.hideDivisions(division.id);
 
             // get subs for selected division
-            var subdivisions = root.data.subdivisions.filter(function(s) {
-                var filter = division.subdivisions.indexOf(s.id) >= 0;
+            subdivisions = root.data.subdivisions.filter(function(s) {
+                var filter;
 
-                if (targets.length) {
-
-                    if (filter) {
-                        // for mode 1 display only subdivisions with positions where transitions is possible
-                        if (root.mode === 1) {
-                            filter = false;
-                            if (s.positions) {
-                                s.positions.forEach(function(p) {
-                                    if (targets.indexOf(p) >= 0) {
-                                        filter = true;
-                                        return false;
-                                    }
-                                });
+                filter = division.subdivisions.indexOf(s.id) >= 0;
+                if (targets.length && filter && root.mode === 1) {
+                    // for mode 1 display only subdivisions with positions where transitions is possible
+                    // and position is in transition list
+                    filter = false;
+                    if (s.positions) {
+                        s.positions.forEach(function(p) {
+                            if (targets.indexOf(p) >= 0) {
+                                filter = true;
+                                return false;
                             }
-                        }
+                        });
                     }
                 }
                 return filter;
@@ -381,18 +388,15 @@ define('app/CareerMap', [
 
             // render position leafs            
             subdivisions.forEach(function(sub) {
+                var positions = [],
+                    enabled = true;
 
                 // get positions for specified subdivision
-                var positions = [];
                 if (sub.positions) {
                     positions = root.data.positions.filter(function(p) {
                         return sub.positions.indexOf(p.id) >= 0;
                     });
                 }
-
-                var enabled = true,
-                    enabledClass = '',
-                    next = 0;
 
                 root.group.selectAll('g#' + sub.id + '-position-tree')
                     .selectAll('circle.position')
@@ -418,26 +422,14 @@ define('app/CareerMap', [
                         if (enabled) {
                             color = root.color(division.i).m;
                             enabled = targets.indexOf(d.id) >= 0 ? false : true;
-                            enabledClass = 'enabled ';
-                            next = 0;
                         } else {
-                            next++;
-                            // TODO Fix - remove making next as enable
-
-                            if (next === 1) {
-                                color = root.color(division.i).m;
-                                enabledClass = 'enabled ';
-                            } else {
-                                color = root.color(division.i).l;
-                                enabledClass = '';
-                            }
+                            color = root.color(division.i).l;
                         }
 
                         return color;
                     })
                     .attr('class', function(d) {
-                        var classValue = targets.indexOf(d.id) >= 0 ? 'position active' : 'position';
-                        return enabledClass + classValue;
+                        return targets.indexOf(d.id) >= 0 ? 'position active' : 'position';
                     })
                     .style('stroke', function() {
                         return root.color(division.i).m;
