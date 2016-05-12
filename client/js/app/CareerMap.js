@@ -259,7 +259,7 @@ define('app/CareerMap', [
 
     /**
      * Expand division
-     * @param  Object division Division
+     * @param  {Object} division Division
      * @param  {Array} targets  Target positions
      */
     CareerMap.prototype.expandDivision = function(division, targets) {
@@ -455,15 +455,12 @@ define('app/CareerMap', [
         }
     };
 
-    CareerMap.prototype.collapseDivision = function(division, partly) {
+    /**
+     * Collapse division
+     * @param  {Object} division Division
+     */
+    CareerMap.prototype.collapseDivision = function(division) {
         var root = this;
-
-        partly = partly || false;
-
-        if (!partly) {
-            $('#form-container').fadeIn(root.duration);
-            $('#requirements-container').animate({ 'right': '-430' }, 750, 'easeInOutCubic');
-        }
 
         d3.selectAll('.spline').remove();
         root.showDivisions();
@@ -507,6 +504,12 @@ define('app/CareerMap', [
         }
     };
 
+    /**
+     * Render Titles
+     * @param  {Object} selection    Elements selection
+     * @param  {String} className    Class name
+     * @param  {String} classNameAdd Additional class name
+     */
     CareerMap.prototype.renderTitles = function(selection, className, classNameAdd) {
         var root = this,
             selector;
@@ -553,6 +556,11 @@ define('app/CareerMap', [
             .style('opacity', '1');
     };
 
+    /**
+     * Select position
+     * @param  {String} currentId [description]
+     * @param  {Boolean} expand    [description]
+     */
     CareerMap.prototype.selectPosition = function(currentId, expand) {
         expand = expand || false;
 
@@ -1001,7 +1009,7 @@ define('app/CareerMap', [
                     return dId === d.id;
                 });
 
-                root.collapseDivision(division, true);
+                root.collapseDivision(division);
             }
         });
 
