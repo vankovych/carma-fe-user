@@ -308,14 +308,14 @@ path.placeholder {
     z-index: 5;
     padding: 0;
     box-sizing: border-box;
-    /*display: none;*/
-    /*box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.2);*/
 }
 
-
-/*#positions-accordion {
-    box-shadow: 0px -5px 5px 0px rgba(0,0,0,0.2);
-}*/
+.posreq {
+    background-color: #fff;
+    box-shadow: -5px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    padding: 1px 0 5px 15px;
+    display: none;
+}
 
 #positions-accordion .accordion-header {
     background: #fff;

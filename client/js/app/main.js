@@ -70,11 +70,6 @@ require([
             CM.expandDivision(division);
         });
 
-        // close requirements
-        //        $('#close-requirements').on('click', function () {
-        //            CM.collapseAll();
-        //        });
-
         // form submit
         $('#form-container').on('submit', function(e) {
             e.preventDefault();

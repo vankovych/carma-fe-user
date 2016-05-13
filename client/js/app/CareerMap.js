@@ -564,19 +564,22 @@ define('app/CareerMap', [
     CareerMap.prototype.selectPosition = function(currentId, expand) {
         expand = expand || false;
 
-        var root = this,
-            position, subdivision, division;
+        var root = this;
 
-        // select only new position, avoid re-selection
+        // select only another position, avoid re-selection of the same position
         if (root.selected.positionId !== currentId) {
+            var $positionsAccordion, position, subdivision, division, $selectedPosition;
+
             root.selected.positionId = currentId;
 
+            // get 
             position = root.data.positions.find(function(p) {
                 return p.id === currentId;
             });
 
             // select only position with transitions
-            if (!position.transition || position.transition.length === 0) {
+            if (root.mode === 1 && !position.transition || position.transition.length === 0) {
+                alert('No way!');
                 return false;
             }
 
@@ -594,11 +597,16 @@ define('app/CareerMap', [
 
             root.collapseAll(division.id);
 
-            var $positionsAccordion = $('#positions-accordion').empty();
+            $positionsAccordion = $('#positions-accordion').empty();
 
-            $('#current-position').text(position.title)
+            $('#current-position')
+                .text(position.title)
                 .css('color', root.color(division.i).m);
             $('#current-division').text(division.title);
+
+            $('.position.active').attr('class', 'position');
+            $selectedPosition = $('#' + currentId);
+            $selectedPosition.attr('class', $selectedPosition.attr('class') + ' active');
 
             if (root.mode === 1) {
                 // Build my career
@@ -609,7 +617,7 @@ define('app/CareerMap', [
                         next = false,
                         positionsData = [];
 
-                    // disable positions on current subdivision after current plus next one                    
+                    // disable positions on current subdivision after current position plus next one                    
                     subdivision.positions.forEach(function(pId) {
                         if (!enabled) {
                             if (next) {
@@ -706,39 +714,18 @@ define('app/CareerMap', [
                 });
             } else if (root.mode === 2) {
                 //Browse positions
-
-                var positionRequirements, $accordionHeader;
+                var positionRequirements;
 
                 positionRequirements = root.data.positionRequirementsMap.find(function(p) {
                     return p.positionId === currentId;
                 });
 
-                $accordionHeader = $('<div>', {
-                        id: 'accordion-header-' + position.id + '-' + position.id,
-                        class: 'accordion-header',
-                        style: 'border-left-color: ' + root.color(position.divisionColor).d
-                    })
-                    .html('<div class="close-requirements">&times;</div>' + ''
-                        // '<h2 style="color:' + root.color(position.divisionColor).d + '">' +
-                        // positionData.positionTitle + '</h2>' +
-                        // '<h3>' + positionData.divisionTitle + '</h3>'
-                    );
-
-                // $positionsAccordion.append($accordionHeader);
-                $positionsAccordion.append(root.createRequirementsList(position, positionRequirements));
-                // $positionsAccordion.accordion('refresh');
-                // $('#positions-accordion').empty().append(root.createRequirementsList(position, positionRequirements));
+                $positionsAccordion
+                    .append(root.createRequirementsList(position, positionRequirements))
+                    .addClass('posreq');
 
                 $('#current-container, #positions-accordion').fadeIn();
-
-                // $('.accordion-header').animate({
-                //     'margin-top': 0,
-                //     'opacity': 1
-                // }, root.duration, 'easeInOutCubic');
             }
-
-            $('.position.active').attr('class', 'position');
-            $('#' + currentId).attr('class', $('#' + currentId).attr('class') + ' active');
         }
     };
 
@@ -746,6 +733,7 @@ define('app/CareerMap', [
      * Create Requirements List for specified Position with items from positionRequirements
      * @param  {Object} position             Position
      * @param  {Object} positionRequirements positionRequirements
+     * @return {String}                      HTML String
      */
     CareerMap.prototype.createRequirementsList = function(position, positionRequirements) {
         var root = this,
@@ -779,11 +767,11 @@ define('app/CareerMap', [
         }
 
         requirementsList =
-            '<div><p><ul class="position-requirements">' + rli + '</ul>' +
+            '<div><ul class="position-requirements">' + rli + '</ul>' +
             '<ul class="position-links">' +
             '<li><a href="' + (position.profile ? position.profile : '#') + '">View Job Profile</a></li>' +
             '<li><a href="' + (position.matrix ? position.matrix : '#') + '">View Competency Matrix</a></li>' +
-            '</ul></p></div>';
+            '</ul></div>';
 
         return requirementsList;
     };
@@ -1040,7 +1028,7 @@ define('app/CareerMap', [
                 'opacity': 0
             }, root.duration, 'easeInOutCubic');
 
-            $('#current-container').fadeOut();
+            $('#current-container, #positions-accordion').fadeOut();
 
             root.selected.divisionIds = [];
             root.selected.positionId = '';
