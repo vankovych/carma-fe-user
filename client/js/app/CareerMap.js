@@ -558,8 +558,8 @@ define('app/CareerMap', [
 
     /**
      * Select position
-     * @param  {String} currentId [description]
-     * @param  {Boolean} expand    [description]
+     * @param  {String} currentId Current Id
+     * @param  {Boolean} expand    
      */
     CareerMap.prototype.selectPosition = function(currentId, expand) {
         expand = expand || false;
@@ -707,11 +707,13 @@ define('app/CareerMap', [
             } else if (root.mode === 2) {
                 //Browse positions
 
-                var positionRequirements = root.data.positionRequirementsMap.find(function(p) {
+                var positionRequirements, $accordionHeader;
+
+                positionRequirements = root.data.positionRequirementsMap.find(function(p) {
                     return p.positionId === currentId;
                 });
 
-                var $accordionHeader = $('<div>', {
+                $accordionHeader = $('<div>', {
                         id: 'accordion-header-' + position.id + '-' + position.id,
                         class: 'accordion-header',
                         style: 'border-left-color: ' + root.color(position.divisionColor).d
@@ -740,20 +742,27 @@ define('app/CareerMap', [
         }
     };
 
+    /**
+     * Create Requirements List for specified Position with items from positionRequirements
+     * @param  {Object} position             Position
+     * @param  {Object} positionRequirements positionRequirements
+     */
     CareerMap.prototype.createRequirementsList = function(position, positionRequirements) {
         var root = this,
             rli = '',
-            posHtml = '';
-        if (positionRequirements) {
+            requirementsList = '';
 
-            var englishLevel = root.data.englishLevels.find(function(e) {
+        if (positionRequirements) {
+            var englishLevel, experience;
+
+            englishLevel = root.data.englishLevels.find(function(e) {
                 return e.id === positionRequirements.englishLevelId;
             });
 
             // English level
             rli += '<li>English ' + englishLevel.title + '</li>';
 
-            var experience = root.data.experiences.find(function(e) {
+            experience = root.data.experiences.find(function(e) {
                 return e.id === positionRequirements.experienceId;
             });
 
@@ -769,20 +778,19 @@ define('app/CareerMap', [
             rli += '<li>(no requirements specified)</li>';
         }
 
-        posHtml =
+        requirementsList =
             '<div><p><ul class="position-requirements">' + rli + '</ul>' +
             '<ul class="position-links">' +
             '<li><a href="' + (position.profile ? position.profile : '#') + '">View Job Profile</a></li>' +
             '<li><a href="' + (position.matrix ? position.matrix : '#') + '">View Competency Matrix</a></li>' +
             '</ul></p></div>';
 
-        return posHtml;
+        return requirementsList;
     };
 
     /**
      * Remove transition
-     * @param  {[type]} e [description]
-     * @return {[type]}   [description]
+     * @param  {Object} elem Element
      */
     CareerMap.prototype.removeTransition = function(elem) {
         // TODO do not remove sub of current pos
@@ -796,7 +804,6 @@ define('app/CareerMap', [
             positionId;
 
         id = $header.attr('id').replace('accordion-header-', '');
-
         positionId = re.exec(id)[1];
 
         subdivision = root.data.subdivisions.find(function(sub) {
@@ -825,6 +832,10 @@ define('app/CareerMap', [
         // TODO hide division title
     };
 
+    /**
+     * Render transitions
+     * @param  {[type]} position [description]
+     */
     CareerMap.prototype.renderTransitions = function(position) {
         var root = this;
 
@@ -840,7 +851,7 @@ define('app/CareerMap', [
                 },
                 gradientId, poss = [];
 
-            // find target subs
+            // find target subdivisions
             root.data.subdivisions.filter(function(s) {
                 var target = false;
 
@@ -869,7 +880,7 @@ define('app/CareerMap', [
                 return target;
             });
 
-            // find target divs
+            // find target divisions
             root.data.divisions.filter(function(d) {
                 var target = false;
 
@@ -945,6 +956,12 @@ define('app/CareerMap', [
         }
     };
 
+    /**
+     * Render transition spline
+     * @param  {String} currentId  Id of current position
+     * @param  {String} targetId   Id of target position
+     * @param  {String} gradientId Id of gradient
+     */
     CareerMap.prototype.renderTransitionSpline = function(currentId, targetId, gradientId) {
         var root = this,
             selectedPos,
@@ -996,13 +1013,16 @@ define('app/CareerMap', [
             });
     };
 
+    /**
+     * Collapse all divisions
+     * @param  {[type]} exceptDivisionId Id of excepted division
+     */
     CareerMap.prototype.collapseAll = function(exceptDivisionId) {
         var root = this;
 
         exceptDivisionId = exceptDivisionId || false;
 
         root.selected.divisionIds.forEach(function(dId) {
-
             // collapse all divisions (except for exceptDivisionId)
             if (exceptDivisionId !== dId) {
                 var division = root.data.divisions.find(function(d) {
@@ -1013,13 +1033,8 @@ define('app/CareerMap', [
             }
         });
 
-        if (exceptDivisionId) {
-
-        } else {
+        if (!exceptDivisionId) {
             $('#form-container').fadeIn(root.duration);
-            //            $('#positions-accordion').remove();
-            //            $('#requirements-container').animate({'right': '-430'}, 750, 'easeInOutCubic');
-
             $('.accordion-header').animate({
                 'margin-top': 300,
                 'opacity': 0
@@ -1032,6 +1047,10 @@ define('app/CareerMap', [
         }
     };
 
+    /**
+     * Make absolute context for element
+     * @param  {Object} element Element
+     */
     CareerMap.prototype.makeAbsoluteContext = function(element) {
         var svgDocument = document.querySelector('svg');
 
@@ -1045,6 +1064,10 @@ define('app/CareerMap', [
         };
     };
 
+    /**
+     * Get element coordinates
+     * @param  {Object} element Element
+     */
     CareerMap.prototype.getElementCoordinates = function(element) {
         var currentBBox,
             convertCurrent,
