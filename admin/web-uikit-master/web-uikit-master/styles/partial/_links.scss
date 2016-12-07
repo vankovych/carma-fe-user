@@ -1,0 +1,23 @@
+//
+// Base styles
+//
+
+a,
+.e-link {
+    color: $e-link-color;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:visited {
+        color: $e-link-visited-color;
+    }
+
+    @include hover {
+        color: $e-link-hover-color;
+        text-decoration: $e-link-hover-decoration;
+    }
+
+    &:active {
+        color: $e-link-active-color;
+    }
+}

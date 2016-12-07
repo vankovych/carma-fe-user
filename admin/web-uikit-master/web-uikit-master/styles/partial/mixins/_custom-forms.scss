@@ -1,0 +1,72 @@
+@mixin form-custom-control-validation($color) {
+  // Custom inputs
+  .c-input {
+    color: $color;
+  }
+  &.disabled {
+    .c-input {
+      color: lighten($color, 20%);
+      cursor: $cursor-disabled;
+
+      .c-indicator {
+        background-color: #fafafc;
+        opacity: 0.6;
+      }
+    }
+  }
+
+  // Checkboxes
+  .c-checkbox {
+    input {
+      &:focus ~ .c-indicator {
+        border-color: $color;
+      }
+      &:checked ~ .c-indicator {
+        background-color: $color;
+        border-color: $color;
+      }
+      &:indeterminate ~ .c-indicator {
+        background-color: $color;
+        border-color: $color;
+      }
+    }
+    &.c-checkbox-inverse {
+      .c-indicator {
+        &:after {
+          border-bottom-color: $color;
+          border-left-color: $color;
+        }
+      }
+
+      input {
+        &:checked ~ .c-indicator {
+          background-color: transparent;
+        }
+        &:indeterminate ~ .c-indicator {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+
+  // Radios
+  .c-radio {
+    .c-indicator {
+      border-color: $color;
+
+      &:after {
+        background-color: $color;
+      }
+    }
+    input:checked ~ .c-indicator {
+      border-color: $input-border-color;
+    }
+  }
+
+  //Default form control validation on focus
+  .form-control {
+    &:focus {
+      @include box-shadow(0 0 5px rgba($color, 0.26));
+    }
+  }
+}

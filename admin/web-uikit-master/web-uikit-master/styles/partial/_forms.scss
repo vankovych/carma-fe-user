@@ -1,0 +1,13 @@
+label {
+  &.required:after {
+    color: $brand-primary;
+    content: '*';
+    font-size: 1.125rem;
+    line-height: 1.25rem;
+    margin-left: 5px;
+  }
+}
+.form-control-label {
+  padding-left: 0;
+  padding-right: 0;
+}

@@ -1,0 +1,246 @@
+// Wrapper and base class
+//
+// Provide a static navbar from which we expand to create full-width, fixed, and
+// other navbar variations.
+
+.e-navbar {
+    margin-bottom: 1rem;
+    position: relative;
+    @include e-clearfix;
+
+    // Navigation
+    //
+    // Custom navbar navigation built on the base `.e-nav` and `e-nav-inline` styles.
+
+    .e-nav {
+        .e-nav-link {
+            display: block;
+            padding: $e-navbar-padding-vertical-top $e-navbar-padding-horizontal $e-navbar-padding-vertical-bottom;
+
+            &.disabled {
+                background-color: transparent;
+                color: $e-nav-disabled-link-color;
+
+                @include hover-focus {
+                    background-color: transparent;
+                    color: $e-nav-disabled-link-hover-color;
+                }
+            }
+        }
+
+        .e-nav-item + .e-nav-item {
+            margin-left: 0;
+        }
+    }
+}
+
+
+// Navbar alignment options
+//
+// Display the navbar across the entirety of the page or fixed it to the top or
+// bottom of the page.
+
+// Static top (unfixed, but 100% wide) navbar
+.e-navbar-static-top {
+    z-index: $e-zindex-navbar;
+}
+
+// Fix the top/bottom navbars when screen real estate supports it
+.e-navbar-fixed-top,
+.e-navbar-fixed-bottom {
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: $e-zindex-navbar-fixed;
+}
+
+.e-navbar-fixed-top {
+    top: 0;
+}
+
+.e-navbar-fixed-bottom {
+    bottom: 0;
+}
+
+.e-navbar-sticky-top {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: $e-zindex-navbar-sticky;
+}
+
+
+//
+// Brand/project name
+//
+
+.e-navbar-brand {
+    float: left;
+    font-size: $e-font-size-lg;
+    margin-left: -1rem;
+    margin-right: 1rem;
+    padding: $e-navbar-padding-vertical-top $e-navbar-padding-horizontal $e-navbar-padding-vertical-bottom;
+    @include transition(background-color 300ms ease-in-out);
+
+    @include hover-focus {
+        text-decoration: none;
+    }
+
+    > img {
+        display: block;
+    }
+}
+
+
+/*.navbar-divider {
+  float: left;
+  margin-left:  $e-navbar-padding-horizontal;
+  margin-right: $e-navbar-padding-horizontal;
+  overflow: hidden;
+  padding-top: 0.425rem;
+  padding-bottom: 0.425rem;
+  width: 1px;
+}*/
+
+
+// Navbar toggle
+//
+// Custom button for toggling the `.navbar-collapse`, powered by the collapse
+// Bootstrap JavaScript plugin.
+
+/*.navbar-toggler {
+  padding: .5rem .75rem;
+  font-size: $font-size-lg;
+  line-height: 1;
+  background: none;
+  border: $border-width solid transparent;
+  @include border-radius($btn-border-radius);
+
+  @include hover-focus {
+    text-decoration: none;
+  }
+}*/
+
+// Custom override for
+/*.navbar-toggleable {
+  &-xs {
+    @include media-breakpoint-up(sm) {
+      display: block !important;
+    }
+  }
+  &-sm {
+    @include media-breakpoint-up(md) {
+      display: block !important;
+    }
+  }
+}*/
+
+// Primary theme
+.e-navbar-primary {
+    background-color: $e-brand-primary;
+
+    .e-navbar-brand {
+        color: white;
+
+        @include hover {
+            background-color: lighten($e-brand-primary, 10%);
+        }
+    }
+
+    .e-nav {
+        .e-nav-link {
+            color: #fff;
+
+            @include hover-focus {
+                background-color: lighten($e-brand-primary, 10%);
+            }
+
+            &.disabled {
+                color: darken($e-nav-disabled-link-color, 20%);
+
+                @include hover-focus {
+                    color: $e-nav-disabled-link-hover-color;
+                }
+            }
+
+            &.active {
+                @include plain-hover-focus {
+                    background-color: lighten($e-brand-primary, 10%);
+                }
+            }
+        }
+    }
+
+    /*.navbar-divider {
+        background-color: rgba(0,0,0,.075);
+    }*/
+}
+
+// Dark links against a light background
+/*.navbar-light {
+  .navbar-brand {
+    color: $navbar-light-active-color;
+
+    @include hover-focus {
+      color: $navbar-light-active-color;
+    }
+  }
+
+  .navbar-nav {
+    .nav-link {
+      color: $navbar-light-color;
+
+      @include hover-focus {
+        color: $navbar-light-hover-color;
+      }
+    }
+
+    .open > .nav-link,
+    .active > .nav-link,
+    .nav-link.open,
+    .nav-link.active {
+      @include plain-hover-focus {
+        color: $navbar-light-active-color;
+      }
+    }
+  }
+
+  .navbar-divider {
+    background-color: rgba(0,0,0,.075);
+  }
+}*/
+
+// White links against a dark background
+/*.navbar-dark {
+  .navbar-brand {
+    color: $navbar-dark-active-color;
+
+    @include hover-focus {
+      color: $navbar-dark-active-color;
+    }
+  }
+
+  .navbar-nav {
+    .nav-link {
+      color: $navbar-dark-color;
+
+      @include hover-focus {
+        color: $navbar-dark-hover-color;
+      }
+    }
+
+    .open > .nav-link,
+    .active > .nav-link,
+    .nav-link.open,
+    .nav-link.active {
+      @include plain-hover-focus {
+        color: $navbar-dark-active-color;
+      }
+    }
+  }
+
+  .navbar-divider {
+    background-color: rgba(255,255,255,.075);
+  }
+}
+*/

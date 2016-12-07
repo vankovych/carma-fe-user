@@ -1,0 +1,75 @@
+//
+/// Grid system
+//
+
+@mixin e-make-container($gutter: $e-grid-gutter-width) {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left:  ($gutter / 2);
+    padding-right: ($gutter / 2);
+    @include e-clearfix();
+}
+
+@mixin e-make-row($gutter: $e-grid-gutter-width) {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left:  ($gutter / -2);
+    margin-right: ($gutter / -2);
+}
+
+@mixin e-make-col-span($size, $columns: $e-grid-columns) {
+    flex: 0 0 percentage($size / $columns);
+    max-width: percentage($size / $columns);
+}
+
+@mixin e-make-col-offset($size, $columns: $e-grid-columns) {
+    margin-left: percentage($size / $columns);
+}
+
+@mixin e-make-col-push($size, $columns: $e-grid-columns) {
+    left: if($size > 0, percentage($size / $columns), auto);
+}
+
+@mixin e-make-col-pull($size, $columns: $e-grid-columns) {
+    right: if($size > 0, percentage($size / $columns), auto);
+}
+
+@mixin e-make-col-modifier($type, $size, $columns) {
+    @if $type == push {
+        @include e-make-col-push($size, $columns);
+    } @else if $type == pull {
+        @include e-make-col-pull($size, $columns);
+    } @else if $type == offset {
+        @include e-make-col-offset($size, $columns);
+    }
+}
+
+@mixin e-make-grid-columns($columns: $e-grid-columns, $gutter: $e-grid-gutter-width, $breakpoints: $e-grid-breakpoints) {
+    %grid-column {
+        min-height: 1px;
+        padding-left: ($gutter / 2);
+        padding-right: ($gutter / 2);
+        position: relative;
+    }
+    @each $breakpoint in map-keys($breakpoints) {
+        @for $i from 1 through $columns {
+            .e-col-#{$breakpoint}-#{$i} {
+                @extend %grid-column;
+            }
+        }
+        @include e-media-breakpoint-up($breakpoint) {
+            @for $i from 1 through $columns {
+                .e-col-#{$breakpoint}-#{$i} {
+                    @include e-make-col-span($i, $columns);
+                }
+            }
+            @each $modifier in (pull, push, offset) {
+                @for $i from 0 through $columns {
+                    .e-col-#{$breakpoint}-#{$modifier}-#{$i} {
+                        @include e-make-col-modifier($modifier, $i, $columns)
+                    }
+                }
+            }
+        }
+    }
+}

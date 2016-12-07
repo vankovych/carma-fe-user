@@ -1,0 +1,79 @@
+@mixin e-button-variant($color, $background, $border) {
+    background-color: $background;
+    border-color: $border;
+    color: $color;
+
+    $active-background: darken($background, 10%);
+    $active-border: darken($border, 12%);
+
+    &:focus,
+    &.focus,
+    &:active,
+    &.active {
+        background-color: $active-background;
+        border-color: $active-border;
+        color: $color;
+    }
+    &:hover {
+        background-color: $active-background;
+        border-color: $active-border;
+        color: $color;
+    }
+    &:active,
+    &.active {
+        @include box-shadow(inset 0 3px 5px rgba(0, 0, 0, 0.125));
+    }
+    &.disabled,
+    &:disabled {
+        &:focus,
+        &.focus {
+            background-color: $background;
+            border-color: $border;
+        }
+        &:hover {
+            background-color: $background;
+            border-color: $border;
+        }
+    }
+}
+
+@mixin e-button-outline-variant($color) {
+    background-color: #fff;
+    background-image: none;
+    border-color: transparent;
+    color: $color;
+
+    &:focus,
+    &.focus,
+    &:active,
+    &.active {
+        border-color: $color;
+    }
+    &:hover {
+        background-color: #fff;
+        border-color: $color;
+    }
+
+    &.disabled,
+    &:disabled,
+    fieldset[disabled] & {
+        background-color: $e-gray-lighter;
+        box-shadow: none !important;
+        color: $e-gray;
+
+        &:focus,
+        &.focus {
+            border-color: transparent;
+        }
+        &:hover {
+            border-color: transparent;
+        }
+    }
+}
+
+@mixin e-button-size($padding-y-bottom, $padding-y-top, $padding-x, $font-size, $line-height, $border-radius) {
+    font-size: $font-size;
+    line-height: $line-height;
+    padding: $padding-y-top $padding-x $padding-y-bottom;
+    @include border-radius($border-radius);
+}

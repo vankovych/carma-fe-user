@@ -1,0 +1,294 @@
+// Checkboxes and radios
+//
+// Base class takes care of all the key behavioral aspects.
+
+.c-input {
+  color: $input-color;
+  display: inline-block;
+  font-size: 0.8125rem;
+  line-height: 0.9375rem;
+  padding: 0.125rem 0 0.125rem 2rem;
+  vertical-align: top;
+
+  > input {
+
+    &:checked ~ .c-indicator {
+      background-color: transparent;
+      @include box-shadow(none);
+    }
+
+    &:focus ~ .c-indicator {
+      // the mixin is not used here to make sure there is feedback
+      box-shadow: 0 0;
+    }
+
+    &:active ~ .c-indicator {
+      background-color: transparent;
+      @include box-shadow(none);
+    }
+  }
+  &.disabled {
+    color: #bfc8d3;
+    cursor: $cursor-disabled;
+
+    .c-indicator {
+      background-color: #fafafc;
+      opacity: 0.6;
+    }
+  }
+}
+
+// Custom indicator
+//
+// Generates a shadow element to create our makeshift checkbox/radio background.
+
+.c-indicator {
+  background-color: #fefeff;
+  border: 1px solid $input-border-color;
+  height: 1.125rem;
+  width: 1.125rem;
+  @include box-shadow(0 0);
+  @include transition(background-color ease-in-out 150ms, border-color ease-in-out 150ms);
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+  }
+}
+
+// Checkboxes
+//
+// Tweak just a few things for checkboxes.
+
+.c-checkbox {
+  .c-indicator {
+    border-radius: .125rem;
+
+    &:after {
+      border-bottom: 2px solid white;
+      border-left: 2px solid white;
+      height: 6px;
+      left: 3px;
+      opacity: 0;
+      top: 4px;
+      width: 10px;
+
+      transform: rotate(-45deg);
+      @include transition(opacity ease-in-out 150ms);
+    }
+  }
+
+  input {
+    &:focus ~ .c-indicator {
+      border-color: $brand-primary;
+    }
+    &:checked ~ .c-indicator {
+      background-color: $brand-primary;
+      background-image: none;
+      border-color: $brand-primary;
+
+      &:after {
+        opacity: 1;
+      }
+    }
+    &:indeterminate ~ .c-indicator {
+      background-color: $brand-primary;
+      background-image: none;
+      border-color: $brand-primary;
+
+      &:after {
+          opacity: 1;
+      }
+    }
+  }
+  &.c-checkbox-inverse {
+    .c-indicator {
+      &:after {
+        border-bottom-color: $brand-primary;
+        border-left-color: $brand-primary;
+      }
+    }
+
+    input {
+      &:checked ~ .c-indicator {
+        background-color: transparent;
+      }
+      &:indeterminate ~ .c-indicator {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+// Radios
+//
+// Tweak just a few things for radios.
+
+.c-radio {
+  .c-indicator {
+    border-radius: 50%;
+
+    &:after {
+      background-color: $brand-primary;
+      border-radius: 50%;
+      height: 10px;
+      left: 50%;
+      margin-left: -5px;
+      margin-top: -5px;
+      top: 50%;
+      transform: scale(0);
+      width: 10px;
+      @include transition(transform ease-in-out 150ms);
+    }
+  }
+
+  input:checked ~ .c-indicator {
+    background-image: none;
+
+    &:after {
+      transform: scale(1);
+    }
+  }
+}
+
+
+// Layout options
+//
+// By default radios and checkboxes are `inline-block` with no additional spacing
+// set. Use these optional classes to tweak the layout.
+
+/*.c-inputs-stacked {
+  .c-input {
+    display: inline;
+
+    &::after {
+      display: block;
+      margin-bottom: .25rem;
+      content: "";
+    }
+
+    + .c-input {
+      margin-left: 0;
+    }
+  }
+}*/
+
+
+// Select
+//
+// Replaces the browser default select with a custom one, mostly pulled from
+// http://primercss.io.
+//
+// Includes IE9-specific hacks (noted by ` \9`).
+
+/*.c-select {
+  display: inline-block;
+  max-width: 100%;
+  padding: .375rem 1.75rem .375rem .75rem;
+  padding-right: .75rem \9;
+  color: $input-color;
+  vertical-align: middle;
+  background: #fff url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAUCAMAAACzvE1FAAAADFBMVEUzMzMzMzMzMzMzMzMKAG/3AAAAA3RSTlMAf4C/aSLHAAAAPElEQVR42q3NMQ4AIAgEQTn//2cLdRKppSGzBYwzVXvznNWs8C58CiussPJj8h6NwgorrKRdTvuV9v16Afn0AYFOB7aYAAAAAElFTkSuQmCC) no-repeat right .75rem center;
+  background-image: none \9;
+  background-size: 8px 10px;
+  border: $input-btn-border-width solid $input-border-color;
+  // Use vendor prefixes as `appearance` isn't part of the CSS spec.
+  -moz-appearance: none;
+  -webkit-appearance: none;
+
+  &:focus {
+    border-color: #51a7e8;
+    outline: none;
+    @include box-shadow(inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 5px rgba(81, 167, 232, 0.5));
+  }
+
+  // Hides the default caret in IE11
+  &::-ms-expand {
+    opacity: 0;
+  }
+}
+
+.c-select-sm {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-size: 12px;
+
+  &:not([multiple]) {
+    height: 26px;
+    min-height: 26px;
+  }
+}
+*/
+
+// File
+//
+// Custom file input.
+
+/*.file {
+  position: relative;
+  display: inline-block;
+  height: 2.5rem;
+  cursor: pointer;
+}
+.file input {
+  min-width: 14rem;
+  margin: 0;
+  filter: alpha(opacity = 0);
+  opacity: 0;
+}
+.file-custom {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  height: 2.5rem;
+  padding: .5rem 1rem;
+  line-height: 1.5;
+  color: #555;
+  user-select: none;
+  background-color: #fff;
+  border: $input-btn-border-width solid #ddd;
+  border-radius: .25rem;
+  @include box-shadow(inset 0 .2rem .4rem rgba(0,0,0,.05));
+}
+.file-custom::after {
+  content: "Choose file...";
+}
+.file-custom::before {
+  position: absolute;
+  top: -.075rem;
+  right: -.075rem;
+  bottom: -.075rem;
+  z-index: 6;
+  display: block;
+  height: 2.5rem;
+  padding: .5rem 1rem;
+  line-height: 1.5;
+  color: #555;
+  content: "Browse";
+  background-color: #eee;
+  border: $input-btn-border-width solid #ddd;
+  border-radius: 0 .25rem .25rem 0;
+}*/
+
+// Focus state
+/*.file input:focus ~ .file-custom {
+  @include box-shadow(0 0 0 .075rem #fff, 0 0 0 .2rem #0074d9);
+}
+*/
+
+
+// Form custom control validation states
+.has-success {
+  @include form-custom-control-validation($brand-success);
+}
+
+.has-warning {
+  @include form-custom-control-validation($brand-warning);
+}
+
+.has-danger {
+  @include form-custom-control-validation($brand-danger);
+}

@@ -1,0 +1,7 @@
+// Image Mixins
+
+@mixin e-img-fluid($display: block) {
+    display: $display;
+    max-width: 100%;
+    height: auto;
+}

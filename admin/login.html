@@ -1,38 +1,50 @@
 ﻿<head>
+
     <title>Career map, ELEKS</title>
     <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"> </script>
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="js/controller.js"> </script>
+
+    <script src="js/login-controller.js"> </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-    <link rel="stylesheet" href="css/vendor/normalize.css">
-    <link rel="stylesheet" href="css/vendor/jquery-ui.min.css">
-    <link rel="stylesheet" href="css/vendor/html5tooltips.css">
-    <link rel="stylesheet" href="css/vendor/html5tooltips.animation.css">
-    <link rel="stylesheet" href="css/style.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"> </script>
+    <link rel="stylesheet" href="css/jquery-ui.css" />
+    <link rel="stylesheet" href="css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="web-uikit-master/web-uikit-master/styles/eleks-ui-kit.css" />
+    <link rel="stylesheet" href="web-uikit-master/web-uikit-master/styles/preview.css" />
     <link rel="shortcut icon" href="favicon.ico">
-    </head>
+    <link rel="stylesheet" href= "css/styles.css" />
+</head>
 <div ng-controller="loginController">
+    <div class="logo"
     <nav>
-        <h1><a href="#">eleks<sup>&reg;</sup> Career map</a></h1>
+        <h3><a href="#">eleks<sup>&reg;</sup> Career map</a></h3>
     </nav>
+    </div>
     <main id="map">
-        
+
         <div class="pen-title">
-            <h1>Welcome.Please login.</h1>
+            <h2>Welcome.Please login.</h2>
         </div>
-        <div class="module form-module">
+        <div class="form-module">
             <div class="form">
-                <h2>Login to your account</h2>
-                    <input type="text" placeholder="Username" ng-model="username" />
-                    <input type="password" placeholder="Password" ng-model="password" ng- />
-                <button type="button" ng-click="submit()">Login</button>
+                <div class="form-group">
+                    <label for="inputNormal" class="required user">Login</label>
+                  
+                    <input type="text" class="form-control" placeholder="Username"ng-model="username" />
+                    <br />
+                    <label for="inputNormal" class="required user">Password</label>
+                    <input type="password" class="form-control" placeholder="Password" ng-model="password" ng- />
+                    <br/>
+                    <button class="btn btn-primary-outline" type="button" ng-click="submit()">Login</button>
+                </div>
             </div>
-        </div>
-       
-        </main>
+            </div>
+
+    </main>
 
 </div>

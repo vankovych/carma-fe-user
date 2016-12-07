@@ -1,0 +1,95 @@
+//
+// Base style
+//
+
+.e-nav {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.e-nav-link {
+    display: inline-block;
+    vertical-align: middle;
+    @include transition(background-color 300ms ease-in-out, border-color 300ms ease-in-out, color 300ms ease-in-out);
+
+    @include hover-focus {
+        text-decoration: none;
+    }
+
+    // Disabled state lightens text and removes hover/tab effects
+    &.disabled {
+        color: $e-nav-disabled-link-color;
+
+        @include plain-hover-focus {
+            color: $e-nav-disabled-link-hover-color;
+            cursor: $e-cursor-disabled;
+            background-color: transparent;
+        }
+    }
+}
+
+
+// Nav inline
+.e-nav-inline {
+    .e-nav-item {
+        float: left;
+
+        & + .e-nav-item {
+            margin-left: 1rem;
+        }
+    }
+}
+
+//
+// Pills
+//
+
+.e-nav-pills {
+    .e-nav-item {
+        float: left;
+
+        + .e-nav-item {
+            margin-left: .2rem;
+        }
+    }
+
+    .e-nav-link {
+        display: block;
+        padding: $e-nav-link-padding;
+        @include border-radius($e-nav-pills-border-radius);
+    }
+
+    .e-nav-link.active,
+    .e-nav-item.open .e-nav-link {
+        @include plain-hover-focus {
+            color: $e-component-active-color;
+            cursor: default;
+            background-color: $e-component-active-bg;
+        }
+    }
+}
+
+.e-nav-stacked {
+    .e-nav-item {
+        display: block;
+        float: none;
+
+        + .e-nav-item {
+            margin-top: .2rem;
+            margin-left: 0;
+        }
+    }
+}
+
+
+//
+// Dropdowns
+//
+
+/*.e-nav-tabs .e-dropdown-menu {
+    // Make dropdown border overlap tab border
+    margin-top: -1px;
+    // Remove the top rounded corners here since there is a hard edge above the menu
+    @include border-top-radius(0);
+}*/

@@ -1,0 +1,195 @@
+//
+// Basic styles for table
+//
+
+.e-table {
+    margin-bottom: $e-spacer;
+    max-width: 100%;
+    width: 100%;
+
+    th,
+    td {
+        border-top: $e-table-border-width solid $e-table-border-color;
+        line-height: $e-line-height;
+        padding: $e-table-cell-padding;
+        vertical-align: top;
+    }
+
+    thead th {
+        border-bottom: (2 * $e-table-border-width) solid $e-table-border-color;
+        vertical-align: bottom;
+    }
+
+    tbody + tbody {
+        border-top: (2 * $e-table-border-width) solid $e-table-border-color;
+    }
+
+    .e-table {
+        background-color: $e-body-bg;
+    }
+}
+
+
+//
+// Condensed table w/ half padding
+//
+
+.e-table-sm {
+  th,
+  td {
+    padding: $e-table-sm-cell-padding;
+  }
+}
+
+
+// Bordered version
+//
+// Add borders all around the table and between all the columns.
+
+.e-table-bordered {
+    border: $e-table-border-width solid $e-table-border-color;
+
+    th,
+    td {
+        border: $e-table-border-width solid $e-table-border-color;
+    }
+
+    thead {
+        th,
+        td {
+            border-bottom-width: (2 * $e-table-border-width);
+        }
+    }
+}
+
+
+// Zebra-striping
+//
+// Default zebra-stripe styles (alternating gray and transparent backgrounds)
+
+.e-table-striped {
+    tbody tr:nth-of-type(odd) {
+        background-color: $e-table-bg-accent;
+    }
+}
+
+
+// Hover effect
+//
+// Placed here since it has to come after the potential zebra striping
+
+.e-table-hover {
+    tbody tr {
+        @include hover {
+            background-color: $e-table-bg-hover;
+        }
+    }
+}
+
+
+// Table backgrounds
+//
+// Exact selectors below required to override `.e-table-striped` and prevent
+// inheritance to nested tables.
+
+// Generate the contextual variants
+@include e-table-row-variant(active, $e-table-bg-active);
+@include e-table-row-variant(success, $e-state-success-bg);
+@include e-table-row-variant(info, $e-state-info-bg);
+@include e-table-row-variant(warning, $e-state-warning-bg);
+@include e-table-row-variant(danger, $e-state-danger-bg);
+
+
+// Responsive tables
+//
+// Wrap your tables in `.e-table-responsive` and we'll make them mobile friendly
+// by enabling horizontal scrolling. Only applies <768px. Everything above that
+// will display normally.
+
+.e-table-responsive {
+    display: block;
+    min-height: 0.01%; // Workaround for IE9 bug (see https://github.com/twbs/bootstrap/issues/14837)
+    overflow-x: auto;
+    width: 100%;
+}
+
+
+.e-thead-inverse {
+    th {
+        background-color: $e-gray-dark;
+        color: #fff;
+    }
+}
+.e-thead-default {
+    th {
+        background-color: $e-gray-lighter;
+        color: $e-gray;
+    }
+}
+
+.e-table-inverse {
+    background-color: $e-gray-dark;
+    color: $e-gray-lighter;
+
+    &.e-table-bordered {
+        border: 0;
+    }
+
+    th,
+    td,
+    thead th {
+        border-color: $e-gray;
+    }
+    &.e-table-hover {
+        tbody tr {
+            @include hover {
+                background-color: $e-gray;
+            }
+        }
+    }
+}
+
+
+/*.table-reflow {
+  thead {
+    float: left;
+  }
+
+  tbody {
+    display: block;
+    white-space: nowrap;
+  }
+
+  th,
+  td {
+    border-top: $table-border-width solid $table-border-color;
+    border-left: $table-border-width solid $table-border-color;
+
+    &:last-child {
+      border-right: $table-border-width solid $table-border-color;
+    }
+  }
+
+  thead,
+  tbody,
+  tfoot {
+    &:last-child {
+      tr:last-child {
+        th,
+        td {
+          border-bottom: $table-border-width solid $table-border-color;
+        }
+      }
+    }
+  }
+
+  tr {
+    float: left;
+
+    th,
+    td {
+      display: block !important;
+      border: $table-border-width solid $table-border-color;
+    }
+  }
+}*/

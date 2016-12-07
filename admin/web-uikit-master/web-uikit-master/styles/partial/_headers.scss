@@ -1,0 +1,20 @@
+//
+// Base styles
+//
+
+h1, h2, h3, h4, h5, h6,
+.e-h1, .e-h2, .e-h3, .e-h4, .e-h5, .e-h6 {
+    color: $e-headings-color;
+    font-family: $e-headings-font-family;
+    font-weight: $e-headings-font-weight;
+    line-height: $e-headings-line-height;
+    margin-bottom: $e-headings-margin-bottom;
+    margin-top: $e-headings-margin-top;
+}
+
+h1, .e-h1 { font-size: $e-font-size-h1; }
+h2, .e-h2 { font-size: $e-font-size-h2; }
+h3, .e-h3 { font-size: $e-font-size-h3; }
+h4, .e-h4 { font-size: $e-font-size-h4; }
+h5, .e-h5 { font-size: $e-font-size-h5; }
+h6, .e-h6 { font-size: $e-font-size-h6; }

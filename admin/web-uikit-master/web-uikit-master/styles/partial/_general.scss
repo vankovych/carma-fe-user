@@ -1,0 +1,73 @@
+html {
+    box-sizing: border-box;
+    font-size: $e-font-size-root;
+}
+
+body {
+    background-color: $e-body-bg;
+    color: $e-body-color;
+    font-family: $e-font-family-base;
+    font-size: $e-font-size-base;
+    line-height: $e-line-height;
+    margin: 0;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+    margin: 0;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+textarea {
+    resize: vertical;
+}
+
+address, dl, ol, p, ul {
+    margin-bottom: 1rem;
+    margin-top: 0;
+}
+ol ol, ol ul, ul ol, ul ul {
+    margin-bottom: 0;
+}
+dl, ol, p, pre, ul {
+    margin-top: 0;
+}
+dt {
+    font-family: $e-font-family-bold-sans-serif;
+}
+dd {
+    margin-bottom: 0.5rem;
+    margin-left: 0;
+}
+figure {
+    margin: 0 0 1rem;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+td, th {
+    padding: 0;
+}
+th {
+    font-family: $e-font-family-bold-sans-serif;
+    font-weight: normal;
+    text-align: left;
+}

@@ -1,0 +1,70 @@
+//
+// Base styles
+//
+
+.e-label {
+    color: $e-label-color;
+    display: inline-block;
+    font-size: 81.3%;
+    line-height: 1.154;
+    padding: 0.25em 0.85em;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+    @include border-radius($e-border-radius);
+
+    // Empty labels collapse automatically
+    &:empty {
+        display: none;
+    }
+
+    // Quick fix for labels in buttons
+    .e-btn & {
+        position: relative;
+        top: -1px;
+    }
+}
+
+// Add hover effects, but only for links
+a.e-label {
+    color: $e-label-color;
+
+    @include hover-focus {
+        color: $e-label-link-hover-color;
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
+
+// Pill labels
+.e-label-pill {
+    border-radius: 1rem;
+    padding-left: .6em;
+    padding-right: .6em;
+}
+
+
+// Colors
+.e-label-default {
+    @include e-label-variant($e-label-default-bg);
+}
+
+.e-label-primary {
+    @include e-label-variant($e-label-primary-bg);
+}
+
+.e-label-success {
+    @include e-label-variant($e-label-success-bg);
+}
+
+.e-label-info {
+  @include e-label-variant($e-label-info-bg);
+}
+
+.e-label-warning {
+    @include e-label-variant($e-label-warning-bg);
+}
+
+.e-label-danger {
+    @include e-label-variant($e-label-danger-bg);
+}

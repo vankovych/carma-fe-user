@@ -1,0 +1,45 @@
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import "partial/syntax-highlighting";
+
+body {
+    padding-top: 40px;
+}
+section {
+    margin-bottom: 4rem;
+}
+.example-wrap {
+    padding: 1.5rem;
+}
+.example-block {
+    background-color: #ffffff;
+    margin: 0 -1.5rem 2rem;
+    padding: 1.5rem;
+
+    .btn + .btn {
+        margin-left: 1rem;
+    }
+    .form-control + .form-control {
+        margin-top: 0.5rem;
+    }
+}
+
+.sidenav {
+    top: 40px;
+}
+.example {
+    padding: 0 0.9375rem;
+
+    .row {
+        & + .row {
+            margin-top: 1rem;
+        }
+
+        & > [class^="col-"] {
+            background-color: #ccc;
+            border: 1px solid #bbb;
+            padding-bottom: 0.5rem;
+            padding-top: 0.5rem;
+        }
+    }
+}

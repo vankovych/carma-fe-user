@@ -1,0 +1,29 @@
+.breadcrumb {
+    font-size: $e-breadcrumb-font-size;
+    line-height: $e-breadcrumb-line-height;
+    list-style: none;
+    margin: 0;
+    padding: $e-breadcrumb-padding-vertical $e-breadcrumb-padding-horizontal;
+    @include e-clearfix;
+
+    > li {
+        float: left;
+
+        + li::before {
+            color: $e-breadcrumb-divider-color;
+            content: "#{$e-breadcrumb-divider}";
+            padding-left: .5rem;
+            padding-right: .5rem;
+        }
+        &:hover {
+            a {
+                color: $e-gray-dark;
+                text-decoration: none;
+            }
+        };
+    }
+
+    > .active {
+        color: $e-breadcrumb-active-color;
+    }
+}

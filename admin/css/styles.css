@@ -1,0 +1,36 @@
+﻿.pen-title 
+{
+    padding-top: 40px;
+    text-align: center;
+   
+}
+.user
+{
+    float: left;
+}
+.form-module {
+  position: relative;
+
+  top: 50px;
+  background: #ffffff;
+  max-width: 320px;
+  width: 100%;
+  border-top: 5px solid #146fea;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  padding: 30px;
+  padding-bottom:10px;
+  text-align: center;
+}
+.logo{
+    padding-left: 60px;
+}
+body{
+     height: 1000px;
+    background: green; /* For browsers that do not support gradients */    
+    background: -webkit-linear-gradient(0deg, green, blue); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(0deg, red, yellow); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(0deg, red, yellow); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(0deg, rgba(20, 111, 234, 0.47),white); /* Standard syntax (must be last) */
+}
+

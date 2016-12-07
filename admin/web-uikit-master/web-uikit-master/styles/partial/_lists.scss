@@ -1,0 +1,26 @@
+//
+// Lists
+//
+
+.e-list-unstyled {
+  @include e-list-unstyled;
+}
+
+// Inline turns list items into inline-block
+.e-list-inline {
+  @include e-list-unstyled;
+}
+.e-list-inline-item {
+  display: inline-block;
+
+  &:not(:last-child) {
+    margin-right: $e-list-inline-padding;
+  }
+}
+
+// Horizontal description lists w/ grid classes
+.e-dl-horizontal {
+  margin-right: -$e-grid-gutter-width;
+  margin-left: -$e-grid-gutter-width;
+  @include e-clearfix;
+}

@@ -1,0 +1,22 @@
+.sidenavWrap {
+    background-color: #fefeff;
+    background-clip: content-box;
+}
+.sidenav {
+    bottom: 0;
+    font-size: 1.25rem;
+    max-width: 260px;
+    overflow: auto;
+    padding: 1.5rem;
+    position: fixed;
+
+    .nav .nav {
+        font-size: 81%;
+        margin-left: 1.25rem;
+    }
+
+    .nav-link {
+        display: block;
+        padding: 2px 0;
+    }
+}
