@@ -34,3 +34,8 @@ body{
     background: linear-gradient(0deg, rgba(20, 111, 234, 0.47),white); /* Standard syntax (must be last) */
 }
 
+.curs
+{
+    cursor: pointer;
+}
+
