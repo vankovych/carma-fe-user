@@ -1,0 +1,45 @@
+﻿<div ng-init="points=[1,15,19,2,40,11,88,71]">
+
+    <button class="btn btn-success" id="AddNew" type="button" onclick="myFunction()">Add new</button>
+    <table class="table table-hover">
+        <thead class="thead-inverse">
+            <tr>
+                <th>Title</th>
+                <th>Value</th>
+                <th>Description</th>
+                <th>Edit existing</th>
+                <th>Remove entry</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-info" ng-repeat="item in points">
+                <td>{{item}}</td>
+                <td>{{points[3]}}</td>
+                <td></td>
+                <td><button class="btn btn-warning" type="button">Edit</button></td>
+                <td><button class="btn btn-danger" type="button">Remove</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+
+            <label for="inputNormal" class="required user">Title</label>
+
+            <input id="inputNormal" type="text" placeholder="Title" class="form-control">
+            <br />
+            <label for="inputNormal" class="required user">Value</label>
+
+            <input id="inputNormal" type="text" placeholder="Value" class="form-control">
+            <br />
+            <label for="inputNormal" class="required user">Description</label>
+            <textarea id="textareaID" class="form-control" placeholder="text area" rows="3"></textarea>
+            <br />
+            <button class="btn btn-primary" type="button">Save</button>
+            <br />
+        </div>
+    </div>
+</div>
