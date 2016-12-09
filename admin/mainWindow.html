@@ -8,7 +8,6 @@
         <li><a data-toggle="pill" class="curs" data-target="#menu2" role="tab">Positions</a></li>
         <li><a data-toggle="pill" class="curs" data-target="#menu3" role="tab">Requirements</a></li>
     </ul>
-
     <ng-app ="app">
         <div class="tab-content">
             <div id="home" class="tab-pane fade in active ">
@@ -17,14 +16,15 @@
             </div>
             <div id="menu1" class="tab-pane fade">
                 <h3>Divisions</h3>
+                <divisions-view></divisions-view>
             </div>
             <div id="menu2" class="tab-pane fade">
                 <h3>Positions</h3>
-                <position-view> </position-view>
+                <position-view></position-view>
             </div>
             <div id="menu3" class="tab-pane fade">
                 <h3>Requirements</h3>
-                <requirements-directive></requirements-directive>
+                <requirements-view></requirements-view>
             </div>
         </div>
     </ng-app>

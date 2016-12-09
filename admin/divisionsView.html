@@ -1,6 +1,6 @@
 ﻿<div ng-init="points=[1,15,19,2,40,11,88,71]">
 
-    <button class="btn btn-success" type="button" onclick="myFunction('reqModal')">Add new</button>
+    <button class="btn btn-success" type="button" onclick="myFunction('divModal')">Add new</button>
     <table class="table table-hover">
         <thead class="thead-inverse">
             <tr>
@@ -22,17 +22,17 @@
         </tbody>
     </table>
 
-    <div id="reqModal" class="modal">
+    <div id="divModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
             <label for="inputNormal" class="required user">Title</label>
             <input id="inputNormal" type="text" placeholder="Title" class="form-control">          
             <label for="inputNormal" class="required user">Value</label>
-            <input id="inputNormal" type="text" placeholder="Value" class="form-control">        
+            <input id="inputNormal" type="text" placeholder="Value" class="form-control">           
             <label for="inputNormal" class="required user">Description</label>
-            <textarea id="textareaID" class="form-control" placeholder="text area" rows="3"></textarea>          
-            <button class="btn btn-primary" type="button">Save</button>           
+            <textarea id="textareaID" class="form-control" placeholder="text area" rows="3"></textarea>           
+            <button class="btn btn-primary" type="button">Save</button>        
         </div>
     </div>
 </div>

@@ -14,7 +14,7 @@ app.controller('loginController', function ($http, $scope) {
                 'Content-Type': 'application/json'
             }
         }
-        var data = JSON.stringify({ login: uname, password: upassword});
+        var data = JSON.stringify({ login: uname, password: upassword });
 
         $http.post('http://localhost:3000/login', data, config)
         .success(function (data, status, headers, config) {
@@ -28,12 +28,5 @@ app.controller('loginController', function ($http, $scope) {
             pass.className = "red";
         });
 
-    };
-});
-app.directive('myCustomer', function() {
-
-    return {
-        $http.get("http://localhost:3000/login")
-        .then 
     };
 });
