@@ -1,31 +1,39 @@
 ﻿
 
-var app = angular.module('mainApp', ['ngRoute']);
-
-app.config(function ($routeProvider) {
-    $routeProvider
-    .when('/', {
-        templateUrl: 'login.html'
-    })
-    .when('/mainWindow', {
-        templateUrl: 'mainWindow.html'
-    })
-    .when('/menu1', {
-        templateUrl: 'menu1.html'
-    })
-
-    .otherwise({
-        redirectTo: '/'
-    });
-
-});
-
 app.controller('loginController', function ($http, $scope) {
+ 
     $scope.submit = function () {
         var uname = $scope.username;
         var upassword = $scope.password;
-        if (uname === 'admin' && upassword === 'admin') {
-            window.location.hash = '#/mainWindow';
+        //if (uname === 'admin' && upassword === 'admin') {
+        //    window.location.hash = '#/mainWindow';
+        //}
+    
+        var config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
+        var data = JSON.stringify({ login: uname, password: upassword});
+
+        $http.post('http://localhost:3000/login', data, config)
+        .success(function (data, status, headers, config) {
+            window.location.hash = '#/mainWindow';
+            $scope.PostDataResponse = data;
+        })
+        .error(function (data, status, header, config) {
+            var user = document.getElementById("user");
+            var pass = document.getElementById("pass");
+            user.className = "red";
+            pass.className = "red";
+        });
+
+    };
+});
+app.directive('myCustomer', function() {
+
+    return {
+        $http.get("http://localhost:3000/login")
+        .then 
     };
 });
