@@ -45,7 +45,7 @@ app.service('CustomPost', function () {
 app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', function ($scope, $http, getTable, CustomPost) {
 
     $scope.dataTable = getTable.myFunc($scope, $http);
-    $scope.Communication = CustomPost.Communicate($scope, $http, reqType, url, dataBody);
+    //$scope.Communication = CustomPost.Communicate($scope, $http, reqType, url, dataBody);
 
     $scope.submit = function () {
         var uname = $scope.username;
