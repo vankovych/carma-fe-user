@@ -6,7 +6,7 @@ app.service('getTable', function () {
             url: 'http://localhost:3000/api/positions',
             method: "GET",       
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -42,31 +42,39 @@ app.service('getReq', function () {
     });
     };
 });
-app.service('CustomPost', function () {
-    this.Communicate = function ($scope, $http, reqType, url, dataBody) {
+
+app.service('CustomPost', [ '$http' , function ($http) {
+    this.Communicate = function (reqType, url, dataBody) {
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: reqType,
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer ' + $scope.PostDataResponse,
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
-    .success(function (response) {
-        console.log(response.data);
-    },
-    function (response) { // optional
-        console.log('epic fail error');
-    });
+        .success(function (response) {
+            console.log(response.data);
+        })
+        .error(function (response) { // optional
+            console.log('epic fail error');
+        });
+        alert('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
     };
-});
+}]);
 
 app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 'getReq',function ($scope, $http, getTable, CustomPost, getReq) {
 
     $scope.dataTable = getTable.myFunc($scope, $http);
-    //$scope.Communication = CustomPost.Communicate($scope, $http, reqType, url, dataBody);
+
     $scope.reqTable = getReq.myFunc($scope, $http);
+    $scope.myPost = function (reqType, url, dataBody) {
+        CustomPost.Communicate(reqType, url, dataBody);
+    };
+
+
     $scope.submit = function () {
         var uname = $scope.username;
         var upassword = $scope.password;
