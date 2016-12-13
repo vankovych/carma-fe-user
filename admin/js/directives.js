@@ -1,20 +1,12 @@
-﻿app.directive('requirementsView', function () {
+﻿app.directive('positionView', function () {
     return {
         restrict: 'E',
-        templateUrl: 'requirementsView.html'
-    }
+        templateUrl: 'positionView.html'
+    };
 });
-
-app.directive('positionView', function () {
-    return {
-        restrict: 'E',
-        templateUrl: 'position-view.html'
-    }
-});
-
 app.directive('divisionsView', function () {
     return {
         restrict: 'E',
         templateUrl: 'divisionsView.html'
-    }
+    };
 });

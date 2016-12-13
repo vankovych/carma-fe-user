@@ -1,14 +1,14 @@
 ﻿
-<div class="container">
+<div class="container" ng-controller="loginController" ng-app="app">
     <h2>Admin panel </h2>
     <p>Welcome.</p>
     <ul class="nav nav-pills" role="tablist">
-        <li class="active curs"><a data-toggle="pill" data-target="#home" role="tab"><span class="curs">Home</span></a></li>
+        <li class="active curs"><a  data-toggle="pill" data-target="#home" role="tab"><span class="curs">Home</span></a></li>
         <li><a data-toggle="pill" class="curs" data-target="#menu1" role="tab">Divisions</a></li>
-        <li><a data-toggle="pill" class="curs" data-target="#menu2" role="tab">Positions</a></li>
-        <li><a data-toggle="pill" class="curs" data-target="#menu3" role="tab">Requirements</a></li>
+        <li><a   data-toggle="pill" class="curs" data-target="#menu2" role="tab">  Positions</a></li>
+  
     </ul>
-    <ng-app ="app">
+    <div>
         <div class="tab-content">
             <div id="home" class="tab-pane fade in active ">
                 <!--<h3 curs>HOME</h3>-->
@@ -22,12 +22,9 @@
                 <h3>Positions</h3>
                 <position-view></position-view>
             </div>
-            <div id="menu3" class="tab-pane fade">
-                <h3>Requirements</h3>
-                <requirements-view></requirements-view>
-            </div>
+           
         </div>
-    </ng-app>
+    </div>
 </div>
 
 

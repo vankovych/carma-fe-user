@@ -1,0 +1,40 @@
+﻿<div >
+    <button class="btn btn-success"  type="button" style="float: right">Add new</button>
+    <table class="table table-hover">
+
+        <thead class="thead-inverse">
+
+            <tr>
+                <th>Name</th>
+                <th>SubTitle</th>
+                <th>Requirements</th>
+
+                <th>Edit existing</th>
+                <th>Remove entry</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-info" ng-repeat="data in dataTable">
+                <td>{{data.name}}</td>
+                <td>{{data.subTitle}}</td>
+                <td>{{data.requirements}}</td>
+                <td><button class="btn btn-warning" type="button">Edit</button></td>
+                <td><button class="btn btn-danger" type="button">Remove</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="positionModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+            <label for="inputNormal" class="required user">Title</label>
+            <input id="inputNormal" type="text" placeholder="Title" class="form-control">
+            <label for="inputNormal" class="required user">Value</label>
+            <input id="inputNormal" type="text" placeholder="Value" class="form-control">
+            <label for="inputNormal" class="required user">Description</label>
+            <textarea id="textareaID" class="form-control" placeholder="text area" rows="3"></textarea>
+            <button class="btn btn-primary" type="button">Save</button>
+        </div>
+    </div>
+</div>
