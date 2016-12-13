@@ -1,6 +1,4 @@
-﻿
-
-app.service('getTable', function () {
+﻿app.service('getTable', function () {
     this.myFunc = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/positions',
@@ -15,19 +13,21 @@ app.service('getTable', function () {
         console.log(response.data);
         $scope.dataTable = response.data;
         console.log(response.data);
-    },
-    function (response) { // optional
-        console.log('epic fail error');
+        console.log('GOOD Token: uIP92SFNwZ06RyrQ');
+    })
+        .error(function (response) { // optional
+        console.log('epic fail error, Token:' + tokenObj);
     });
     };
 });
+
 app.service('getReq', function () {
     this.myFunc = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/requirements',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -44,13 +44,13 @@ app.service('getReq', function () {
 });
 
 app.service('CustomPost', ['$http', function ($http) {
-    this.Communicate = function (reqType, url, dataBody) {
+    this.Communicate = function (rMethod, url, dataBody) {
         $http({
             url: 'http://localhost:3000/api/' + url,
-            method: reqType,
+            method: rMethod,
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -60,8 +60,6 @@ app.service('CustomPost', ['$http', function ($http) {
         .error(function (response) { // optional
             console.log('epic fail error');
         });
-        alert('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-
     };
 }]);
 
@@ -70,16 +68,14 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
     $scope.dataTable = getTable.myFunc($scope, $http);
 
     $scope.reqTable = getReq.myFunc($scope, $http);
-    $scope.myPost = function (reqType, url, dataBody) {
-        CustomPost.Communicate(reqType, url, dataBody);
+    $scope.myPost = function (rMethod, url, dataBody) {
+        CustomPost.Communicate(rMethod, url, dataBody);
     };
-
-
+    
     $scope.submit = function () {
         var uname = $scope.username;
         var upassword = $scope.password;
-
-
+        
         var config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -91,8 +87,7 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
         .success(function (data, status, headers, config) {
             $scope.PostDataResponse = data;
             window.location.hash = '#/mainWindow';
-            console.log(data);
-            console.log($scope.PostDataResponse);
+            tokenObj = data.token;
         })
         .error(function (data, status, header, config) {
             var user = document.getElementById("user");
@@ -100,6 +95,5 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
             user.className = "red";
             pass.className = "red";
         });
-
     };
 }]);
