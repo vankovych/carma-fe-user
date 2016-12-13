@@ -22,11 +22,30 @@ app.service('getTable', function () {
     };
 });
 
- 
+app.service('CustomPost', function () {
+    this.Communicate = function ($scope, $http, reqType, url, dataBody) {
+        $http({
+            url: 'http://localhost:3000/api/' + url,
+            method: reqType,
+            data: dataBody,
+            headers: {
+                'Authorization': 'Bearer ' + $scope.PostDataResponse,
+                'Content-Type': 'application/json'
+            }
+        })
+    .success(function (response) {
+        console.log(response.data);
+    },
+    function (response) { // optional
+        console.log('epic fail error');
+    });
+    };
+});
 
-app.controller('loginController', ['$scope', '$http', 'getTable', function ($scope, $http, getTable) {
+app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', function ($scope, $http, getTable, CustomPost) {
 
     $scope.dataTable = getTable.myFunc($scope, $http);
+    $scope.Communication = CustomPost.Communicate($scope, $http, reqType, url, dataBody);
 
     $scope.submit = function () {
         var uname = $scope.username;
