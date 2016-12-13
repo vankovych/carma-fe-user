@@ -21,7 +21,27 @@ app.service('getTable', function () {
     });
     };
 });
+app.service('getReq', function () {
+    this.myFunc = function ($scope, $http) {
+        $http({
+            url: 'http://localhost:3000/api/requirements',
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Content-Type': 'application/json'
+            }
+        })
+    .success(function (response) {
 
+        console.log(response.data);
+        $scope.reqTable = response.data;
+        console.log(response.data);
+    },
+    function (response) { // optional
+        console.log('epic fail error');
+    });
+    };
+});
 app.service('CustomPost', function () {
     this.Communicate = function ($scope, $http, reqType, url, dataBody) {
         $http({
@@ -42,11 +62,11 @@ app.service('CustomPost', function () {
     };
 });
 
-app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', function ($scope, $http, getTable, CustomPost) {
+app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 'getReq',function ($scope, $http, getTable, CustomPost, getReq) {
 
     $scope.dataTable = getTable.myFunc($scope, $http);
     //$scope.Communication = CustomPost.Communicate($scope, $http, reqType, url, dataBody);
-
+    $scope.reqTable = getReq.myFunc($scope, $http);
     $scope.submit = function () {
         var uname = $scope.username;
         var upassword = $scope.password;
