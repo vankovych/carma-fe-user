@@ -52,3 +52,17 @@ body{
     box-shadow: 0 0;
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
+
+.label1 {
+        display: contents;
+    font-size: 90%;
+    font-weight: 900;
+    line-height: 3;
+    color: #fff;
+    text-align: right;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .99em;
+    background-color: #449D44;
+    text-decoration: none;
+}

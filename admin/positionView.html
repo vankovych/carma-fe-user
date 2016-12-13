@@ -3,12 +3,10 @@
     <table class="table table-hover">
 
         <thead class="thead-inverse">
-
             <tr>
                 <th>Name</th>
                 <th>SubTitle</th>
                 <th>Requirements</th>
-
                 <th>Edit existing</th>
                 <th>Remove entry</th>
             </tr>
@@ -17,13 +15,12 @@
             <tr class="table-info" ng-repeat="data in dataTable">
                 <td>{{data.name}}</td>
                 <td>{{data.subTitle}}</td>
-                <td>{{data.requirements}}</td>
+                <td>{{data.requirements}} <a class= "label label1 label-pill label-info" >+</a> </td>
                 <td><button class="btn btn-warning" type="button">Edit</button></td>
                 <td><button class="btn btn-danger" type="button">Remove</button></td>
             </tr>
         </tbody>
     </table>
-
     <div id="positionModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
@@ -37,7 +34,6 @@
 
             <label for="inputNormal" class="required">Requirements</label>
             <textarea id="posInput1" class="form-control" rows="3"></textarea>
-
             <button class="btn btn-primary" type="button" onclick="">Save</button>     
         </div>
     </div>

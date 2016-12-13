@@ -21,9 +21,34 @@ app.service('getTable', function () {
     });
     };
 });
+app.service('getReq', function () {
+    this.myFunc = function ($scope, $http) {
+        $http({
+            url: 'http://localhost:3000/api/requirements',
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Content-Type': 'application/json'
+            }
+        })
+    .success(function (response) {
 
+<<<<<<< HEAD
 app.service('CustomPost', [ '$http' , function ($http) {
     this.Communicate = function (reqType, url, dataBody) {
+=======
+        console.log(response.data);
+        $scope.reqTable = response.data;
+        console.log(response.data);
+    },
+    function (response) { // optional
+        console.log('epic fail error');
+    });
+    };
+});
+app.service('CustomPost', function () {
+    this.Communicate = function ($scope, $http, reqType, url, dataBody) {
+>>>>>>> 5879578288cf5d331d6091976c11929ea2a82ef4
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: reqType,
@@ -44,14 +69,19 @@ app.service('CustomPost', [ '$http' , function ($http) {
     };
 }]);
 
-app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', function ($scope, $http, getTable, CustomPost) {
+app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 'getReq',function ($scope, $http, getTable, CustomPost, getReq) {
 
     $scope.dataTable = getTable.myFunc($scope, $http);
+<<<<<<< HEAD
     $scope.myPost = function (reqType, url, dataBody) {
         CustomPost.Communicate(reqType, url, dataBody);
     };
 
 
+=======
+    //$scope.Communication = CustomPost.Communicate($scope, $http, reqType, url, dataBody);
+    $scope.reqTable = getReq.myFunc($scope, $http);
+>>>>>>> 5879578288cf5d331d6091976c11929ea2a82ef4
     $scope.submit = function () {
         var uname = $scope.username;
         var upassword = $scope.password;
