@@ -1,38 +1,31 @@
-﻿<div ng-init="points=[1,15,19,2,40,11,88,71]">
-
+﻿<div>
     <button class="btn btn-success" type="button" onclick="myFunction('divModal')">Add new</button>
     <table class="table table-hover">
         <thead class="thead-inverse">
             <tr>
-                <th>Title</th>
-                <th>Value</th>
-                <th>Description</th>
-                <th>Edit existing</th>
-                <th>Remove entry</th>
             </tr>
         </thead>
-        <tbody>
-            <tr class="table-info" ng-repeat="item in points">
-                <td>{{item}}</td>
-                <td>{{points[3]}}</td>
-                <td></td>
-                <td><button class="btn btn-warning" onclick="editField()" type="button">Edit</button></td>
-                <td><button class="btn btn-danger" type="button">Remove</button></td>
-            </tr>
+        <tbody>       
         </tbody>
     </table>
 
     <div id="divModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
+
             <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
-            <label for="inputNormal" class="required user">Title</label>
-            <input id="inputNormal" type="text" placeholder="Title" class="form-control">          
-            <label for="inputNormal" class="required user">Value</label>
-            <input id="inputNormal" type="text" placeholder="Value" class="form-control">           
-            <label for="inputNormal" class="required user">Description</label>
-            <textarea id="textareaID" class="form-control" placeholder="text area" rows="3"></textarea>           
-            <button class="btn btn-primary" type="button">Save</button>        
+
+            <label for="inputNormal" class="required">Title</label>
+            <input id="inputNormal" type="text" placeholder="Title" class="form-control">   
+                   
+            <label for="inputNormal" class="required">Sub Title</label>
+            <input id="inputNormal" type="text" placeholder="Value" class="form-control">   
+                    
+            <label for="inputNormal" class="required">Sub Divisions</label>
+            <textarea id="textareaID" class="form-control" rows="3"></textarea>  
+                     
+            <button class="btn btn-primary" type="button">Save</button>     
+               
         </div>
     </div>
 </div>
