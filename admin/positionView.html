@@ -1,5 +1,5 @@
 ﻿<div >
-    <button class="btn btn-success"  type="button" onclick="myFunction('positionModal')">Add new</button>
+    <button class="btn btn-success"  type="button" onclick="myFunction('positionModal','add')">Add new</button>
     <table class="table table-hover">
 
         <thead id="positionsTable" class="thead-inverse">
@@ -20,12 +20,14 @@
 
                 <td>{{data.requirements}} <a class= "label label1 label-pill label-info" data-toggle="modal" data-target="#reqModal"  >+</a> </td>
           
-                <td><button class="btn btn-warning" type="button" onclick="getId(this)">Edit</button></td>
+                <td><button class="btn btn-warning" type="button" data-lastUsage="none" onclick="editPosition(this)">Edit</button></td>
                 <td><button class="btn btn-danger" type="button" onclick="removePosition(this)">Remove</button></td>
             </tr>
         </tbody>
     </table>
-    <div id="positionModal" class="modal">
+
+
+    <div id="positionModal" class="modal"  data-lastUsage="none" data-lastID="">
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
@@ -43,7 +45,8 @@
     </div>
 
 
-    <div id="reqModal" class="modal" role="dialog">
+
+    <div id="positionModal" class="modal" role="dialog">
         <div class="modal-content">
 
             <table class="table-hover table-sm">
