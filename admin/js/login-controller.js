@@ -6,7 +6,7 @@ app.service('getTable', function () {
             url: 'http://localhost:3000/api/positions',
             method: "GET",       
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
