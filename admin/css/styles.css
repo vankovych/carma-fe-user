@@ -66,3 +66,14 @@ body{
     background-color: #449D44;
     text-decoration: none;
 }
+
+.modal-content {
+   width: 400px;
+   height: 300px;
+   position: absolute;
+   left: 50%;
+   top: 50%; 
+   margin-left: -150px;
+   margin-top: -150px;
+   background-color: #d9edf7;
+}

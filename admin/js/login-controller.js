@@ -27,7 +27,7 @@ app.service('getReq', function () {
             url: 'http://localhost:3000/api/requirements',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -45,18 +45,22 @@ app.service('getReq', function () {
 
 
 app.service('CustomPost', ['$http', function ($http) {
-    this.Communicate = function (rMethod, url, dataBody) {
+    this.Communicate = function (rMethod, url, dataBody,$scope) {
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: rMethod,
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
-        .success(function (response) {
+        .success(function (response) {           
             console.log(response.data);
+            $scope.dataTable.push(response.data);
+            alert('The position was added succesful');
+            document.getElementById('posInput1').value = '';
+            document.getElementById('posInput2').value = '';
         })
         .error(function (response) { // optional
             console.log('epic fail error');
@@ -70,7 +74,7 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
 
     $scope.reqTable = getReq.myFunc($scope, $http);
     $scope.myPost = function (rMethod, url, dataBody) {
-        CustomPost.Communicate(rMethod, url, dataBody);
+        CustomPost.Communicate(rMethod, url, dataBody,$scope);
     };
     
 
