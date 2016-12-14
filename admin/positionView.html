@@ -2,8 +2,9 @@
     <button class="btn btn-success"  type="button" onclick="myFunction('positionModal')">Add new</button>
     <table class="table table-hover">
 
-        <thead class="thead-inverse">
+        <thead id="positionsTable" class="thead-inverse">
             <tr>
+                <th>Id</th>
                 <th>Name</th>
                 <th>SubTitle</th>
                 <th>Requirements</th>
@@ -13,11 +14,18 @@
         </thead>
         <tbody>
             <tr class="table-info" ng-repeat="data in dataTable">
+                <td>{{data._id}}</td>
                 <td>{{data.name}}</td>
                 <td>{{data.subTitle}}</td>
+<<<<<<< HEAD
                 <td>{{data.requirements}} <a class= "label label1 label-pill label-info" data-toggle="modal" data-target="#reqModal"  >+</a> </td>
                 <td><button class="btn btn-warning" type="button">Edit</button></td>
                 <td><button class="btn btn-danger" type="button">Remove</button></td>
+=======
+                <td>{{data.requirements}} <a class= "label label1 label-pill label-info" >+</a> </td>
+                <td><button class="btn btn-warning" type="button" onclick="getId(this)">Edit</button></td>
+                <td><button class="btn btn-danger" type="button" onclick="removePosition(this)">Remove</button></td>
+>>>>>>> origin/Alex
             </tr>
         </tbody>
     </table>
@@ -34,7 +42,7 @@
 
             <label for="inputNormal" class="required">Requirements</label>
             <textarea id="posInput1" class="form-control" rows="3"></textarea>
-            <button class="btn btn-primary" type="button" onclick="">Save</button>     
+            <button class="btn btn-primary" type="button" onclick="builder(document.getElementById('posInput1').value, document.getElementById('posInput2').value)">Save</button>     
         </div>
     </div>
 
