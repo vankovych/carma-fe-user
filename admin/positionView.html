@@ -1,6 +1,11 @@
 ﻿<div>
     <button class="btn btn-success" type="button" onclick="myFunction('positionModal','add')">Add new</button>
+    <select onchange="changeOption()" id ="select-block" data-option="name">
+        <option value="name" >by name</option>
+        <option value="title" >by subtitle </option>
+    </select>
     <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for titles.." title="Type in a name">
+
     <table  id="posTable" class="table table-hover">
 
         <thead id="positionsTable" class="thead-inverse">
