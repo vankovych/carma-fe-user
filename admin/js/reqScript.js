@@ -1,11 +1,15 @@
-﻿    var lastModal;
+﻿
+
+
+function mrTest(path, element1, idToEdit) {
+   
+};
+
 
     function myFunction(modalForm,sender,id) {
-        lastModal = document.getElementById(modalForm);
-     
+        lastModal = document.getElementById(modalForm);     
         lastModal.setAttribute('data-lastUsage', sender);
         lastModal.setAttribute('data-lastID', id);
-
         console.log(lastModal);
         lastModal.style.display = "block";
     }
@@ -24,7 +28,7 @@ all modal windows save buttons
                + '"name" : ' + '"' + n + '"' + ','
                + '"subTitle" : ' + '"' + s + '"'
                + '}';
-
+            
             angular.element(document.getElementById('mainWindowId')).scope().myPost('positions', element);
         }
 
@@ -61,17 +65,4 @@ all modal windows save buttons
         myFunction('positionModal', 'edit', idToEdit);
     }
 
-// simple test function
-    function getId(element) {
 
-        alert(element.getAttribute("data-lastUsage"));
-      
-    }
-
-    window.onclick = function (event) {
-        if (undefined !== lastModal) {
-            if (event.target === lastModal) {
-                closeAddSpan();
-            }
-        }
-    };

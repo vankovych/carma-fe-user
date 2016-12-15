@@ -5,7 +5,7 @@ app.service('getTable', function () {
             url: 'http://localhost:3000/api/positions',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -29,7 +29,7 @@ app.service('getReq', function () {
             url: 'http://localhost:3000/api/requirements',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -53,7 +53,7 @@ app.service('CustomPost', ['$http', function ($http) {
             method: 'POST',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -80,7 +80,7 @@ app.service('CustomGet', ['$http', function ($http) {
             method: 'GET',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -97,13 +97,12 @@ app.service('CustomGet', ['$http', function ($http) {
 
 
 app.service('CustomDelete', ['$http', function ($http) {
-    this.Communicate = function (url, dataBody, $scope) {
+    this.Communicate = function (url, $scope) {
         $http({
             url: 'http://localhost:3000/api/' + url,
-            method: 'DELETE',
-            data: dataBody,
+            method: 'DELETE',            
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -125,7 +124,7 @@ app.service('CustomPut', ['$http', function ($http) {
             method: 'PUT',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -161,10 +160,39 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
         $scope.dataTable = getTable.myFunc($scope, $http);
         $scope.reqTable = getReq.myFunc($scope, $http);
     };
-    $scope.showModal = function (_id) {
-        document.getElementById("requirementsModal").setAttribute("data-id", _id);
-        $('#requirementsModal').modal('show');
+    $scope.showModal = function (modalID, _id, usage) {
+        if (_id !== '')
+        {
+            //id is not empty must load data to the table
+
+        }
+
+        document.getElementById(modalID).setAttribute('data-id', _id);
+        document.getElementById(modalID).setAttribute('data-lastUsage', usage);
+        $('#' + modalID).modal('show');
+
     };
+
+    $scope.modalButtonAction = function (senderModalForm, path, id) {
+
+        var lastModal = document.getElementById(senderModalForm);
+        var all = document.getElementById(senderModalForm).getElementsByClassName('form-control');
+        var obj = {};
+        for (index = 0; index < all.length; ++index) {
+            obj[all[index].name] = all[index].value;
+        }
+
+        console.log(obj);
+       
+        if (lastModal.getAttribute('data-lastUsage') === 'add') {
+            angular.element(document.getElementById('mainWindowId')).scope().myPost(path, obj);
+        }
+        else if (lastModal.getAttribute('data-lastUsage') === 'edit') {
+            angular.element(document.getElementById('mainWindowId')).scope().myPut(path + lastModal.getAttribute('data-id'), obj);
+        }
+
+        $('#' + senderModalForm).modal('close');
+    }
 
     $scope.PostReq = function (req_id) {
         console.log(req_id);
@@ -174,7 +202,7 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
             url: 'http://localhost:3000/api/' + url,
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -185,25 +213,16 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
      console.log('epic fail error');
  });
     };
-    $scope.removePosition = function (id) {
-        var url = id;
-        $http({
-            url: 'http://localhost:3000/api/positions/' + url,
-            method: 'DELETE',
-            headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
-                'Content-Type': 'application/json'
-            }
-        })
-     .success(function (response) {
-         console.log(response.data);
-         alert('The position was deleted succesful');
-     })
-     .error(function (response) { // optional
-         console.log('epic fail error');
-     });
- }
+
+    $scope.removePosition = function (path,id) {
+        CustomDelete.Communicate(path + id, $scope);
+    }
     
+    $scope.editPosition = function (path, fData) {
+        CustomDelete.Communicate(path + fData, $scope);
+    }
+    
+
     $scope.submit = function () {
         var uname = $scope.username;
         var upassword = $scope.password;
@@ -229,4 +248,6 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
             pass.className = "red";
         });
     };
+
+
 }]);

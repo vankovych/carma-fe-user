@@ -16,22 +16,27 @@
                 <td>{{data.value}}</td>
                 <td>{{data.description}}  </td>
                 <td><button class="btn btn-warning"  type="button">Edit</button></td>
-                <td><button class="btn btn-danger" type="button">Remove</button></td>
+                <td><button class="btn btn-danger" type="button" ng-click="removePosition('requirements/', data._id)">Remove</button></td>
             </tr>
         </tbody>
     </table>
 
-    <div id="reqModal" class="modal">
+    <div id="reqModal" class="modal data-lastUsage="none" data-lastID="">
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
-            <label for="inputNormal" class="required user">Title</label>
-            <input id="inputNormal" type="text" placeholder="Title" class="form-control">          
-            <label for="inputNormal" class="required user">Value</label>
-            <input id="inputNormal" type="text" placeholder="Value" class="form-control">        
-            <label for="inputNormal" class="required user">Description</label>
-            <textarea id="textareaID" class="form-control" placeholder="text area" rows="3"></textarea>          
-            <button class="btn btn-primary" type="button">Save</button>           
+
+            <label for="inputNormal" class="required">Title</label>
+            <input id="reqInput1" name="title" type="text" placeholder="Title" class="form-control">
+
+            <label for="inputNormal" class="required">Value</label>
+            <input id="reqInput2" name="value" type="text" placeholder="Value" class="form-control">
+
+            <label for="inputNormal" class="required">Description</label>
+            <textarea id="reqTextareaID" name="description" class="form-control" rows="3"></textarea>  
+
+            <button class="btn btn-primary" type="button" onclick="mrTest('requirements', 'reqModal','')">TEST</button>
+
         </div>
     </div>
 </div>
