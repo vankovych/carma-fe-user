@@ -1,10 +1,11 @@
-﻿app.service('getTable', function () {
+﻿
+app.service('getTable', function () {
     this.myFunc = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/positions',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -13,7 +14,7 @@
         console.log(response.data);
         $scope.dataTable = response.data;
         console.log(response.data);
-        console.log('GOOD Token: uIP92SFNwZ06RyrQ');
+        console.log('GOOD Token: GmSddICqaogEnWte');
     })
         .error(function (response) { // optional
         console.log('epic fail error, Token:' + tokenObj);
@@ -28,7 +29,7 @@ app.service('getReq', function () {
             url: 'http://localhost:3000/api/requirements',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -52,7 +53,7 @@ app.service('CustomPost', ['$http', function ($http) {
             method: 'POST',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -79,7 +80,7 @@ app.service('CustomGet', ['$http', function ($http) {
             method: 'GET',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -102,7 +103,7 @@ app.service('CustomDelete', ['$http', function ($http) {
             method: 'DELETE',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -124,7 +125,7 @@ app.service('CustomPut', ['$http', function ($http) {
             method: 'PUT',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -132,6 +133,7 @@ app.service('CustomPut', ['$http', function ($http) {
             //add some code here
             document.getElementById('posInput1').value = '';
             document.getElementById('posInput2').value = '';
+            $('#positionModal').modal('close');
         })
         .error(function (response) { // optional
             console.log('epic fail error');
@@ -159,9 +161,30 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
         $scope.dataTable = getTable.myFunc($scope, $http);
         $scope.reqTable = getReq.myFunc($scope, $http);
     };
+    $scope.showModal = function (_id) {
+        document.getElementById("requirementsModal").setAttribute("data-id", _id);
+        $('#requirementsModal').modal('show');
+    };
 
-
-    
+    $scope.PostReq = function (req_id) {
+        console.log(req_id);
+        console.log(document.getElementById("requirementsModal").getAttribute("data-id"));
+        var url = "/positions/" + document.getElementById("requirementsModal").getAttribute("data-id") + "/requirements/" + req_id;
+        $http({
+            url: 'http://localhost:3000/api/' + url,
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Content-Type': 'application/json'
+            }
+        })
+ .success(function (response) {
+     console.log('succes');
+ })
+ .error(function (response) { // optional
+     console.log('epic fail error');
+ });
+    };
 
     $scope.submit = function () {
         var uname = $scope.username;
