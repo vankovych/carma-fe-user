@@ -37,6 +37,7 @@ all modal windows save buttons
                + '}';
 
             angular.element(document.getElementById('mainWindowId')).scope().myPut('positions/' + idToEdit, element);
+            $('#positionModal').modal('close');
         }
     }
 
@@ -54,10 +55,10 @@ all modal windows save buttons
         //get all records for current reccord
         var idToEdit = element.parentNode.parentNode.parentNode.parentNode.rows[element.parentNode.parentNode.rowIndex].cells[0].innerHTML;
         //set them to proper modal window 
-        document.getElementById('posInput1').value = element.parentNode.parentNode.parentNode.parentNode.rows[element.parentNode.parentNode.rowIndex].cells[1].innerHTML;
-        document.getElementById('posInput2').value = element.parentNode.parentNode.parentNode.parentNode.rows[element.parentNode.parentNode.rowIndex].cells[2].innerHTML;
+        document.getElementById('posInput1').value = element.parentNode.parentNode.parentNode.parentNode.rows[element.parentNode.parentNode.rowIndex].cells[0].innerHTML;
+        document.getElementById('posInput2').value = element.parentNode.parentNode.parentNode.parentNode.rows[element.parentNode.parentNode.rowIndex].cells[1].innerHTML;
         //perform "PUT" for update reccord using '/positions/:id' route
-        myFunction('positionModal', 'edit', idToEdit)
+        myFunction('positionModal', 'edit', idToEdit);
     }
 
 // simple test function
@@ -67,10 +68,10 @@ all modal windows save buttons
       
     }
 
-    window.onclick = function (event) {      
+    window.onclick = function (event) {
         if (undefined !== lastModal) {
-            if (event.target == lastModal) {
+            if (event.target === lastModal) {
                 closeAddSpan();
             }
         }
-    }
+    };

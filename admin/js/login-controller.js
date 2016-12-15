@@ -1,10 +1,11 @@
-﻿app.service('getTable', function () {
+﻿
+app.service('getTable', function () {
     this.myFunc = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/positions',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -13,17 +14,13 @@
         console.log(response.data);
         $scope.dataTable = response.data;
         console.log(response.data);
-        console.log('GOOD Token: uIP92SFNwZ06RyrQ');
+        console.log('GOOD Token: GmSddICqaogEnWte');
     })
         .error(function (response) { // optional
-            console.log('epic fail error, Token:' + tokenObj);
-        });
         console.log('epic fail error, Token:' + tokenObj);
-    }
-}
-    );
-
-
+    });
+    };
+});
 
 
 app.service('getReq', function () {
@@ -32,7 +29,7 @@ app.service('getReq', function () {
             url: 'http://localhost:3000/api/requirements',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -50,24 +47,22 @@ app.service('getReq', function () {
 
 
 app.service('CustomPost', ['$http', function ($http) {
-
-    this.Communicate = function (url, dataBody, $scope) {
-
+    this.Communicate = function ( url, dataBody,$scope) {
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: 'POST',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
-        .success(function (response) {
+        .success(function (response) {           
             console.log(response.data);
             $scope.dataTable.push(response.data);
+            
 
-            //    alert('The position was added succesful');
-
+        //    alert('The position was added succesful');
             document.getElementById('posInput1').value = '';
             document.getElementById('posInput2').value = '';
         })
@@ -85,7 +80,7 @@ app.service('CustomGet', ['$http', function ($http) {
             method: 'GET',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -108,15 +103,14 @@ app.service('CustomDelete', ['$http', function ($http) {
             method: 'DELETE',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
         .success(function (response) {
             console.log(response.data);
             alert('The position was deleted succesful');
-        })
-
+         })
         .error(function (response) { // optional
             console.log('epic fail error');
         });
@@ -131,7 +125,7 @@ app.service('CustomPut', ['$http', function ($http) {
             method: 'PUT',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -139,6 +133,7 @@ app.service('CustomPut', ['$http', function ($http) {
             //add some code here
             document.getElementById('posInput1').value = '';
             document.getElementById('posInput2').value = '';
+            $('#positionModal').modal('close');
         })
         .error(function (response) { // optional
             console.log('epic fail error');
@@ -153,8 +148,7 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
 
     $scope.reqTable = getReq.myFunc($scope, $http);
     $scope.myPost = function (url, dataBody) {
-
-        CustomPost.Communicate(url, dataBody, $scope);
+        CustomPost.Communicate(url, dataBody,$scope);
     };
     $scope.myGet = function (url, dataBody) {
         CustomGet.Communicate(url, dataBody, $scope);
@@ -167,11 +161,35 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
         $scope.dataTable = getTable.myFunc($scope, $http);
         $scope.reqTable = getReq.myFunc($scope, $http);
     };
+    $scope.showModal = function (_id) {
+        document.getElementById("requirementsModal").setAttribute("data-id", _id);
+        $('#requirementsModal').modal('show');
+    };
+
+    $scope.PostReq = function (req_id) {
+        console.log(req_id);
+        console.log(document.getElementById("requirementsModal").getAttribute("data-id"));
+        var url = "/positions/" + document.getElementById("requirementsModal").getAttribute("data-id") + "/requirements/" + req_id;
+        $http({
+            url: 'http://localhost:3000/api/' + url,
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Content-Type': 'application/json'
+            }
+        })
+ .success(function (response) {
+     console.log('succes');
+ })
+ .error(function (response) { // optional
+     console.log('epic fail error');
+ });
+    };
 
     $scope.submit = function () {
         var uname = $scope.username;
         var upassword = $scope.password;
-
+        
         var config = {
             headers: {
                 'Content-Type': 'application/json'
