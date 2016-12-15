@@ -1,6 +1,7 @@
 ﻿<div>
     <button class="btn btn-success" type="button" onclick="myFunction('positionModal','add')">Add new</button>
-    <table class="table table-hover">
+    <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for titles.." title="Type in a name">
+    <table  id="posTable" class="table table-hover">
 
         <thead id="positionsTable" class="thead-inverse">
             <tr>
@@ -15,8 +16,6 @@
             <tr class="table-info" ng-repeat="data in dataTable">
                 <td>{{data.name}}</td>
                 <td>{{data.subTitle}}</td>
-
-               
                 <td ng-repeat="i in reqTable"
                     ng-if="i._id == data.requirements">
                     {{i.title}}
@@ -56,8 +55,8 @@
 
 
 <div id="requirementsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
-    <div class="modal-content">
-        <button class="btn btn-danger" type="button">Add new requirements</button>
+    <div class="modal-content modal-dialog">
+       
         <table class="table-hover table-sm">
             <thead class="thead-inverse">
                 <tr>
@@ -76,7 +75,7 @@
                 </tr>
             </tbody>
         </table>
-
+        <button class="btn  btn-success " type="button">Add new requirements</button>
     </div>
 
 </div>
