@@ -43,7 +43,7 @@ all modal windows save buttons
 
     function removePosition(element) {
 
-        var idToDelete = element.parentNode.parentNode.parentNode.parentNode.rows[element.parentNode.parentNode.rowIndex].cells[0].innerHTML;        
+        //var idToDelete = element.parentNode.parentNode.parentNode.parentNode.rows[element.parentNode.parentNode.rowIndex].cells[0].innerHTML;        
         //alert('going to remove:' + toDelete);
         angular.element(document.getElementById('mainWindowId')).scope().myDelete('positions/' + idToDelete, element);
         //delete row from DOM

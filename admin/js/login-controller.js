@@ -185,7 +185,25 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
      console.log('epic fail error');
  });
     };
-
+    $scope.removePosition = function (id) {
+        var url = id;
+        $http({
+            url: 'http://localhost:3000/api/positions/' + url,
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Content-Type': 'application/json'
+            }
+        })
+     .success(function (response) {
+         console.log(response.data);
+         alert('The position was deleted succesful');
+     })
+     .error(function (response) { // optional
+         console.log('epic fail error');
+     });
+ }
+    
     $scope.submit = function () {
         var uname = $scope.username;
         var upassword = $scope.password;

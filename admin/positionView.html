@@ -30,11 +30,8 @@
 
                     <a class="label label1 label-pill label-info" ng-click="showModal(data._id)">+</a>
                 </td>
-
-
-
-<td><button class="btn btn-warning" type="button" data-lastUsage="none" onclick="editPosition(this)">Edit</button></td>
-<td><button class="btn btn-danger" type="button" onclick="removePosition(this)">Remove</button></td>
+                <td><button class="btn btn-warning" type="button" data-lastUsage="none" onclick="editPosition(this)">Edit</button></td>
+                <td><button class="btn btn-danger" type="button" ng-click="removePosition(data._id)">Remove</button></td>
             </tr>
         </tbody>
     </table>
