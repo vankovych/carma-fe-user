@@ -1,5 +1,4 @@
 ﻿<div>
-    <!--<button class="btn btn-success" type="button" onclick="myFunction('positionModal','add')">Add new</button>-->
     <button class="btn btn-success" type="button" ng-click="showModal('positionModal','','add')">Add new</button>
       <table class="table table-hover">
 
@@ -16,20 +15,24 @@
             <tr class="table-info" ng-repeat="data in dataTable">
                 <td>{{data.name}}</td>
                 <td>{{data.subTitle}}</td>               
-                <td ng-repeat="i in reqTable"
-                    ng-if="i._id == data.requirements">
-                    {{i.title}}
-                    {{i.value}}
-                    {{i.description}}   
-                    <a class="label label1 label-pill label-info" ng-click="showModal('requirementsModal',data._id)">+</a>
+                <td>
+                    <ul>
+                        <li ng-repeat="i in reqTable"  ng-if="i._id == data.requirements">>
+                            {{i.title}}
+                            {{i.value}}
+                            {{i.description}}
+                        </li>
+                        <a class="label label1 label-pill label-info" ng-click="showModal('requirementsModal',data._id)">+</a>
+                    </ul>
+
                 </td>             
-                <td ng-repeat="i in reqTable"
+                <!--<td ng-repeat="i in reqTable"
                     ng-if="i._id != data.requirements">
                     No requirements
                     <a class="label label1 label-pill label-info" ng-click="showModal('requirementsModal',data._id)">+</a>
-                </td>
-                <td><button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('positionModal', data._id, 'edit')">Edit</button></td>
-                <td><button class="btn btn-danger" type="button" ng-click="removePosition('positions/', data._id)">Remove</button></td>
+                </td>-->
+                <td><button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('positionModal', data, 'edit')">Edit</button></td>
+                <td><button class="btn btn-danger" type="button" ng-click="removePosition('positions/', data)">Remove</button></td>
             </tr>
         </tbody>
     </table>
