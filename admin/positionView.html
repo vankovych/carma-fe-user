@@ -21,18 +21,20 @@
                 <td>{{data.name}}</td>
                 <td>{{data.subTitle}}</td>               
                 <td id="requirements">
-              
-                    <ul>
-                        <li ng-repeat="i in selectRequirements(data)">>
-                            {{i.title}}
-                            {{i.value}}
-                            {{i.description}}
-                         
-                        </li>
-                    </ul>
-                    <a class="label label1 label-pill label-info" ng-click="setPositionId(data._id)">+</a>
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo-{{$index}}">View Requirements</button>
+                    <div id="demo-{{$index}}" class="collapse">
+                        <ul>
+                            <li ng-repeat="i in selectRequirements(data)">
+                                >
+                                {{i.title}}
+                                {{i.value}}
+                                {{i.description}}
 
-                </td>             
+                            </li>
+                        </ul>
+                        <a class="label label1 label-pill label-info" ng-click="setPositionId(data._id)">+</a>
+                        </div>
+</td>             
                
                 <td><button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('positionModal', data, 'edit')">Edit</button></td>
                 <td><button class="btn btn-danger" type="button" ng-click="removePosition('positions/', data)">Remove</button></td>
