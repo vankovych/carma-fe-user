@@ -5,7 +5,7 @@ app.service('getTable', function () {
             url: 'http://localhost:3000/api/positions',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -29,7 +29,7 @@ app.service('getReq', function () {
             url: 'http://localhost:3000/api/requirements',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -45,27 +45,19 @@ app.service('getReq', function () {
     };
 });
 
-
 app.service('CustomPost', ['$http', function ($http) {
-    this.Communicate = function ( url, dataBody,$scope) {
+    this.Communicate = function (url, dataBody, callbackSucces, $scope) {
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: 'POST',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
-        .success(function (response) {           
-            console.log(response.data);
-            $scope.dataTable.push(response.data);
-            
-
-        //    alert('The position was added succesful');
-            document.getElementById('posInput1').value = '';
-            document.getElementById('posInput2').value = '';
-        })
+        .success(function (response) {
+            callbackSucces(response)        }        )
         .error(function (response) { // optional
             console.log('epic fail error');
         });
@@ -80,7 +72,7 @@ app.service('CustomGet', ['$http', function ($http) {
             method: 'GET',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -97,19 +89,17 @@ app.service('CustomGet', ['$http', function ($http) {
 
 
 app.service('CustomDelete', ['$http', function ($http) {
-    this.Communicate = function (url, dataBody, $scope) {
+    this.Communicate = function (url, callbackSucces, $scope) {
         $http({
             url: 'http://localhost:3000/api/' + url,
-            method: 'DELETE',
-            data: dataBody,
+            method: 'DELETE',            
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
         .success(function (response) {
-            console.log(response.data);
-            alert('The position was deleted succesful');
+            callbackSucces(response);
          })
         .error(function (response) { // optional
             console.log('epic fail error');
@@ -125,7 +115,7 @@ app.service('CustomPut', ['$http', function ($http) {
             method: 'PUT',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -147,24 +137,86 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
     $scope.dataTable = getTable.myFunc($scope, $http);
 
     $scope.reqTable = getReq.myFunc($scope, $http);
-    $scope.myPost = function (url, dataBody) {
-        CustomPost.Communicate(url, dataBody,$scope);
+
+    $scope.myPost = function (url, dataBody, callbackSucces) {
+        CustomPost.Communicate(url, dataBody, callbackSucces, $scope);
     };
+
     $scope.myGet = function (url, dataBody) {
         CustomGet.Communicate(url, dataBody, $scope);
     };
+
     $scope.myDelete = function (url, dataBody) {
         CustomDelete.Communicate(url, dataBody, $scope);
     };
+
     $scope.myPut = function (url, dataBody) {
         CustomPut.Communicate(url, dataBody, $scope);
         $scope.dataTable = getTable.myFunc($scope, $http);
         $scope.reqTable = getReq.myFunc($scope, $http);
     };
-    $scope.showModal = function (_id) {
-        document.getElementById("requirementsModal").setAttribute("data-id", _id);
-        $('#requirementsModal').modal('show');
+
+    $scope.showModal = function (modalID, data, usage) {
+        var smWindow = document.getElementById(modalID);
+        var all = smWindow.getElementsByClassName('form-control');
+        if (data) {
+            //id is not empty must load data to the table
+            //data has all information neaded for filling table 
+                Object.keys(data).forEach(function (k) {
+                for (index = 0; index < all.length; ++index) {
+                    if (all[index].name === k) all[index].value = data[k];
+                }
+            });
+        }
+        else {
+            for (index = 0; index < all.length; ++index) {
+                all[index].value = '';
+            }
+        }
+        smWindow.setAttribute('data-id', data._id);
+        smWindow.setAttribute('data-lastUsage', usage);
+        $('#' + modalID).modal('show');
     };
+    
+    $scope.modalButtonAction = function (senderModalForm, path) {
+
+        var lastModal = document.getElementById(senderModalForm);
+        
+        ///// в обєкті купа пропертів, може можна замутити простий досту по нейму через []
+        var all = document.getElementById(senderModalForm).getElementsByClassName('form-control');
+        //obj - JSON object - BODY
+        var obj = {};
+        for (index = 0; index < all.length; ++index) {
+            obj[all[index].name] = all[index].value;
+        }
+
+        console.log(obj);
+       
+        //////refactoring required
+                var dataSource;
+                switch (senderModalForm)
+                {
+                    case 'reqModal':
+                        dataSource = 'reqTable';
+                        break;
+                    case 'positionModal':
+                        dataSource = 'dataTable';
+                        break;
+                    default:
+                        throw 'Error: data source can not be found';
+                }
+        //////
+
+        if (lastModal.getAttribute('data-lastUsage') === 'add') {
+            $scope.myPost(path, obj, function (arg) {
+                $scope[dataSource].push(arg.data);
+            });//<---- callbacks here як вирішити які саме таблиці має обробляти колбек
+        }
+        else if (lastModal.getAttribute('data-lastUsage') === 'edit') {            
+            $scope.myPut(path + lastModal.getAttribute('data-id'), obj);//<---- callbacks here
+        }
+        $('#' + senderModalForm).modal('hide');
+    }
 
     $scope.PostReq = function (req_id) {
         console.log(req_id);
@@ -174,7 +226,7 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
             url: 'http://localhost:3000/api/' + url,
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
                 'Content-Type': 'application/json'
             }
         })
@@ -185,25 +237,30 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
      console.log('epic fail error');
  });
     };
-    $scope.removePosition = function (id) {
-        var url = id;
-        $http({
-            url: 'http://localhost:3000/api/positions/' + url,
-            method: 'DELETE',
-            headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
-                'Content-Type': 'application/json'
+
+    $scope.removePosition = function (path, data) {
+        CustomDelete.Communicate(path + data._id, function (arg) {
+            var dataSource;
+            switch (path)
+            {
+                case 'requirements/':
+                    dataSource = 'reqTable';
+                    break;
+                case 'positions/':
+                    dataSource = 'dataTable';
+                    break;
+                default:
+                    throw 'Error: data source can not be found';
             }
-        })
-     .success(function (response) {
-         console.log(response.data);
-         alert('The position was deleted succesful');
-     })
-     .error(function (response) { // optional
-         console.log('epic fail error');
-     });
- }
-    
+            var index = $scope[dataSource].indexOf(data);
+            $scope[dataSource].splice(index, 1);
+        }, $scope);//<----- delegate?
+    }
+
+    $scope.editPosition = function (path, fData) {
+        CustomDelete.Communicate(path + fData, $scope);
+    }
+
     $scope.submit = function () {
         var uname = $scope.username;
         var upassword = $scope.password;
@@ -229,4 +286,5 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
             pass.className = "red";
         });
     };
+    
 }]);

@@ -1,4 +1,5 @@
 ﻿<div>
+<<<<<<< HEAD
     <button class="btn btn-success" type="button" onclick="myFunction('positionModal','add')">Add new</button>
     <select onchange="changeOption()" id ="select-block" data-option="name">
         <option value="name" >by name</option>
@@ -7,6 +8,10 @@
     <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for titles.." title="Type in a name">
 
     <table  id="posTable" class="table table-hover">
+=======
+    <button class="btn btn-success" type="button" ng-click="showModal('positionModal','','add')">Add new</button>
+      <table class="table table-hover">
+>>>>>>> Requirements
 
         <thead id="positionsTable" class="thead-inverse">
             <tr>
@@ -20,6 +25,7 @@
         <tbody>
             <tr class="table-info" ng-repeat="data in dataTable">
                 <td>{{data.name}}</td>
+<<<<<<< HEAD
                 <td>{{data.subTitle}}</td>
                 <td ng-repeat="i in reqTable"
                     ng-if="i._id == data.requirements">
@@ -29,35 +35,46 @@
                     <a class="label label1 label-pill label-info" ng-click="showModal(data._id)">+</a>
                 </td>
                 <td ng-repeat="i in reqTable"
+=======
+                <td>{{data.subTitle}}</td>               
+                <td>
+                    <ul>
+                        <li ng-repeat="i in reqTable"  ng-if="i._id == data.requirements">>
+                            {{i.title}}
+                            {{i.value}}
+                            {{i.description}}
+                        </li>
+                        <a class="label label1 label-pill label-info" ng-click="showModal('requirementsModal',data._id)">+</a>
+                    </ul>
+
+                </td>             
+                <!--<td ng-repeat="i in reqTable"
+>>>>>>> Requirements
                     ng-if="i._id != data.requirements">
                     No requirements
-
-                    <a class="label label1 label-pill label-info" ng-click="showModal(data._id)">+</a>
-                </td>
-                <td><button class="btn btn-warning" type="button" data-lastUsage="none" onclick="editPosition(this)">Edit</button></td>
-                <td><button class="btn btn-danger" type="button" ng-click="removePosition(data._id)">Remove</button></td>
+                    <a class="label label1 label-pill label-info" ng-click="showModal('requirementsModal',data._id)">+</a>
+                </td>-->
+                <td><button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('positionModal', data, 'edit')">Edit</button></td>
+                <td><button class="btn btn-danger" type="button" ng-click="removePosition('positions/', data)">Remove</button></td>
             </tr>
         </tbody>
     </table>
 
-
-<div id="positionModal" class="modal" data-lastUsage="none" data-lastID="">
+<div id="positionModal" class="modal" data-lastUsage="none" data-id="">
     <!-- Modal content -->
     <div class="modal-content">
         <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
 
         <label for="inputNormal" class="required">Name</label>
-        <input id="posInput1" type="text" placeholder="Title" class="form-control">
+        <input id="posInput1" type="text" name="name" placeholder="Title" class="form-control">
 
         <label for="inputNormal" class="required">Sub Title</label>
-        <input id="posInput2" type="text" placeholder="Value" class="form-control">
-
-
-        <button class="btn btn-primary" type="button" onclick="builder(document.getElementById('posInput1').value, document.getElementById('posInput2').value)">Save</button>
+        <input id="posInput2" type="text" name="subTitle" placeholder="Value" class="form-control">
+        
+        <button class="btn btn-primary" type="button" ng-click="modalButtonAction('positionModal', 'positions/')">Save</button>
     </div>
 </div>
-
-
+    
 
 <div id="requirementsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
     <div class="modal-content modal-dialog">

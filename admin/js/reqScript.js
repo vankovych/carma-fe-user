@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿function changeOption()
 {
     if (document.getElementById("select-block").value === "name") {
@@ -111,3 +112,6 @@ all modal windows save buttons
             }
         }
     };
+=======
+﻿
+>>>>>>> Requirements
