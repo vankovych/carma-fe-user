@@ -5,7 +5,7 @@ app.service('getTable', function () {
             url: 'http://localhost:3000/api/positions',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer 9NfZEKrTTmNbNhv7',
                 'Content-Type': 'application/json'
             }
         })
@@ -14,7 +14,6 @@ app.service('getTable', function () {
         console.log(response.data);
         $scope.dataTable = response.data;
         console.log(response.data);
-        console.log('GOOD Token: GmSddICqaogEnWte');
     })
         .error(function (response) { // optional
         console.log('epic fail error, Token:' + tokenObj);
@@ -22,14 +21,13 @@ app.service('getTable', function () {
     };
 });
 
-
 app.service('getReq', function () {
     this.myFunc = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/requirements',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer 9NfZEKrTTmNbNhv7',
                 'Content-Type': 'application/json'
             }
         })
@@ -45,34 +43,31 @@ app.service('getReq', function () {
     };
 });
 
-app.service('CustomPost', ['$http', function ($http) {
-    this.Communicate = function (url, dataBody, callbackSucces, $scope) {
+app.service('CommunicationProvider', ['$http','$window', function ($http, $window) {
+    this.PostData = function (url, dataBody, callbackSucces, $scope) {
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: 'POST',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
                 'Content-Type': 'application/json'
             }
         })
         .success(function (response) {
-            callbackSucces(response)        }        )
+            callbackSucces(response)
+        })
         .error(function (response) { // optional
             console.log('epic fail error');
         });
     };
-}]);
-
-
-app.service('CustomGet', ['$http', function ($http) {
-    this.Communicate = function (url, dataBody, $scope) {
+    this.GetData = function (url, dataBody, $scope) {
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: 'GET',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
                 'Content-Type': 'application/json'
             }
         })
@@ -85,54 +80,43 @@ app.service('CustomGet', ['$http', function ($http) {
             console.log('epic fail error');
         });
     };
-}]);
-
-
-app.service('CustomDelete', ['$http', function ($http) {
-    this.Communicate = function (url, callbackSucces, $scope) {
+    this.DeleteData = function (url, callbackSucces, $scope) {
         $http({
             url: 'http://localhost:3000/api/' + url,
-            method: 'DELETE',            
+            method: 'DELETE',
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
                 'Content-Type': 'application/json'
             }
         })
         .success(function (response) {
             callbackSucces(response);
-         })
+        })
         .error(function (response) { // optional
             console.log('epic fail error');
         });
     };
-}]);
-
-
-app.service('CustomPut', ['$http', function ($http) {
-    this.Communicate = function (url, dataBody, $scope) {
+    this.PutData = function (url, dataBody, callbackSucces, $scope) {
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: 'PUT',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
                 'Content-Type': 'application/json'
             }
         })
         .success(function (response) {
-            //add some code here
-            document.getElementById('posInput1').value = '';
-            document.getElementById('posInput2').value = '';
-            $('#positionModal').modal('close');
+            callbackSucces(response)
         })
         .error(function (response) { // optional
             console.log('epic fail error');
         });
     };
+
 }]);
 
-
-app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 'CustomGet', 'CustomDelete', 'CustomPut', 'getReq', function ($scope, $http, getTable, CustomPost, CustomGet, CustomDelete, CustomPut, getReq) {
+app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'CommunicationProvider', 'getReq', function ($scope, $http, $window, getTable, CommunicationProvider, getReq) {
 
     $scope.dataTable = getTable.myFunc($scope, $http);
 
@@ -145,21 +129,19 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
     $scope.reqTable = getReq.myFunc($scope, $http);
 
     $scope.myPost = function (url, dataBody, callbackSucces) {
-        CustomPost.Communicate(url, dataBody, callbackSucces, $scope);
+        CommunicationProvider.PostData(url, dataBody, callbackSucces, $scope);
     };
 
     $scope.myGet = function (url, dataBody) {
-        CustomGet.Communicate(url, dataBody, $scope);
+        CommunicationProvider.GetData(url, dataBody, $scope);
     };
 
     $scope.myDelete = function (url, dataBody) {
-        CustomDelete.Communicate(url, dataBody, $scope);
+        CommunicationProvider.DeleteData(url, dataBody, $scope);
     };
 
-    $scope.myPut = function (url, dataBody) {
-        CustomPut.Communicate(url, dataBody, $scope);
-        $scope.dataTable = getTable.myFunc($scope, $http);
-        $scope.reqTable = getReq.myFunc($scope, $http);
+    $scope.myPut = function (url, dataBody, callbackSucces) {
+        CommunicationProvider.PutData(url, dataBody, callbackSucces, $scope);
     };
 
     $scope.showModal = function (modalID, data, usage) {
@@ -188,7 +170,7 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
 
         var lastModal = document.getElementById(senderModalForm);
         
-        ///// в обєкті купа пропертів, може можна замутити простий досту по нейму через []
+      
         var all = document.getElementById(senderModalForm).getElementsByClassName('form-control');
         //obj - JSON object - BODY
         var obj = {};
@@ -219,7 +201,23 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
             });//<---- callbacks here як вирішити які саме таблиці має обробляти колбек
         }
         else if (lastModal.getAttribute('data-lastUsage') === 'edit') {            
-            $scope.myPut(path + lastModal.getAttribute('data-id'), obj);//<---- callbacks here
+            $scope.myPut(path + lastModal.getAttribute('data-id'), obj, function (arg) {
+                $scope[dataSource].forEach(function(elem,i){
+                    if (elem._id == lastModal.getAttribute('data-id')) {
+               
+
+                        Object.keys(obj).forEach(function (k) {
+                            Object.keys(elem).forEach(function (subK)
+                            {
+                                if (subK === k)
+                                {
+                                    elem[k] = obj[k];
+                                }
+                            })                            
+                        })   
+                    }
+                });                                
+            });
         }
         $('#' + senderModalForm).modal('hide');
     }
@@ -232,7 +230,7 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
             url: 'http://localhost:3000/api/' + url,
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer 9NfZEKrTTmNbNhv7',
                 'Content-Type': 'application/json'
             }
         })
@@ -245,7 +243,7 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
     };
 
     $scope.removePosition = function (path, data) {
-        CustomDelete.Communicate(path + data._id, function (arg) {
+        CommunicationProvider.DeleteData(path + data._id, function (arg) {
             var dataSource;
             switch (path)
             {
@@ -263,9 +261,10 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
         }, $scope);//<----- delegate?
     }
 
-    $scope.editPosition = function (path, fData) {
-        CustomDelete.Communicate(path + fData, $scope);
-    }
+    $scope.ALERTME = function ()
+    {
+        alert($window.localStorage['token']);
+    };
 
     $scope.submit = function () {
         var uname = $scope.username;
@@ -283,7 +282,8 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
         .success(function (data, status, headers, config) {
             $scope.PostDataResponse = data;
             window.location.hash = '#/mainWindow';
-            tokenObj = data.token;
+            $window.localStorage['token'] = data.token;
+            alert($window.localStorage['token']);
         })
         .error(function (data, status, header, config) {
             var user = document.getElementById("user");
