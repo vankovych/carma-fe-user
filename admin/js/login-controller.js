@@ -136,6 +136,12 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
 
     $scope.dataTable = getTable.myFunc($scope, $http);
 
+    $scope.setPositionId = function (_id) {
+        document.getElementById("requirementsModal").setAttribute("data-id",_id);
+        console.log("posId:" + document.getElementById("requirementsModal").getAttribute("data-id"));
+                $('#requirementsModal').modal('show');
+           };
+
     $scope.reqTable = getReq.myFunc($scope, $http);
 
     $scope.myPost = function (url, dataBody, callbackSucces) {
@@ -219,14 +225,14 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
     }
 
     $scope.PostReq = function (req_id) {
-        console.log(req_id);
-        console.log(document.getElementById("requirementsModal").getAttribute("data-id"));
+        console.log("ReqId: "+req_id);
+    
         var url = "/positions/" + document.getElementById("requirementsModal").getAttribute("data-id") + "/requirements/" + req_id;
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
