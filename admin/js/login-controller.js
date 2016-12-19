@@ -5,7 +5,7 @@ app.service('getTable', function () {
             url: 'http://localhost:3000/api/positions',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -29,7 +29,7 @@ app.service('getReq', function () {
             url: 'http://localhost:3000/api/requirements',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -52,7 +52,7 @@ app.service('CustomPost', ['$http', function ($http) {
             method: 'POST',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -72,7 +72,7 @@ app.service('CustomGet', ['$http', function ($http) {
             method: 'GET',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -94,7 +94,7 @@ app.service('CustomDelete', ['$http', function ($http) {
             url: 'http://localhost:3000/api/' + url,
             method: 'DELETE',            
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -115,7 +115,7 @@ app.service('CustomPut', ['$http', function ($http) {
             method: 'PUT',
             data: dataBody,
             headers: {
-                'Authorization': 'Bearer uIP92SFNwZ06RyrQ',
+                'Authorization': 'Bearer GmSddICqaogEnWte',
                 'Content-Type': 'application/json'
             }
         })
@@ -264,7 +264,7 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
     $scope.submit = function () {
         var uname = $scope.username;
         var upassword = $scope.password;
-        
+
         var config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -285,6 +285,22 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
             user.className = "red";
             pass.className = "red";
         });
+    };
+
+    $scope.selectRequirements = function (data) {
+   
+        var array = [];
+        for (var i = 0; i < data.requirements.length;i++)
+        {
+            for (var i =0; i<$scope.reqTable.length; i++)
+            {
+                if (data.requirements[i] == $scope.reqTable[i]._id)
+                {
+                   array.push($scope.reqTable[i]);
+                }
+            }
+        }
+        return array;
     };
     
 }]);

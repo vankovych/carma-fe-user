@@ -1,6 +1,5 @@
 ﻿<div>
-<<<<<<< HEAD
-    <button class="btn btn-success" type="button" onclick="myFunction('positionModal','add')">Add new</button>
+    <button class="btn btn-success" type="button"  data-lastUsage="none" ng-click="showModal('positionModal', '', 'add')">Add new</button>
     <select onchange="changeOption()" id ="select-block" data-option="name">
         <option value="name" >by name</option>
         <option value="title" >by subtitle </option>
@@ -8,11 +7,6 @@
     <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for titles.." title="Type in a name">
 
     <table  id="posTable" class="table table-hover">
-=======
-    <button class="btn btn-success" type="button" ng-click="showModal('positionModal','','add')">Add new</button>
-      <table class="table table-hover">
->>>>>>> Requirements
-
         <thead id="positionsTable" class="thead-inverse">
             <tr>
                 <th>Name</th>
@@ -25,35 +19,21 @@
         <tbody>
             <tr class="table-info" ng-repeat="data in dataTable">
                 <td>{{data.name}}</td>
-<<<<<<< HEAD
-                <td>{{data.subTitle}}</td>
-                <td ng-repeat="i in reqTable"
-                    ng-if="i._id == data.requirements">
-                    {{i.title}}
-                    {{i.value}}
-                     {{i.description}}   
-                    <a class="label label1 label-pill label-info" ng-click="showModal(data._id)">+</a>
-                </td>
-                <td ng-repeat="i in reqTable"
-=======
                 <td>{{data.subTitle}}</td>               
-                <td>
+                <td id="requirements">
+              
                     <ul>
-                        <li ng-repeat="i in reqTable"  ng-if="i._id == data.requirements">>
+                        <li ng-repeat="i in selectRequirements(data)">>
                             {{i.title}}
                             {{i.value}}
                             {{i.description}}
+                         
                         </li>
-                        <a class="label label1 label-pill label-info" ng-click="showModal('requirementsModal',data._id)">+</a>
                     </ul>
+                    <a class="label label1 label-pill label-info" ng-click="showModal('requirementsModal',data._id)">+</a>
 
                 </td>             
-                <!--<td ng-repeat="i in reqTable"
->>>>>>> Requirements
-                    ng-if="i._id != data.requirements">
-                    No requirements
-                    <a class="label label1 label-pill label-info" ng-click="showModal('requirementsModal',data._id)">+</a>
-                </td>-->
+               
                 <td><button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('positionModal', data, 'edit')">Edit</button></td>
                 <td><button class="btn btn-danger" type="button" ng-click="removePosition('positions/', data)">Remove</button></td>
             </tr>
