@@ -1,5 +1,7 @@
 ﻿<div>
     <button class="btn btn-success" type="button"  data-lastUsage="none" ng-click="showModal('positionModal', '', 'add')">Add new</button>
+
+    <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="MYTEST()">TEST</button>
     <select onchange="changeOption()" id ="select-block" data-option="name">
         <option value="name" >by name</option>
         <option value="title" >by subtitle </option>
@@ -24,12 +26,10 @@
                     <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo-{{$index}}">View Requirements</button>
                     <div id="demo-{{$index}}" class="collapse">
                         <ul>
-                            <li ng-repeat="i in selectRequirements(data)">
-                                >
-                                {{i.title}}
-                                {{i.value}}
-                                {{i.description}}
-
+                            <li ng-repeat="i in data.myarr">                                
+                                {{i}}
+                                {{i}}
+                                {{i}}
                             </li>
                         </ul>
                         <a class="label label1 label-pill label-info" ng-click="setPositionId(data._id)">+</a>

@@ -1,11 +1,11 @@
 ﻿
-app.service('getTable', function () {
+app.service('getTable',['$http','$window', function ($http,$window) {
     this.myFunc = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/positions',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer 9NfZEKrTTmNbNhv7',
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
                 'Content-Type': 'application/json'
             }
         })
@@ -16,18 +16,19 @@ app.service('getTable', function () {
         console.log(response.data);
     })
         .error(function (response) { // optional
-        console.log('epic fail error, Token:' + tokenObj);
+        console.log('epic fail error, Token:');
     });
     };
-});
+}]);
 
-app.service('getReq', function () {
+app.service('getReq',['$http','$window', function ($http,$window) {
     this.myFunc = function ($scope, $http) {
+        
         $http({
             url: 'http://localhost:3000/api/requirements',
             method: "GET",
             headers: {
-                'Authorization': 'Bearer 9NfZEKrTTmNbNhv7',
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
                 'Content-Type': 'application/json'
             }
         })
@@ -36,12 +37,12 @@ app.service('getReq', function () {
         console.log(response.data);
         $scope.reqTable = response.data;
         console.log(response.data);
-    },
-    function (response) { // optional
-        console.log('epic fail error');
+    })
+    .error(function (response) { // optional
+        console.log('epic fail error, Token:');
     });
     };
-});
+}]);
 
 app.service('CommunicationProvider', ['$http','$window', function ($http, $window) {
     this.PostData = function (url, dataBody, callbackSucces, $scope) {
@@ -119,14 +120,13 @@ app.service('CommunicationProvider', ['$http','$window', function ($http, $windo
 app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'CommunicationProvider', 'getReq', function ($scope, $http, $window, getTable, CommunicationProvider, getReq) {
 
     $scope.dataTable = getTable.myFunc($scope, $http);
+    $scope.reqTable = getReq.myFunc($scope, $http);
 
     $scope.setPositionId = function (_id) {
         document.getElementById("requirementsModal").setAttribute("data-id",_id);
         console.log("posId:" + document.getElementById("requirementsModal").getAttribute("data-id"));
                 $('#requirementsModal').modal('show');
            };
-
-    $scope.reqTable = getReq.myFunc($scope, $http);
 
     $scope.myPost = function (url, dataBody, callbackSucces) {
         CommunicationProvider.PostData(url, dataBody, callbackSucces, $scope);
@@ -243,28 +243,45 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
     };
 
     $scope.removePosition = function (path, data) {
-        CommunicationProvider.DeleteData(path + data._id, function (arg) {
-            var dataSource;
-            switch (path)
-            {
-                case 'requirements/':
-                    dataSource = 'reqTable';
-                    break;
-                case 'positions/':
-                    dataSource = 'dataTable';
-                    break;
-                default:
-                    throw 'Error: data source can not be found';
-            }
-            var index = $scope[dataSource].indexOf(data);
-            $scope[dataSource].splice(index, 1);
-        }, $scope);//<----- delegate?
+
+
+        if (confirm('Do you realy want to delete this record?')) {
+
+            CommunicationProvider.DeleteData(path + data._id, function (arg) {
+                var dataSource;
+                switch (path) {
+                    case 'requirements/':
+                        dataSource = 'reqTable';
+                        break;
+                    case 'positions/':
+                        dataSource = 'dataTable';
+                        break;
+                    default:
+                        throw 'Error: data source can not be found';
+                }
+                var index = $scope[dataSource].indexOf(data);
+                $scope[dataSource].splice(index, 1);
+            }, $scope);//<----- delegate?
+        }
     }
 
     $scope.ALERTME = function ()
     {
         alert($window.localStorage['token']);
     };
+    $scope.counter = 1;
+    $scope.MYTEST = function () {
+        console.log($scope.dataTable[1].myarr);
+
+        if ($scope.dataTable[1].myarr === undefined) {
+            alert('1');
+            $scope.dataTable[1].myarr = [];
+        }
+       
+
+        $scope.dataTable[1].myarr.push($scope.counter);
+        $scope.counter = $scope.counter + 1;
+    }
 
     $scope.submit = function () {
         var uname = $scope.username;
@@ -292,6 +309,28 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
             pass.className = "red";
         });
     };
+
+    $scope.LogOut = function () {
+
+        alert('going to log out' + $window.localStorage['token']);               
+            $http({
+                url: 'http://localhost:3000/logout',
+                method: 'POST',
+                data: { "token": $window.localStorage['token'] },
+                headers: {
+                    'Authorization': 'Bearer ' + $window.localStorage['token'],
+                    'Content-Type': 'application/json'
+                }
+            })
+            .success(function (response) {
+                window.location.hash = '#/';
+            })
+            .error(function (response) { // optional
+                console.log(response.error);
+            });
+
+
+    }
 
     $scope.selectRequirements = function (data) {
    
