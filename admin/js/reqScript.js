@@ -1,18 +1,18 @@
 ﻿
-﻿function changeOption()
+﻿function changeOption(selectBlock)
 {
-    if (document.getElementById("select-block").value === "name") {
-        document.getElementById("select-block").setAttribute("data-option", "name");
-        console.log(document.getElementById("select-block").value);
+    if (document.getElementById(selectBlock).value === "name") {
+        document.getElementById(selectBlock).setAttribute("data-option", "name");
+        console.log(document.getElementById(selectBlock).value);
     }
     else
     {
-        document.getElementById("select-block").setAttribute("data-option", "title");
-        console.log(document.getElementById("select-block").value);
+        document.getElementById(selectBlock).setAttribute("data-option", "title");
+        console.log(document.getElementById(selectBlock).value);
     }
 }
-function searchFunction() {
-    if (document.getElementById("select-block").value == "title") {
+function searchFunction(selectBlock,searchBar,outTable) {
+    if (document.getElementById(selectBlock).value == "title") {
         var parameter = 1;
     } else
     {
@@ -20,9 +20,9 @@ function searchFunction() {
     }
     
     var input, filter, table, tr, td, i;
-    input = document.getElementById("myInput");
+    input = document.getElementById(searchBar);
     filter = input.value.toUpperCase();
-    table = document.getElementById("posTable");
+    table = document.getElementById(outTable);
     tr = table.getElementsByTagName("tr");
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[parameter];
@@ -35,3 +35,9 @@ function searchFunction() {
         }
     }
 }
+function closeAddSpan() {
+    $('#positionModal').modal('hide');
+    $('#requirementsModal').modal('hide');
+    $('#reqModal').modal('hide');
+}
+

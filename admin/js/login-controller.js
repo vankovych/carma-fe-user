@@ -230,7 +230,7 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
             url: 'http://localhost:3000/api/' + url,
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer 9NfZEKrTTmNbNhv7',
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
                 'Content-Type': 'application/json'
             }
         })
@@ -247,7 +247,7 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
             url: 'http://localhost:3000/api/' + url,
             method: 'DELETE',
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
                 'Content-Type': 'application/json'
             }
         })

@@ -1,6 +1,11 @@
 ﻿<div>
     <button class="btn btn-success" type="button" ng-click="showModal('reqModal','','add')">Add new</button>
-    <table class="table table-hover">
+    <select onchange="changeOption('select-block-req')" id="select-block-req" data-option="name">
+        <option value="name">by title</option>
+        <option value="title">by value </option>
+    </select>
+    <input type="text" class="myInput" id="search-req" onkeyup="searchFunction('select-block-req', 'search-req', 'reqTable')" placeholder="Search for titles.." title="Type in a name">
+    <table id ="reqTable"class="table table-hover">
         <thead class="thead-inverse">
             <tr>
                 <th>Title</th>
@@ -21,7 +26,7 @@
         </tbody>
     </table>
 
-    <div id="reqModal" class="modal data-lastUsage="none" data-lastID="">
+    <div id="reqModal" class="modal" data-lastUsage="none" data-lastID="">
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
