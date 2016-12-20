@@ -1,5 +1,5 @@
 ﻿
-app.service('getTable',['$http','$window', function ($http,$window) {
+app.service('getTable', ['$http', '$window', function ($http, $window) {
     this.myFunc = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/positions',
@@ -13,11 +13,23 @@ app.service('getTable',['$http','$window', function ($http,$window) {
 
         console.log(response.data);
         $scope.dataTable = response.data;
-        console.log(response.data);
+        $scope.dataTable.forEach(function (entry) {
+            entry.requirements.forEach(function (innerReq) {
+                if (entry.assigned === undefined) {
+                    entry.assigned = [];
+                }
+                $scope.reqTable.forEach(function (reqEntry) {
+                    if (reqEntry._id === innerReq) {
+                        entry.assigned.push(reqEntry);
+                    }
+                });
+            });
+        });
+        console.log($scope.dataTable);
     })
-        .error(function (response) { // optional
-        console.log('epic fail error, Token:');
-    });
+        .error(function (response) {
+            console.log('Error occured: ' + response);
+        });
     };
 }]);
 
@@ -37,8 +49,8 @@ app.service('getReq',['$http','$window', function ($http,$window) {
 
         console.log(response.data);
     })
-    .error(function (response) { // optional
-        console.log('epic fail error, Token:');
+    .error(function (response) {
+        console.log('Error occured: ' + response);
     });
     };
 }]);
@@ -58,8 +70,8 @@ app.service('CommunicationProvider', ['$http','$window', function ($http, $windo
 
             callbackSucces(response)
         })
-        .error(function (response) { // optional
-            console.log('epic fail error');
+        .error(function (response) {
+            console.log('Error occured: ' + response);
         });
     };
     this.GetData = function (url, dataBody, $scope) {
@@ -77,8 +89,8 @@ app.service('CommunicationProvider', ['$http','$window', function ($http, $windo
 
 
         })
-        .error(function (response) { // optional
-            console.log('epic fail error');
+        .error(function (response) { 
+            console.log('Error occured: ' + response);
         });
     };
     this.DeleteData = function (url, callbackSucces, $scope) {
@@ -94,7 +106,7 @@ app.service('CommunicationProvider', ['$http','$window', function ($http, $windo
             callbackSucces(response);
         })
         .error(function (response) { // optional
-            console.log('epic fail error');
+            console.log('Error occured: ' + response);
         });
     };
     this.PutData = function (url, dataBody, callbackSucces, $scope) {
@@ -111,7 +123,7 @@ app.service('CommunicationProvider', ['$http','$window', function ($http, $windo
             callbackSucces(response)
         })
         .error(function (response) { // optional
-            console.log('epic fail error');
+            console.log('Error occured: ' + response);
         });
     };
 
@@ -119,8 +131,9 @@ app.service('CommunicationProvider', ['$http','$window', function ($http, $windo
 
 app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'CommunicationProvider', 'getReq', function ($scope, $http, $window, getTable, CommunicationProvider, getReq) {
 
-    $scope.dataTable = getTable.myFunc($scope, $http);
+    //load requirements first 
     $scope.reqTable = getReq.myFunc($scope, $http);
+    $scope.dataTable = getTable.myFunc($scope, $http);   
 
     $scope.setPositionId = function (_id) {
         document.getElementById("requirementsModal").setAttribute("data-id",_id);
@@ -223,48 +236,78 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
     }
 
     $scope.LinkReq = function (req_id) {
-        console.log("ReqId: "+req_id);
-    
-        var url = "/positions/" + document.getElementById("requirementsModal").getAttribute("data-id") + "/requirements/" + req_id;
+        var url = "/positions/" + document.getElementById("requirementsModal").getAttribute("data-id") + "/requirements/" + req_id._id;
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer 9NfZEKrTTmNbNhv7',
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
                 'Content-Type': 'application/json'
             }
         })
- .success(function (response) {
-     console.log('succes');
- })
- .error(function (response) { // optional
-     console.log('epic fail error');
- });
+         .success(function (response) {
+
+             console.log('succes');
+
+             $scope.dataTable.forEach(function (element) {
+                 if (element._id === document.getElementById("requirementsModal").getAttribute("data-id")) {
+                     if (element.assigned === undefined) {
+                         element.assigned = [];
+                     }
+                     if (element.assigned.indexOf(req_id) === -1) {
+                         element.assigned.push(req_id);
+                     }
+                     else {
+                         alert('cant add duplicates');
+                     }
+                 }
+             });
+         })
+         .error(function (response) { // optional
+             console.log('epic fail error');
+         });
     };
+
     $scope.UnlinkReq = function (pos_id, req_id) {
-        var url = "/positions/" + pos_id + "/requirements/" + req_id;
+        var url = "/positions/" + pos_id._id + "/requirements/" + req_id._id;
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: 'DELETE',
             headers: {
-                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
                 'Content-Type': 'application/json'
             }
         })
  .success(function (response) {
-     console.log('succes');
-  
+     console.log('unlink');
+     $scope.dataTable.forEach(function (element) {
+         if (element._id === pos_id._id)
+         {
+             if (element.assigned !== undefined) {
+                 var index = $scope.dataTable.indexOf(pos_id);
+                 $scope.dataTable[index].assigned.splice($scope.dataTable[index].assigned.indexOf(req_id), 1);
+             }
+         }
+
+         if (element._id === document.getElementById("requirementsModal").getAttribute("data-id")) {
+             if (element.assigned === undefined) {
+                 element.assigned = [];
+             }
+             element.assigned.push(req_id);
+         }
+     });
+
+
  })
  .error(function (response) { // optional
      console.log('epic fail error');
  });
 
     };
+
     $scope.removePosition = function (path, data) {
 
-
         if (confirm('Do you realy want to delete this record?')) {
-
             CommunicationProvider.DeleteData(path + data._id, function (arg) {
                 var dataSource;
                 switch (path) {
@@ -288,6 +331,7 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
         alert($window.localStorage['token']);
     };
     $scope.counter = 1;
+
     $scope.MYTEST = function () {
         console.log($scope.dataTable[1].myarr);
 
@@ -328,7 +372,6 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
         });
     };
 
-
     $scope.LogOut = function () {
 
         alert('going to log out' + $window.localStorage['token']);               
@@ -349,27 +392,5 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
             });
 
 
-    }
-
-    $scope.selectRequirements = function (data) {
-   
-        var array = new Array();
-     
-        var req = $scope.reqTable;
-        if (angular.isDefined(req)) {
-            for (var i = 0; i < data.requirements.length; i++) {
-                console.log("reqTable:" + req);
-                for (var j = 0; j < req.length; j++) {
-                    if (data.requirements[i] == req[j]._id) {
-                        array.push(req[j]);
-                    }
-                }
-            }
-        }
-        return array;
-       
-
-
-    };
-    
+    }    
 }]);
