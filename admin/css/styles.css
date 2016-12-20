@@ -8,6 +8,11 @@
 {
     float: left;
 }
+.button-floating-right
+{
+    float: right;
+}
+
 .form-module {
   position: relative;
 

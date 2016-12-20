@@ -1,5 +1,7 @@
 ﻿<div>
     <button class="btn btn-success" type="button"  data-lastUsage="none" ng-click="showModal('positionModal', '', 'add')">Add new</button>
+
+    <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="MYTEST()">TEST</button>
     <select onchange="changeOption()" id ="select-block" data-option="name">
         <option value="name" >by name</option>
         <option value="title" >by subtitle </option>
@@ -29,7 +31,7 @@
                                 {{i.value}}
                                 {{i.description}}
                                 <a class="label label2 label-pill label-info" ng-click="UnlinkReq(data._id,i._id)">-</a>
-                            </li>
+                        
                         </ul>
                         <a class="label label1 label-pill label-info" ng-click="setPositionId(data._id)">+</a>
                         </div>
