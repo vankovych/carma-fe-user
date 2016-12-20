@@ -34,10 +34,9 @@ app.service('getReq', function () {
             }
         })
     .success(function (response) {
-
-        console.log(response.data);
         $scope.reqTable = response.data;
-        console.log(response.data);
+
+       
     },
     function (response) { // optional
         console.log('epic fail error');
@@ -57,7 +56,7 @@ app.service('CustomPost', ['$http', function ($http) {
             }
         })
         .success(function (response) {
-            callbackSucces(response)        }        )
+            callbackSucces(response);        }        )
         .error(function (response) { // optional
             console.log('epic fail error');
         });
@@ -224,7 +223,7 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
         $('#' + senderModalForm).modal('hide');
     }
 
-    $scope.PostReq = function (req_id) {
+    $scope.LinkReq = function (req_id) {
         console.log("ReqId: "+req_id);
     
         var url = "/positions/" + document.getElementById("requirementsModal").getAttribute("data-id") + "/requirements/" + req_id;
@@ -243,7 +242,25 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
      console.log('epic fail error');
  });
     };
+    $scope.UnlinkReq = function (pos_id, req_id) {
+        var url = "/positions/" + pos_id + "/requirements/" + req_id;
+        $http({
+            url: 'http://localhost:3000/api/' + url,
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer GmSddICqaogEnWte',
+                'Content-Type': 'application/json'
+            }
+        })
+ .success(function (response) {
+     console.log('succes');
+  
+ })
+ .error(function (response) { // optional
+     console.log('epic fail error');
+ });
 
+    };
     $scope.removePosition = function (path, data) {
         CustomDelete.Communicate(path + data._id, function (arg) {
             var dataSource;
@@ -292,21 +309,26 @@ app.controller('loginController', ['$scope', '$http', 'getTable', 'CustomPost', 
             pass.className = "red";
         });
     };
-
+    $scope.requirements = $scope.selectRequirements
     $scope.selectRequirements = function (data) {
    
-        var array = [];
-        for (var i = 0; i < data.requirements.length;i++)
-        {
-            for (var i =0; i<$scope.reqTable.length; i++)
-            {
-                if (data.requirements[i] == $scope.reqTable[i]._id)
-                {
-                   array.push($scope.reqTable[i]);
+        var array = new Array();
+     
+        var req = $scope.reqTable;
+        if (angular.isDefined(req)) {
+            for (var i = 0; i < data.requirements.length; i++) {
+                console.log("reqTable:" + req);
+                for (var j = 0; j < req.length; j++) {
+                    if (data.requirements[i] == req[j]._id) {
+                        array.push(req[j]);
+                    }
                 }
             }
         }
         return array;
+       
+
+
     };
     
 }]);

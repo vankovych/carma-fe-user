@@ -66,7 +66,19 @@ body{
     background-color: #449D44;
     text-decoration: none;
 }
-
+.label2 {
+        display: contents;
+    font-size: 90%;
+    font-weight: 900;
+    line-height: 3;
+   color: #fff;
+    text-align: right;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .99em;
+    background-color: red;
+    text-decoration: none;
+}
 .modal-content {
    width: 500px;
    height: 400px;
