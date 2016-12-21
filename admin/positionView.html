@@ -1,13 +1,13 @@
 ﻿<div>
-    <button class="btn btn-success" type="button"  data-lastUsage="none" ng-click="showModal('positionModal', '', 'add')">Add new</button>
-    <select onchange="changeOption('select-block-pos')" id ="select-block-pos" data-option="name">
+    <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="showModal('positionModal', '', 'add')">Add new</button>
+    <select onchange="changeOption('select-block-pos')" id="select-block-pos" data-option="name">
 
-        <option value="name" >by name</option>
-        <option value="title" >by subtitle </option>
+        <option value="name">by name</option>
+        <option value="title">by subtitle </option>
     </select>
     <input type="text" id="search-position" class="myInput" onkeyup="searchFunction('select-block-pos',  'search-position','posTable')" placeholder="Search for titles.." title="Type in a name">
 
-    <table  id="posTable" class="sort table table-hover tablesorter ">
+    <table id="posTable" class="sort table table-hover tablesorter ">
         <thead id="positionsTable" class="thead-inverse">
             <tr>
                 <th>Name</th>
@@ -20,69 +20,71 @@
         <tbody>
             <tr class="table-info" ng-repeat="data in dataTable">
                 <td>{{data.name}}</td>
-                <td>{{data.subTitle}}</td>               
+                <td>{{data.subTitle}}</td>
                 <td id="requirements">
-                    <button type="button" class="btn btn-info" ng-click= ""data-toggle="collapse" data-target="#demo-{{$index}}">View Requirements</button>
+                    <button type="button" class="btn btn-info" ng-click="" data-toggle="collapse" data-target="#demo-{{$index}}">View Requirements</button>
                     <div id="demo-{{$index}}" class="collapse">
                         <ul>
-                            <li ng-repeat="i in data.assigned">                               
-                                {{i.title}}
-                                {{i.value}}
+                            <li ng-repeat="i in data.assigned">
+                                <b>
+                                    {{i.title}}
+                                    {{i.value}}
+                                </b><br />
                                 {{i.description}}
                                 <a class="label label2 label-pill label-info" ng-click="unlinkReq(data,i)">-</a>
-                        
+
                         </ul>
                         <a class="label label1 label-pill label-info" ng-click="setPositionId(data)">+</a>
-                        </div>
-                 </td>                
+                    </div>
+                </td>
                 <td><button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('positionModal', data, 'edit')">Edit</button></td>
                 <td><button class="btn btn-danger" type="button" ng-click="removePosition('positions/', data)">Remove</button></td>
             </tr>
         </tbody>
     </table>
 
-<div id="positionModal" class="modal" data-lastUsage="none" data-id="">
-    <!-- Modal content -->
-    <div class="modal-content">
-        <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+    <div id="positionModal" class="modal" data-lastUsage="none" data-id="">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
 
-        <label for="inputNormal" class="required">Name</label>
-        <input id="posInput1" type="text" name="name" placeholder="Title" class="form-control">
+            <label for="inputNormal" class="required">Name</label>
+            <input id="posInput1" type="text" name="name" placeholder="Title" class="form-control">
 
-        <label for="inputNormal" class="required">Sub Title</label>
-        <input id="posInput2" type="text" name="subTitle" placeholder="Value" class="form-control">
-        
-        <button class="btn btn-primary" type="button" ng-click="modalButtonAction('positionModal', 'positions/')">Save</button>
+            <label for="inputNormal" class="required">Sub Title</label>
+            <input id="posInput2" type="text" name="subTitle" placeholder="Value" class="form-control">
+
+            <button class="btn btn-primary" type="button" ng-click="modalButtonAction('positionModal', 'positions/')">Save</button>
+        </div>
     </div>
-</div>
-    
 
-<div id="requirementsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
-    <div class="modal-content modal-dialog">
-        <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
-        <table class="table-hover table-sm">
-            <thead class="thead-inverse">
-                <tr>
-                    <th>Title</th>
-                    <th>Value</th>
-                    <th>Description</th>
-                    <th>Add existing</th>
-                </tr>
-            </thead>
-            <tbody>
-                    
+
+    <div id="requirementsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
+        <div class="modal-content modal-dialog">
+            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+            <table class="table-hover table-sm">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>Title</th>
+                        <th>Value</th>
+                        <th>Description</th>
+                        <th>Add existing</th>
+                    </tr>
+                </thead>
+                <tbody>
+
                     <tr class="table-info" ng-repeat="i in unassigned">
                         <td>{{i.title}}</td>
                         <td>{{i.value}}</td>
                         <td>{{i.description}}  </td>
                         <td><button class="btn btn-danger" type="button" ng-click="linkReq(i)">Add</button></td>
                     </tr>
-               
-            </tbody>
-        </table>
-        <button class="btn  btn-success " type="button">Add new requirements</button>
-    </div>
 
-</div>
+                </tbody>
+            </table>
+            <button class="btn  btn-success " type="button">Add new requirements</button>
+        </div>
+
+    </div>
 </div>
 

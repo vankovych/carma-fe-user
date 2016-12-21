@@ -295,12 +295,12 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
              }
          }
 
-         if (element._id === document.getElementById("requirementsModal").getAttribute("data-id")) {
-             if (element.assigned === undefined) {
-                 element.assigned = [];
-             }
-             element.assigned.push(req_id);
-         }
+         //if (element._id === document.getElementById("requirementsModal").getAttribute("data-id")) {
+         //    if (element.assigned === undefined) {
+         //        element.assigned = [];
+         //    }
+         //    element.assigned.push(req_id);
+         //}
      });
 
 

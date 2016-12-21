@@ -43,6 +43,10 @@ function closeAddSpan() {
 
 function arr_diff(allReq, assignedReq) {
 
+    if (assignedReq == undefined)
+    {
+        assignedReq = [];
+    }
     var res = [];
     for (var i = 0; i < allReq.length; i++)
     {
