@@ -1,4 +1,4 @@
-﻿
+﻿ 
 app.service('getTable', ['$http', '$window', function ($http, $window) {
     this.myFunc = function ($scope, $http) {
         $http({
@@ -24,6 +24,15 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                     }
                 });
             });
+
+            entry.requirements.forEach(function (innerReq) {
+                if (entry.unassigned === undefined) {
+                    entry.unassigned = [];
+                }
+            
+            });
+            
+
         });
         console.log($scope.dataTable);
     })
@@ -128,18 +137,20 @@ app.service('CommunicationProvider', ['$http', '$window', function ($http, $wind
 
 }]);
 
-app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'CommunicationProvider', 'getReq', function ($scope, $http, $window, getTable, CommunicationProvider, getReq) {
+app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'CommunicationProvider', 'getReq', function ($scope, $http, $window, getTable, CommunicationProvider, getReq) {
 
     $scope.reqTable = getReq.myFunc($scope, $http);
     $scope.dataTable = getTable.myFunc($scope, $http);
 
-    $scope.setPositionId = function (_id) {
-        document.getElementById("requirementsModal").setAttribute("data-id", _id);
+    $scope.setPositionId = function (data) {
+        document.getElementById("requirementsModal").setAttribute("data-id", data._id);
         console.log("posId:" + document.getElementById("requirementsModal").getAttribute("data-id"));
+        
+        $scope.unassigned = arr_diff($scope.reqTable, data.assigned);
         $('#requirementsModal').modal('show');
     };
 
-    $scope.myPost = function (url, dataBody, callbackSucces) {
+    $scope.myPost = function (url, dataBody, callbackSucces)   {
         CommunicationProvider.PostData(url, dataBody, callbackSucces, $scope);
     };
 
@@ -230,8 +241,8 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
         $('#' + senderModalForm).modal('hide');
     }
 
-    $scope.LinkReq = function (req_id) {
-        var url = "/positions/" + document.getElementById("requirementsModal").getAttribute("data-id") + "/requirements/" + req_id._id;
+    $scope.linkReq = function (data) {
+        var url = "/positions/" + document.getElementById("requirementsModal").getAttribute("data-id") + "/requirements/" + data._id;
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: 'POST',
@@ -243,14 +254,15 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
          .success(function (response) {
 
              console.log('succes');
-
+             var index = $scope.unassigned.indexOf(data);
+             $scope.unassigned.splice(index, 1);
              $scope.dataTable.forEach(function (element) {
                  if (element._id === document.getElementById("requirementsModal").getAttribute("data-id")) {
                      if (element.assigned === undefined) {
                          element.assigned = [];
                      }
-                     if (element.assigned.indexOf(req_id) === -1) {
-                         element.assigned.push(req_id);
+                     if (element.assigned.indexOf(data) === -1) {
+                         element.assigned.push(data);
                      }
                      else {
                          alert('cant add duplicates');
@@ -263,7 +275,7 @@ app.controller('loginController', ['$scope', '$http', '$window', 'getTable', 'Co
          });
     };
 
-    $scope.UnlinkReq = function (pos_id, req_id) {
+    $scope.unlinkReq = function (pos_id, req_id) {
         var url = "/positions/" + pos_id._id + "/requirements/" + req_id._id;
         $http({
             url: 'http://localhost:3000/api/' + url,

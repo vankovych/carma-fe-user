@@ -29,10 +29,10 @@
                                 {{i.title}}
                                 {{i.value}}
                                 {{i.description}}
-                                <a class="label label2 label-pill label-info" ng-click="UnlinkReq(data,i)">-</a>
+                                <a class="label label2 label-pill label-info" ng-click="unlinkReq(data,i)">-</a>
                         
                         </ul>
-                        <a class="label label1 label-pill label-info" ng-click="setPositionId(data._id)">+</a>
+                        <a class="label label1 label-pill label-info" ng-click="setPositionId(data)">+</a>
                         </div>
                  </td>                
                 <td><button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('positionModal', data, 'edit')">Edit</button></td>
@@ -70,12 +70,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="table-info" ng-repeat="data in reqTable">
-                    <td>{{data.title}}</td>
-                    <td>{{data.value}}</td>
-                    <td>{{data.description}}  </td>
-                    <td><button class="btn btn-danger" type="button" ng-click="LinkReq(data)">Add</button></td>
-                </tr>
+                    
+                    <tr class="table-info" ng-repeat="i in unassigned">
+                        <td>{{i.title}}</td>
+                        <td>{{i.value}}</td>
+                        <td>{{i.description}}  </td>
+                        <td><button class="btn btn-danger" type="button" ng-click="linkReq(i)">Add</button></td>
+                    </tr>
+               
             </tbody>
         </table>
         <button class="btn  btn-success " type="button">Add new requirements</button>
