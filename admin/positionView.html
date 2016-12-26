@@ -10,14 +10,15 @@
     <table id="posTable" class="sort table table-hover tablesorter ">
         <thead id="positionsTable" class="thead-inverse">
             <tr>
-                <th>Name</th>
-                <th>SubTitle</th>
+                <th id ="position-name" onclick="sort_table('people', 0, asc1); asc1 *= -1; asc2 = 1; asc3 = 1;">Name ▼ 
+                </th>
+                <th id ="position-subtitle" onclick="sort_table('people', 1, asc2); asc2 *= -1; asc3 = 1; asc1 = 1;">Subtitle  ▼ </th> 
                 <th>Requirements</th>
                 <th>Edit existing</th>
                 <th>Remove entry</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="people">
             <tr class="table-info" ng-repeat="data in dataTable">
                 <td>{{data.name}}</td>
                 <td>{{data.subTitle}}</td>
@@ -29,7 +30,7 @@
                                 <b>
                                     {{i.title}}
                                     {{i.value}}
-                                </b><br />
+                                </b><br/>
                                 {{i.description}}
                                 <a class="label label2 label-pill label-info" ng-click="unlinkReq(data,i)">-</a>
 
