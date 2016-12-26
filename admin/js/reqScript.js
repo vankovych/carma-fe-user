@@ -42,18 +42,9 @@ function searchFunction(selectBlock, searchBar, outTable) {
         }
     }
 }
-function closeAddSpan() {//close only upper
+function closeAddSpan(modalId) {//close only upper
+    $('#'+ modalId).modal('hide');
 
-    if ($('#subDivAddModal').hasClass('in')){
-        $('#subDivAddModal').modal('hide');
-        return;
-    }
-
-    $('#subdivisionsModal').modal('hide');
-    $('#positionModal').modal('hide');
-    $('#requirementsModal').modal('hide');
-    $('#reqModal').modal('hide');
-    $('#divModal').modal('hide');    
 }
 
 function arr_diff(allReq, assignedReq) {

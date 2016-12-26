@@ -1,10 +1,13 @@
 ﻿<div>
     <button class="btn btn-success" type="button" ng-click="showModal('reqModal','','add')">Add new</button>
-    <select class="styled-select" onchange="changeOption('select-block-req')" id="select-block-req" data-option="name">
-        <option value="name">by title</option>
-        <option value="title">by value </option>
-    </select>
-    <input type="text" class="myInput" id="search-req" onkeyup="searchFunction('select-block-req', 'search-req', 'reqTable')" placeholder="Search for titles.." title="Type in a name">
+    <br/>
+    <div>
+        <input type="text" class="myInput" id="search-req" onkeyup="searchFunction('select-block-req', 'search-req', 'reqTable')" placeholder="Search by..." title="Type in a name">
+        <select class="styled-select" onchange="changeOption('select-block-req')" id="select-block-req" data-option="name">
+            <option selected value="name">by title</option>
+            <option value="title">by value </option>
+        </select>
+    </div>
     <table id ="reqTable"class="table table-hover">
         <thead class="thead-inverse">
             <tr>
@@ -28,9 +31,8 @@
 
     <div id="reqModal" class="modal modal-padding" data-lastUsage="none" data-lastID="">
         <!-- Modal content -->
-        <div class="my-modal-content-req">
-            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
-
+        <div class="my-modal-content">
+            <span class="close" id="addClose" onclick="closeAddSpan('reqModal')">×</span>
             <label for="inputNormal" class="required">Title</label>
             <input id="reqInput1" name="title" type="text" placeholder="Title" class="form-control">
 
@@ -38,7 +40,7 @@
             <input id="reqInput2" name="value" type="text" placeholder="Value" class="form-control">
 
             <label for="inputNormal" class="required">Description</label>
-            <textarea id="reqTextareaID" name="description" class="form-control" rows="2"></textarea>  
+            <textarea id="reqTextareaID" name="description" class="form-control" rows="4"></textarea>  
 
             <button class="btn btn-primary modal-padding" type="button" ng-click="modalButtonAction('reqModal', 'requirements/')">Save</button>
 

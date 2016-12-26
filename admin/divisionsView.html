@@ -84,7 +84,7 @@
     <div id="divModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
-            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+            <span class="close" id="addClose" onclick="closeAddSpan('divModal')">×</span>
 
             <label for="inputNormal" class="required">Name</label>
             <input id="duvInput1" type="text" name="title" placeholder="Title" class="form-control">
@@ -99,7 +99,7 @@
 
     <div id="subdivisionsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
         <div class="modal-content modal-dialog">
-            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+            <span class="close" id="addClose" onclick="closeAddSpan('subdivisionsModal')">×</span>
             <table class="table-hover table-sm">
                 <thead class="thead-inverse">
                     <tr>
@@ -122,7 +122,7 @@
 
     <div id="subdivisionsPositionsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
         <div class="modal-content modal-dialog">
-            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+            <span class="close" id="addClose" onclick="closeAddSpan('subdivisionsPositionsModal')">×</span>
             <table class="table-hover table-sm">
                 <thead class="thead-inverse">
                     <tr>
@@ -146,7 +146,7 @@
     <div id="subDivAddModal" class="modal" data-lastUsage="none" data-id="">
         <!-- Modal content -->
         <div class="modal-content">
-            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+            <span class="close" id="addClose" onclick="closeAddSpan('subDivAddModal')">×</span>
 
             <label for="inputNormal" class="required">Name</label>
             <input id="duvInput1" type="text" name="name" placeholder="Name" class="form-control">

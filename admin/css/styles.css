@@ -120,22 +120,24 @@ body{
 }
 
 .myInput {
-  background-image: url('/css/searchicon.png');
   background-position: 10px 10px;
   background-repeat: no-repeat;
-  width: 100%;
+  width: 86%;
   font-size: 16px;
   padding: 12px 20px 12px 40px;
   border: 1px solid #ddd;
   margin-bottom: 12px;
+  margin-top:12px;
+  height:35px;
 }
 
 .styled-select {
-   width: 240px;
-   height: 34px;
+   width: 100px;
+   height: 25px;
    overflow: hidden;
    background: #e4eefd;
    border: 1px solid #ccc;
+   margin-bottom: 12px;
    }
  .modal-padding{
        margin: 10px;
@@ -145,7 +147,7 @@ body{
  .my-modal-content {
     padding:10px;
     width: 500px;
-    height: 200px;
+    max-height:350px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -156,19 +158,5 @@ body{
             border: 1px solid rgba(0,0,0,.2);
     border-radius: 6px;
     outline: 0;
-}
- .my-modal-content-req {
-    padding:10px;
-    width: 500px;
-    height: 300px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-left: -150px;
-    margin-top: -150px;
-    background-color: #d9edf7;
-        box-shadow: 0 5px 15px rgba(0,0,0,.5);
-            border: 1px solid rgba(0,0,0,.2);
-    border-radius: 6px;
-    outline: 0;
+      overflow:auto;
 }
