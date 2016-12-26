@@ -1,6 +1,6 @@
-﻿ 
+﻿//refactor later using callback and url PATH ??? ???
 app.service('getTable', ['$http', '$window', function ($http, $window) {
-    this.myFunc = function ($scope, $http) {
+    this.getPositionsTable = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/positions',
             method: "GET",
@@ -11,7 +11,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
         })
     .success(function (response) {
 
-        console.log(response.data);
+        //  console.log(response.data);
         $scope.dataTable = response.data;
         $scope.dataTable.forEach(function (entry) {
             entry.requirements.forEach(function (innerReq) {
@@ -24,26 +24,14 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                     }
                 });
             });
-
-            entry.requirements.forEach(function (innerReq) {
-                if (entry.unassigned === undefined) {
-                    entry.unassigned = [];
-                }
-            
-            });
-            
-
         });
-        console.log($scope.dataTable);
+        //  console.log($scope.dataTable);
     })
         .error(function (response) {
             console.log('Error occured: ' + response);
         });
     };
-}]);
-
-app.service('getReq', ['$http', '$window', function ($http, $window) {
-    this.myFunc = function ($scope, $http) {
+    this.getRequirementsTable = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/requirements',
             method: "GET",
@@ -55,7 +43,80 @@ app.service('getReq', ['$http', '$window', function ($http, $window) {
     .success(function (response) {
         $scope.reqTable = response.data;
 
-        console.log(response.data);
+        //    console.log(response.data);
+    })
+    .error(function (response) {
+        console.log('Error occured: ' + response);
+    });
+    };
+    this.getDivisionTable = function ($scope, $http) {
+        $http({
+            url: 'http://localhost:3000/api/divisions',
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
+                'Content-Type': 'application/json'
+            }
+        })
+    .success(function (response) {
+
+
+        $scope.divisionTable = response.data;
+        console.log('getDivision responce: ' + response.data);
+        ////////////
+        $scope.divisionTable.forEach(function (entry) {
+            entry.subdivisions.forEach(function (innerDiv) {//add watch here 
+                if (entry.assigned === undefined) {
+                    entry.assigned = [];
+                }
+                $scope.SubDivisionTable.forEach(function (reqEntry) {
+                    if (reqEntry._id === innerDiv) {
+                        entry.assigned.push(reqEntry);
+                    }
+                });
+            });
+        });
+        ////////////
+        console.log("blah blah");
+
+    })
+    .error(function (response) {
+        console.log('Error occured: ' + response);
+    });
+    };
+    this.getSubDivisionTable = function ($scope, $http) {
+        $http({
+            url: 'http://localhost:3000/api/subdivisions',
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
+                'Content-Type': 'application/json'
+            }
+        })
+    .success(function (response) {
+        $scope.SubDivisionTable = response.data;
+        console.log('getDivision responce: ' + response.data);
+
+        $scope.SubDivisionTable.forEach(function (entry) {
+            entry.subnodes.forEach(function (innerDiv) {//add watch here 
+                if (entry.assigned === undefined) {
+                    entry.assigned = [];
+                }
+                $scope.dataTable.forEach(function (reqEntry) {
+                    if (reqEntry._id === innerDiv) {
+                        entry.assigned.push(reqEntry);
+                    }
+                });
+            });
+        });
+
+
+
+
+
+
+
+
     })
     .error(function (response) {
         console.log('Error occured: ' + response);
@@ -137,20 +198,40 @@ app.service('CommunicationProvider', ['$http', '$window', function ($http, $wind
 
 }]);
 
-app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'CommunicationProvider', 'getReq', function ($scope, $http, $window, getTable, CommunicationProvider, getReq) {
+app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'CommunicationProvider', function ($scope, $http, $window, getTable, CommunicationProvider) {
 
-    $scope.reqTable = getReq.myFunc($scope, $http);
-    $scope.dataTable = getTable.myFunc($scope, $http);
+    $scope.reqTable = getTable.getRequirementsTable($scope, $http);
+    $scope.dataTable = getTable.getPositionsTable($scope, $http);
+    $scope.SubDivisionTable = getTable.getSubDivisionTable($scope, $http);
+    $scope.divisionTable = getTable.getDivisionTable($scope, $http);
+    $scope.s = {};
+
+    $scope.myINFO = function () {
+        console.log('console.log($scope.divisionTable); ' );
+        console.log($scope.divisionTable);
+        console.log('console.log($scope.getSubDivisionTable); ' + $scope.SubDivisionTable);
+        console.log($scope.SubDivisionTable);
+
+        console.log('console.log($scope.dataTable); ' + $scope.dataTable);
+        console.log($scope.dataTable);
+
+
+    }
 
     $scope.setPositionId = function (data) {
         document.getElementById("requirementsModal").setAttribute("data-id", data._id);
         console.log("posId:" + document.getElementById("requirementsModal").getAttribute("data-id"));
-        
         $scope.unassigned = arr_diff($scope.reqTable, data.assigned);
         $('#requirementsModal').modal('show');
     };
+    
+    $scope.setSubDivivsionId = function (sender, data) {
+        document.getElementById(sender).setAttribute("data-id", data._id);
+        $('#' + sender).modal('show');
+    };
 
-    $scope.myPost = function (url, dataBody, callbackSucces)   {
+
+    $scope.myPost = function (url, dataBody, callbackSucces) {
         CommunicationProvider.PostData(url, dataBody, callbackSucces, $scope);
     };
 
@@ -205,12 +286,21 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
         //////refactoring required
         var dataSource;
         switch (senderModalForm) {
+            case 'divModal':
+                dataSource = 'divisionTable';
+                break;
             case 'reqModal':
                 dataSource = 'reqTable';
                 break;
             case 'positionModal':
                 dataSource = 'dataTable';
                 break;
+            case 'subDivAddModal':
+                dataSource = 'SubDivisionTable';
+                break;
+
+
+
             default:
                 throw 'Error: data source can not be found';
         }
@@ -219,14 +309,12 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
         if (lastModal.getAttribute('data-lastUsage') === 'add') {
             $scope.myPost(path, obj, function (arg) {
                 $scope[dataSource].push(arg.data);
-            });//<---- callbacks here як вирішити які саме таблиці має обробляти колбек
+            });
         }
         else if (lastModal.getAttribute('data-lastUsage') === 'edit') {
             $scope.myPut(path + lastModal.getAttribute('data-id'), obj, function (arg) {
                 $scope[dataSource].forEach(function (elem, i) {
                     if (elem._id == lastModal.getAttribute('data-id')) {
-
-
                         Object.keys(obj).forEach(function (k) {
                             Object.keys(elem).forEach(function (subK) {
                                 if (subK === k) {
@@ -237,6 +325,9 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
                     }
                 });
             });
+        }
+        if (dataSource === 'reqTable') {
+            $scope.dataTable = getTable.getRequirementsTable($scope, $http);
         }
         $('#' + senderModalForm).modal('hide');
     }
@@ -252,10 +343,11 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
             }
         })
          .success(function (response) {
-
              console.log('succes');
+             ////////////////////////////////////////////////////////////////////////////////////////////////////
              var index = $scope.unassigned.indexOf(data);
              $scope.unassigned.splice(index, 1);
+
              $scope.dataTable.forEach(function (element) {
                  if (element._id === document.getElementById("requirementsModal").getAttribute("data-id")) {
                      if (element.assigned === undefined) {
@@ -274,6 +366,25 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
              console.log('epic fail error');
          });
     };
+
+    $scope.linkNode = function (parent, child, parentId, childId) {
+        var _id = document.getElementById(parentId).getAttribute("data-id");
+        $http({
+            url: 'http://localhost:3000/api/' + parent + _id + '/' + child + childId,
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
+                'Content-Type': 'application/json'
+            }
+        })
+         .success(function (response) {
+             console.log('succes');
+             console.log("linked");
+         })
+         .error(function (response) { // optional
+             console.log('epic fail error');
+         });
+    }
 
     $scope.unlinkReq = function (pos_id, req_id) {
         var url = "/positions/" + pos_id._id + "/requirements/" + req_id._id;
@@ -304,10 +415,10 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
      });
 
 
- })
- .error(function (response) { // optional
-     console.log('epic fail error');
- });
+     })
+     .error(function (response) { // optional
+         console.log('epic fail error');
+     });
 
     };
 
@@ -317,6 +428,9 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
             CommunicationProvider.DeleteData(path + data._id, function (arg) {
                 var dataSource;
                 switch (path) {
+                    case 'divisions/':
+                        dataSource = 'divisionTable';
+                        break;
                     case 'requirements/':
                         dataSource = 'reqTable';
                         break;
@@ -327,7 +441,12 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
                         throw 'Error: data source can not be found';
                 }
                 var index = $scope[dataSource].indexOf(data);
+
                 $scope[dataSource].splice(index, 1);
+
+                if (path === 'requirements/') {
+                    $scope.dataTable = getTable.getRequirementsTable($scope, $http);
+                }
             }, $scope);//<----- delegate?
         }
     }

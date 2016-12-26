@@ -1,4 +1,12 @@
-﻿
+﻿function myINFO(a)
+{
+    console.log(a);
+    angular.element(document.getElementById('divisionsTable')).scope().myINFO();
+    a.setAttribute('id',   ( angular.element(document.getElementById('divisionsTable')).scope().s._id));
+    console.log(a);
+}
+
+
 ﻿function changeOption(selectBlock)
 {
     if (document.getElementById(selectBlock).value === "name") {
@@ -35,10 +43,18 @@ function searchFunction(selectBlock,searchBar,outTable) {
         }
     }
 }
-function closeAddSpan() {
+function closeAddSpan() {//close only upper
+
+    if ($('#subDivAddModal').hasClass('in')){
+        $('#subDivAddModal').modal('hide');
+        return;
+    }
+
+    $('#subdivisionsModal').modal('hide');
     $('#positionModal').modal('hide');
     $('#requirementsModal').modal('hide');
     $('#reqModal').modal('hide');
+    $('#divModal').modal('hide');    
 }
 
 function arr_diff(allReq, assignedReq) {
