@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-﻿
-
-function myINFO(a)
-=======
-
-﻿function myINFO(a)
->>>>>>> 8c633691b5c08ba75ed92d154d3b387c1869ae07
+﻿﻿function myINFO(a)
 {
     console.log(a);
     angular.element(document.getElementById('divisionsTable')).scope().myINFO();
