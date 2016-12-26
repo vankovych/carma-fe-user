@@ -1,0 +1,13 @@
+﻿<div id="user-operations" class="container" >
+    <h3> User Information</h3>
+    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allUsers">Show all users</button>
+    <div id="allUsers" class="collapse">
+        <div ng-repeat="user in allUsers">
+            <ul class="list-group">
+                <li class="list-group-item"> <b>{{$index+1}}.</b> Login: {{user.login}} Password: {{user.password}}</li>
+            </ul>
+        
+        </div>
+    </div>
+    
+</div>

@@ -107,18 +107,31 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 });
             });
         });
-
-
-
-
-
-
-
-
     })
     .error(function (response) {
         console.log('Error occured: ' + response);
     });
+    };
+
+}]);
+app.service('getUser', ['$http', '$window', function ($http, $window) {
+    this.getAllUsers = function ($scope, $http) {
+        $http({
+            url: 'http://localhost:3000/api/user',
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
+                'Content-Type': 'application/json'
+            }
+        })
+    .success(function (response) {
+        $scope.allUsers = response.data;
+     
+
+    })
+        .error(function (response) {
+            console.log('Error occured: ' + response);
+        });
     };
 
 }]);
@@ -197,7 +210,7 @@ app.service('CommunicationProvider', ['$http', '$window', function ($http, $wind
 
 }]);
 
-app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'CommunicationProvider', function ($scope, $http, $window, getTable, CommunicationProvider) {
+app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'getUser','CommunicationProvider', function ($scope, $http, $window, getTable, getUser,CommunicationProvider) {
 
     $scope.reqTable = getTable.getRequirementsTable($scope, $http);
     $scope.dataTable = getTable.getPositionsTable($scope, $http);
@@ -321,7 +334,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
             $scope.dataTable = getTable.getRequirementsTable($scope, $http);
         }
         $('#' + senderModalForm).modal('hide');
-    }
+    };
 
     $scope.linkReq = function (data) {
         var url = "/positions/" + document.getElementById("requirementsModal").getAttribute("data-id") + "/requirements/" + data._id;
@@ -378,7 +391,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
          .error(function (response) { // optional
              console.log('epic fail error');
          });
-    }
+    };
 
     $scope.unLinkNode = function (parent, child, parentId, childId) {
         var url = parent + parentId._id + child + childId._id;
@@ -456,7 +469,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
                 }
             }, $scope);//<----- delegate?
         }
-    }
+    };
 
     $scope.submit = function () {
         var uname = $scope.username;
@@ -501,5 +514,9 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
            .error(function (response) { // optional
                console.log(response.error);
            });
-    }
+    };
+
+    $scope.allUsers = getUser.getAllUsers($scope, $http);
+
+
 }]);
