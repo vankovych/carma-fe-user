@@ -1,4 +1,6 @@
-﻿﻿function myINFO(a)
+﻿
+
+function myINFO(a)
 {
     console.log(a);
     angular.element(document.getElementById('divisionsTable')).scope().myINFO();
