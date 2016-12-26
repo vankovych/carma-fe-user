@@ -1,6 +1,6 @@
 ﻿<div>
     <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="showModal('positionModal', '', 'add')">Add new</button>
-    <select onchange="changeOption('select-block-pos')" id="select-block-pos" data-option="name">
+    <select class="styled-select" onchange="changeOption('select-block-pos')" id="select-block-pos" data-option="name">
 
         <option value="name">by name</option>
         <option value="title">by subtitle </option>
@@ -43,9 +43,9 @@
         </tbody>
     </table>
 
-    <div id="positionModal" class="modal" data-lastUsage="none" data-id="">
+    <div id="positionModal" class="modal modal-padding" data-lastUsage="none" data-id="">
         <!-- Modal content -->
-        <div class="modal-content">
+        <div class="my-modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
 
             <label for="inputNormal" class="required">Name</label>
@@ -54,7 +54,7 @@
             <label for="inputNormal" class="required">Sub Title</label>
             <input id="posInput2" type="text" name="subTitle" placeholder="Value" class="form-control">
 
-            <button class="btn btn-primary" type="button" ng-click="modalButtonAction('positionModal', 'positions/')">Save</button>
+            <button class="btn btn-primary modal-padding" type="button" ng-click="modalButtonAction('positionModal', 'positions/')">Save</button>
         </div>
     </div>
 

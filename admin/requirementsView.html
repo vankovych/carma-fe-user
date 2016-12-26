@@ -1,6 +1,6 @@
 ﻿<div>
     <button class="btn btn-success" type="button" ng-click="showModal('reqModal','','add')">Add new</button>
-    <select onchange="changeOption('select-block-req')" id="select-block-req" data-option="name">
+    <select class="styled-select" onchange="changeOption('select-block-req')" id="select-block-req" data-option="name">
         <option value="name">by title</option>
         <option value="title">by value </option>
     </select>
@@ -26,9 +26,9 @@
         </tbody>
     </table>
 
-    <div id="reqModal" class="modal" data-lastUsage="none" data-lastID="">
+    <div id="reqModal" class="modal modal-padding" data-lastUsage="none" data-lastID="">
         <!-- Modal content -->
-        <div class="modal-content">
+        <div class="my-modal-content-req">
             <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
 
             <label for="inputNormal" class="required">Title</label>
@@ -38,9 +38,9 @@
             <input id="reqInput2" name="value" type="text" placeholder="Value" class="form-control">
 
             <label for="inputNormal" class="required">Description</label>
-            <textarea id="reqTextareaID" name="description" class="form-control" rows="3"></textarea>  
+            <textarea id="reqTextareaID" name="description" class="form-control" rows="2"></textarea>  
 
-            <button class="btn btn-primary" type="button" ng-click="modalButtonAction('reqModal', 'requirements/')">Save</button>
+            <button class="btn btn-primary modal-padding" type="button" ng-click="modalButtonAction('reqModal', 'requirements/')">Save</button>
 
         </div>
     </div>

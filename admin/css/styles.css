@@ -130,3 +130,45 @@ body{
   margin-bottom: 12px;
 }
 
+.styled-select {
+   width: 240px;
+   height: 34px;
+   overflow: hidden;
+   background: #e4eefd;
+   border: 1px solid #ccc;
+   }
+ .modal-padding{
+       margin: 10px;
+        text-align:center;
+
+ }
+ .my-modal-content {
+    padding:10px;
+    width: 500px;
+    height: 200px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -150px;
+    margin-top: -150px;
+    background-color: #d9edf7;
+        box-shadow: 0 5px 15px rgba(0,0,0,.5);
+            border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    outline: 0;
+}
+ .my-modal-content-req {
+    padding:10px;
+    width: 500px;
+    height: 300px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -150px;
+    margin-top: -150px;
+    background-color: #d9edf7;
+        box-shadow: 0 5px 15px rgba(0,0,0,.5);
+            border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    outline: 0;
+}
