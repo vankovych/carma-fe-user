@@ -19,11 +19,11 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title button-container">
-                                    <button class="btn btn-info button-fill  button-gray " data-toggle="collapse" data-target="#collapseInner-{{$parent.$index}}-{{$index}}">{{subDiv.name}} {{subDiv.subTitle}}</button>
+                                    <button class="btn btn-info button-fill  button-gray" data-toggle="collapse" data-target="#collapseInner-{{$parent.$index}}-{{$index}}">{{subDiv.name}} {{subDiv.subTitle}}</button>
 
                                     <!-- subdivmodal edit -->
-                                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('divModal', data, 'edit')">Edit</button></>
-                                    <button class="btn btn-danger" type="button" ng-click="removePosition('divisions/'+data._id+'/subdivisions/', data)">Remove</button></>
+                                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('subDivAddModal', subDiv, 'edit')">Edit</button></>
+                                    <button class="btn btn-danger" type="button" ng-click="unLinkNode('divisions/','/subdivisions/',data,subDiv )">Unlink</button></>
                                 </h4>
                                 <div id="collapseInner-{{$parent.$index}}-{{$index}}" class="panel-collapse collapse">
                                     <br>
@@ -33,6 +33,7 @@
                                                 <div class="panel-heading">
                                                     {{poss.subTitle}}
                                                     {{poss.name}}
+                                                    <button class="btn btn-danger" type="button" ng-click="unLinkNode('subdivisions/','/positions/', subDiv, poss)">Unlink</button></>
                                                 </div>
                                             </div>
                                         </div>
@@ -96,7 +97,6 @@
         </div>
     </div>
 
-
     <div id="subdivisionsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
         <div class="modal-content modal-dialog">
             <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
@@ -106,14 +106,18 @@
                         <th>Title</th>
                         <th>Value</th>
                         <th>Add existing</th>
+                        <th>Remove</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="table-info" ng-repeat="subDivisionElement in SubDivisionTable">
                         <td>{{subDivisionElement.name}}</td>
                         <td>{{subDivisionElement.subTitle}}</td>
-                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('divisions/','subdivisions/','subdivisionsModal',subDivisionElement._id)">Add</button></td>
-                    </tr>
+                        <!-- лінк дівіжина збережений в атрибутах модалки... може якось витягувати не з атрибута а зразу передавати таргет обєкт -->
+                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('divisions/','subdivisions/','subdivisionsModal',subDivisionElement._id,'divisionTable','SubDivisionTable')">Add</button></td>
+                        <td><button class="btn btn-danger" type="button" ng-click="removePosition('subdivisions/', subDivisionElement)">Remove</button></td>
+
+                      </tr>
                 </tbody>
             </table>
             <button class="btn  btn-success " type="button" ng-click="showModal('subDivAddModal', '', 'add')">Add new Subdivision</button>
@@ -135,7 +139,7 @@
                     <tr class="table-info" ng-repeat="position in dataTable">
                         <td>{{position.name}}</td>
                         <td>{{position.subTitle}}</td>
-                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('subdivisions/','positions/','subdivisionsPositionsModal',position._id)">Add</button></td>
+                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('subdivisions/','positions/','subdivisionsPositionsModal',position._id,'SubDivisionTable','dataTable')">Add</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -157,5 +161,4 @@
             <button class="btn btn-primary" type="button" ng-click="modalButtonAction('subDivAddModal', 'subdivisions/')">Save</button>
         </div>
     </div>
-
 </div>
