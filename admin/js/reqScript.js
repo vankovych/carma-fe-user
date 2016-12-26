@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 ﻿
 
 function myINFO(a)
+=======
+
+﻿function myINFO(a)
+>>>>>>> 8c633691b5c08ba75ed92d154d3b387c1869ae07
 {
     console.log(a);
     angular.element(document.getElementById('divisionsTable')).scope().myINFO();
@@ -15,20 +20,18 @@ function myINFO(a)
         document.getElementById(selectBlock).setAttribute("data-option", "name");
         console.log(document.getElementById(selectBlock).value);
     }
-    else
-    {
+    else {
         document.getElementById(selectBlock).setAttribute("data-option", "title");
         console.log(document.getElementById(selectBlock).value);
     }
 }
-function searchFunction(selectBlock,searchBar,outTable) {
+function searchFunction(selectBlock, searchBar, outTable) {
     if (document.getElementById(selectBlock).value == "title") {
         var parameter = 1;
-    } else
-    {
+    } else {
         var parameter = 0;
     }
-    
+
     var input, filter, table, tr, td, i;
     input = document.getElementById(searchBar);
     filter = input.value.toUpperCase();
@@ -45,38 +48,74 @@ function searchFunction(selectBlock,searchBar,outTable) {
         }
     }
 }
-function closeAddSpan() {//close only upper
+function closeAddSpan(modalId) {//close only upper
+    $('#'+ modalId).modal('hide');
 
-    if ($('#subDivAddModal').hasClass('in')){
-        $('#subDivAddModal').modal('hide');
-        return;
-    }
-
-    $('#subdivisionsModal').modal('hide');
-    $('#positionModal').modal('hide');
-    $('#requirementsModal').modal('hide');
-    $('#reqModal').modal('hide');
-    $('#divModal').modal('hide');    
 }
 
 function arr_diff(allReq, assignedReq) {
 
-    if (assignedReq == undefined)
-    {
+    if (assignedReq == undefined) {
         assignedReq = [];
     }
     var res = [];
-    for (var i = 0; i < allReq.length; i++)
-    {
+    for (var i = 0; i < allReq.length; i++) {
         res.push(allReq[i]);
     }
-    for(var i =0; i< assignedReq.length; i++)
-    {
-        if (res.indexOf(assignedReq[i] != -1))
-        {
-            res.splice(res.indexOf(assignedReq[i]),1);
+    for (var i = 0; i < assignedReq.length; i++) {
+        if (res.indexOf(assignedReq[i] != -1)) {
+            res.splice(res.indexOf(assignedReq[i]), 1);
         }
     }
-        return res;
-    
+    return res;
+
 };
+
+var people, asc1 = 1,
+       asc2 = 1,
+       asc3 = 1;
+window.onload = function () {
+    people = document.getElementById("people");
+}
+
+function sort_table(body, col, asc) {
+    var tbody = document.getElementById(body);
+    var rows = tbody.rows,
+        rlen = rows.length,
+        arr = new Array(),
+        i, j, cells, clen;
+    // fill the array with values from the table
+    for (i = 0; i < rlen; i++) {
+        cells = rows[i].cells;
+        clen = cells.length;
+        arr[i] = new Array();
+        for (j = 0; j < clen; j++) {
+            arr[i][j] = cells[j].innerHTML;
+        }
+    }
+    // sort the array by the specified column number (col) and order (asc)
+    arr.sort(function (a, b) {
+        return (a[col] == b[col]) ? 0 : ((a[col] > b[col]) ? asc : -1 * asc);
+    });
+    // replace existing rows with new rows created from the sorted array
+    for (i = 0; i < rlen; i++) {
+        rows[i].innerHTML = "<td>" + arr[i].join("</td><td>") + "</td>";
+    }
+
+    if (asc > 0) {
+        if (col == 0) {
+            document.getElementById('position-name').innerHTML = "Name ▲"
+        }
+        else {
+            document.getElementById('position-subtitle').innerHTML = "Subtitle ▲"
+        }
+    }
+    else {
+        if (col == 0) {
+            document.getElementById('position-name').innerHTML = "Name ▼"
+        }
+        else {
+            document.getElementById('position-subtitle').innerHTML = "Subtitle ▼"
+        }
+    }
+}
