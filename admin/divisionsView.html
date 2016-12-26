@@ -1,25 +1,161 @@
 ﻿<div>
-    <button class="btn btn-success" type="button">Add new</button>
-    <table class="table table-hover">
-        <thead class="thead-inverse">
+    <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="showModal('divModal', '', 'add')">Add new</button>
+    <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="myINFO()">Add new</button>
+    <div class="panel-group">
+        <div class="panel panel-default" ng-repeat="data in divisionTable">
+            <div class="panel-heading">
+                <h4 class="panel-title button-container">
+                    <!-- top level -->
+                    <button class="btn btn-info button-fill  " data-toggle="collapse" data-target="#collapse-{{$index}}">{{data.title}} {{data.subTitle}}</button>
+                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('divModal', data, 'edit')">Edit</button></>
+                    <button class="btn btn-danger" type="button" ng-click="removePosition('divisions/', data)">Remove</button></>
+                </h4>
+            </div>
+            <div id="collapse-{{$index}}" class="panel-collapse collapse">
+                <!-- collapsable inner represens subdivisions -->
+                <!-- subDiv is only id field -->
+                <div class="panel-body" ng-repeat="subDiv in data.assigned">
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title button-container">
+                                    <button class="btn btn-info button-fill  button-gray " data-toggle="collapse" data-target="#collapseInner-{{$parent.$index}}-{{$index}}">{{subDiv.name}} {{subDiv.subTitle}}</button>
+
+                                    <!-- subdivmodal edit -->
+                                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('divModal', data, 'edit')">Edit</button></>
+                                    <button class="btn btn-danger" type="button" ng-click="removePosition('divisions/'+data._id+'/subdivisions/', data)">Remove</button></>
+                                </h4>
+                                <div id="collapseInner-{{$parent.$index}}-{{$index}}" class="panel-collapse collapse">
+                                    <br>
+                                    <div class="panel-body" ng-repeat="poss in subDiv.assigned">
+                                        <div class="panel-group">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    {{poss.subTitle}}
+                                                    {{poss.name}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-info" ng-click="setSubDivivsionId('subdivisionsPositionsModal', subDiv)">Add Position</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <!-- this button show all current subdivisions???-->
+                <button class="btn btn-info" data-container-id="{{data._id}}" ng-click="setSubDivivsionId('subdivisionsModal',data)">Add Subdivision</button>
+            </div>
+        </div>
+    </div>
+
+    <!--<table id="posTable" class="sort table table-hover tablesorter ">
+        <thead id="divisionsTable" class="thead-inverse">
             <tr>
+                <th>Title</th>
+                <th>SubTitle</th>
+                <th>SubDivisions</th>
+                <th>Edit existing</th>
+                <th>Remove entry</th>
             </tr>
         </thead>
-        <tbody>       
+        <tbody>
+            <tr class="table-info" ng-repeat="data in divisionTable">
+                <td>{{data.title}}</td>
+                <td>{{data.subTitle}}</td>
+                <td id="id-subDivisions">
+                    <button type="button" class="btn btn-info" ng-click="" data-toggle="collapse" data-target="#subDiv-{{$index}}">Show Subdivisions</button>
+                    <div id="subDiv-{{$index}}" class="collapse">
+                        <ul>
+                            <li ng-repeat="i in data.assigned">
+                                {{i.name}}
+                                {{i.subTitle}}
+                                <a class="label label2 label-pill label-info" ng-click="unlinkReq(data,i)">-</a>
+                        </ul>
+                        <a class="label label1 label-pill label-info" ng-click="setSubDivivsionId(data)">+</a>
+                    </div>
+                </td>
+
+            </tr>
         </tbody>
-    </table>
+    </table>-->
 
     <div id="divModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
-            <label for="inputNormal" class="required">Title</label>
-            <input id="inputNormal" type="text" placeholder="Title" class="form-control">                      
+
+            <label for="inputNormal" class="required">Name</label>
+            <input id="duvInput1" type="text" name="title" placeholder="Title" class="form-control">
+
             <label for="inputNormal" class="required">Sub Title</label>
-            <input id="inputNormal" type="text" placeholder="Value" class="form-control">                      
-            <label for="inputNormal" class="required">Sub Divisions</label>
-            <textarea id="textareaID" class="form-control" rows="3"></textarea>                      
-            <button class="btn btn-primary" type="button">Save</button>                    
+            <input id="divInput2" type="text" name="subTitle" placeholder="Subtitle" class="form-control">
+
+            <button class="btn btn-primary" type="button" ng-click="modalButtonAction('divModal', 'divisions/')">Save</button>
         </div>
     </div>
+
+
+    <div id="subdivisionsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
+        <div class="modal-content modal-dialog">
+            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+            <table class="table-hover table-sm">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>Title</th>
+                        <th>Value</th>
+                        <th>Add existing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-info" ng-repeat="subDivisionElement in SubDivisionTable">
+                        <td>{{subDivisionElement.name}}</td>
+                        <td>{{subDivisionElement.subTitle}}</td>
+                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('divisions/','subdivisions/','subdivisionsModal',subDivisionElement._id)">Add</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn  btn-success " type="button" ng-click="showModal('subDivAddModal', '', 'add')">Add new Subdivision</button>
+        </div>
+    </div>
+
+    <div id="subdivisionsPositionsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
+        <div class="modal-content modal-dialog">
+            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+            <table class="table-hover table-sm">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>Title</th>
+                        <th>Value</th>
+                        <th>Add existing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-info" ng-repeat="position in dataTable">
+                        <td>{{position.name}}</td>
+                        <td>{{position.subTitle}}</td>
+                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('subdivisions/','positions/','subdivisionsPositionsModal',position._id)">Add</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn  btn-success " type="button" ng-click="showModal('subDivAddModal', '', 'add')">Add new Subdivision</button>
+        </div>
+    </div>
+
+    <div id="subDivAddModal" class="modal" data-lastUsage="none" data-id="">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" id="addClose" onclick="closeAddSpan()">×</span>
+
+            <label for="inputNormal" class="required">Name</label>
+            <input id="duvInput1" type="text" name="name" placeholder="Name" class="form-control">
+
+            <label for="inputNormal" class="required">SubTitle</label>
+            <input id="divInput2" type="text" name="subTitle" placeholder="Title" class="form-control">
+
+            <button class="btn btn-primary" type="button" ng-click="modalButtonAction('subDivAddModal', 'subdivisions/')">Save</button>
+        </div>
+    </div>
+
 </div>

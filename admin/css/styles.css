@@ -13,6 +13,26 @@
     float: right;
 }
 
+.edit-remove-button {
+
+    float: right;
+}
+
+.button-container {
+    display: flex;
+}
+
+.button-gray
+{
+    background-color: #a3b5cf;
+
+}
+
+.button-fill 
+{
+    flex-grow : 2;
+}
+
 .form-module {
   position: relative;
 
