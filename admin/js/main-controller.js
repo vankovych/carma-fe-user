@@ -126,14 +126,11 @@ app.service('getUser', ['$http', '$window', function ($http, $window) {
         })
     .success(function (response) {
         $scope.allUsers = response.data;
-     
-
     })
         .error(function (response) {
             console.log('Error occured: ' + response);
         });
     };
-
 }]);
 
 app.service('CommunicationProvider', ['$http', '$window', function ($http, $window) {
@@ -148,10 +145,10 @@ app.service('CommunicationProvider', ['$http', '$window', function ($http, $wind
             }
         })
         .success(function (response) {
-
             callbackSucces(response)
         })
         .error(function (response) {
+            alert(response.error);
             console.log('Error occured: ' + response);
         });
     };
@@ -277,7 +274,6 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
 
         var lastModal = document.getElementById(senderModalForm);
 
-
         var all = document.getElementById(senderModalForm).getElementsByClassName('form-control');
         //obj - JSON object - BODY
         var obj = {};
@@ -288,7 +284,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
         console.log(obj);
 
         //////refactoring required
-        var dataSource;
+        var dataSource = {};
         switch (senderModalForm) {
             case 'divModal':
                 dataSource = 'divisionTable';
@@ -303,13 +299,22 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
                 dataSource = 'SubDivisionTable';
                 break;
 
-
+            case 'newUserModal':
+                dataSource = 'allUsers'
+                break;
 
             default:
                 throw 'Error: data source can not be found';
         }
         //////
+        if (lastModal.getAttribute('data-lastUsage') === 'newUser')
+        { 
+            $scope.myPost(path, obj, function (arg) {
+                $scope.allUsers.push(arg.data);
+                console.log('add user, fine!');
 
+            });
+        }
         if (lastModal.getAttribute('data-lastUsage') === 'add') {
             $scope.myPost(path, obj, function (arg) {
                 $scope[dataSource].push(arg.data);
@@ -438,13 +443,33 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
          });
     };
 
+    $scope.removeUser = function (data,index) {
+        if (confirm('Do you realy want to delete this user?'))
+        {
+            $http({
+                url: 'http://localhost:3000/api/user/' + data._id,
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + $window.localStorage['token'],
+                    'Content-Type': 'application/json'
+                }
+            })
+       .success(function (response) {
+           $scope.allUsers.splice(index, 1);
+       })
+       .error(function (response) { // optional
+          alert('Error occured: ' + response.error);
+       });
+        }
+
+    }
+
     $scope.removePosition = function (path, data) {
 
         if (confirm('Do you realy want to delete this record?')) {
             CommunicationProvider.DeleteData(path + data._id, function (arg) {
                 var dataSource;
                 switch (path) {
-
                     case 'subdivisions/':
                         dataSource = 'SubDivisionTable';
                         break;
@@ -460,6 +485,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
                     default:
                         throw 'Error: data source can not be found';
                 }
+                
                 var index = $scope[dataSource].indexOf(data);
 
                 $scope[dataSource].splice(index, 1);
@@ -516,7 +542,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
            });
     };
 
-    $scope.allUsers = getUser.getAllUsers($scope, $http);
+   getUser.getAllUsers($scope, $http);
 
 
 }]);

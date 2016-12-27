@@ -1,13 +1,31 @@
 ﻿<div id="user-operations" class="container" >
-    <h3> User Information</h3>
-    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allUsers">Show all users</button>
-    <div id="allUsers" class="collapse">
+    <h3> User Settings</h3>
+    <button type="button" ng-click="showModal('newUserModal','','newUser')" class="btn btn-info" >Add new user</button>
+    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allUser">Show all users</button>
+    <div id="allUser" class="collapse">
         <div ng-repeat="user in allUsers">
             <ul class="list-group">
-                <li class="list-group-item"> <b>{{$index+1}}.</b> Login: {{user.login}} Password: {{user.password}}</li>
+                <li class="list-group-item"> <b>{{$index+1}}.</b> Login: {{user.login}}; Password: {{user.password}}
+                    <a class="label label-danger" ng-click="removeUser(user,$index)">-</a>
+                    <a class="label label-warning">edit </a> 
+                   </li>
+               
+
             </ul>
-        
         </div>
     </div>
     
+<div id="newUserModal" class="modal modal-padding" data-lastUsage="none" data-id="">
+    <div class="my-modal-content">
+        <span class="close" id="addClose" onclick="closeAddSpan('newUserModal')">×</span>
+
+        <label for="inputNormal" class="required">Login</label>
+        <input id="userInput1" type="text" name="login" placeholder="Title" class="form-control">
+
+        <label for="inputNormal" class="required">Password</label>
+        <input id="userInput2" type="text" name="password" placeholder="Value" class="form-control">
+
+        <button class="btn btn-primary modal-padding" type="button" ng-click="modalButtonAction('newUserModal', 'user')">Save</button>
+    </div>
+</div>
 </div>
