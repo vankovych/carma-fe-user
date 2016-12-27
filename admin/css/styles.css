@@ -1,20 +1,17 @@
 ﻿.pen-title 
 {
     padding-top: 40px;
-    text-align: center;
-   
+    text-align: center;  
 }
 .user
 {
     float: left;
 }
-.button-floating-right
-{
+.button-floating-right{
     float: right;
 }
 
 .edit-remove-button {
-
     float: right;
 }
 
@@ -52,14 +49,15 @@
 }
 
 body{
-     height: 1000px;
-    background: green; /* For browsers that do not support gradients */    
-    background: -webkit-linear-gradient(0deg, green, blue); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(0deg, red, yellow); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(0deg, red, yellow); /* For Firefox 3.6 to 15 */
+   height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     background: linear-gradient(0deg, rgba(20, 111, 234, 0.47),white); /* Standard syntax (must be last) */
 }
-
+html {
+    min-height: 100%
+}
 .curs
 {
     cursor: pointer;

@@ -26,6 +26,7 @@
                 <td>{{data.subTitle}}</td>
                 <td  id="requirements">
                     <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo-{{$index}}">View Requirements</button>
+                    <a class="label label-success" ng-click="setPositionId(data)">+</a>
                     <div id="demo-{{$index}}" class="collapse">
                         <ul>
                             <li ng-repeat="i in data.assigned">
@@ -68,34 +69,26 @@
             <input type="text" class="myInput" id="search-req" onkeyup="searchFunction('select-block-req', 'search-req', 'req-table-modal')" placeholder="Search by..." title="Type in a name">
             <select class="styled-select" onchange="changeOption('select-block-req')" id="select-block-req" data-option="name">
                 <option value="name">by title</option>
-                <option value="title">by value </option>
-                
-            </select> <span>or</span>
-             
-            <button class="btn  btn-success " type="button" ng-click="showModal('reqModal','','add')">Add new</button>
-         
+                <option value="title">by value </option>               
+            </select> <span>or</span>            
+            <button class="btn  btn-success " type="button" ng-click="showModal('reqModal','','add')">Add new</button>         
             <table id="req-table-modal" class="table-hover table">
                 <thead class="thead-inverse">
                     <tr>
                         <th>Title</th>
-                        <th>Value</th>
-           
+                        <th>Value</th>        
                         <th>Add existing</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="table-info" ng-repeat="i in unassigned">
                         <td>{{i.title}}</td>
-                        <td>{{i.value}}</td>
-                     
-                        <td><button class="btn btn-danger" type="button" ng-click="linkReq(i)">Add</button></td>
+                        <td>{{i.value}}</td>           
+                      <td><button class="btn btn-danger" type="button" ng-click="linkReq(i)">Add</button></td>
                     </tr>
-
                 </tbody>
-            </table>
-        
+            </table>      
         </div>
-
     </div>
 </div>
 
