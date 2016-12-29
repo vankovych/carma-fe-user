@@ -109,20 +109,30 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 });
             });
         });
-
-
-
-
-
-
-
-
     })
     .error(function (response) {
         console.log('Error occured: ' + response);
     });
     };
 
+}]);
+app.service('getUser', ['$http', '$window', function ($http, $window) {
+    this.getAllUsers = function ($scope, $http) {
+        $http({
+            url: 'http://localhost:3000/api/user',
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + $window.localStorage['token'],
+                'Content-Type': 'application/json'
+            }
+        })
+    .success(function (response) {
+        $scope.allUsers = response.data;
+    })
+        .error(function (response) {
+            console.log('Error occured: ' + response);
+        });
+    };
 }]);
 
 app.service('CommunicationProvider', ['$http', '$window', function ($http, $window) {
@@ -137,10 +147,10 @@ app.service('CommunicationProvider', ['$http', '$window', function ($http, $wind
             }
         })
         .success(function (response) {
-
             callbackSucces(response)
         })
         .error(function (response) {
+            alert(response.error);
             console.log('Error occured: ' + response);
         });
     };
@@ -199,7 +209,7 @@ app.service('CommunicationProvider', ['$http', '$window', function ($http, $wind
 
 }]);
 
-app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'CommunicationProvider', function ($scope, $http, $window, getTable, CommunicationProvider) {
+app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'getUser','CommunicationProvider', function ($scope, $http, $window, getTable, getUser,CommunicationProvider) {
 
     $scope.reqTable = getTable.getRequirementsTable($scope, $http);
     $scope.dataTable = getTable.getPositionsTable($scope, $http);
@@ -271,7 +281,6 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
 
         var lastModal = document.getElementById(senderModalForm);
 
-
         var all = document.getElementById(senderModalForm).getElementsByClassName('form-control');
         //obj - JSON object - BODY
         var obj = {};
@@ -282,7 +291,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
         console.log(obj);
 
         //////refactoring required
-        var dataSource;
+        var dataSource = {};
         switch (senderModalForm) {
             case 'divModal':
                 dataSource = 'divisionTable';
@@ -297,13 +306,23 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
                 dataSource = 'SubDivisionTable';
                 break;
 
-
+            case 'newUserModal':
+                dataSource = 'allUsers'
+                break;
 
             default:
                 throw 'Error: data source can not be found';
         }
         //////
+        if (lastModal.getAttribute('data-lastUsage') === 'newUser')
+        {
 
+            $scope.myPost(path, obj, function (arg) {
+                $scope.allUsers.push(arg.data);
+                console.log('add user, fine!');
+
+            });
+        }
         if (lastModal.getAttribute('data-lastUsage') === 'add') {
             $scope.myPost(path, obj, function (arg) {
                 $scope[dataSource].push(arg.data);
@@ -328,7 +347,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
         //    $scope.dataTable = getTable.getPositionsTable($scope, $http);
         //}
         $('#' + senderModalForm).modal('hide');
-    }
+    };
 
     $scope.linkReq = function (data) {
         var url = "/positions/" + document.getElementById("requirementsModal").getAttribute("data-id") + "/requirements/" + data._id;
@@ -393,7 +412,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
          .error(function (response) { // optional
              console.log('epic fail error');
          });
-    }
+    };
 
     $scope.unLinkNode = function (parent, child, parentId, childId) {
         var url = parent + parentId._id + child + childId._id;
@@ -439,13 +458,33 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
          });
     };
 
+    $scope.removeUser = function (data,index) {
+        if (confirm('Do you realy want to delete this user?'))
+        {
+            $http({
+                url: 'http://localhost:3000/api/user/' + data._id,
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + $window.localStorage['token'],
+                    'Content-Type': 'application/json'
+                }
+            })
+       .success(function (response) {
+           $scope.allUsers.splice(index, 1);
+       })
+       .error(function (response) { // optional
+          alert('Error occured: ' + response.error);
+       });
+        }
+
+    }
+
     $scope.removePosition = function (path, data) {
 
         if (confirm('Do you realy want to delete this record?')) {
             CommunicationProvider.DeleteData(path + data._id, function (arg) {
                 var dataSource;
                 switch (path) {
-
                     case 'subdivisions/':
                         dataSource = 'SubDivisionTable';
                         break;
@@ -461,6 +500,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
                     default:
                         throw 'Error: data source can not be found';
                 }
+                
                 var index = $scope[dataSource].indexOf(data);
                 for (var property in $scope[dataSource][index]) {
                     if ($scope[dataSource][index].hasOwnProperty(property)) {
@@ -469,9 +509,18 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
                 }
                 $scope[dataSource].splice(index, 1);
 
+<<<<<<< HEAD
             }, $scope);
+=======
+                //if (path === 'requirements/') {
+                //    $scope.dataTable = getTable.getPositionsTable($scope, $http);
+                //}
+            }, $scope);//<----- delegate?
+>>>>>>> 87f70cdb93a8843f33e1656f678abd2cd72c2d0b
         }
-    }
+    };
+
+    $scope.counter = 0;
 
     $scope.submit = function () {
         var uname = $scope.username;
@@ -499,6 +548,19 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
         });
     };
 
+    $scope.changeScope = function (arg) {
+        
+        $scope.counter += 1;
+        if ($scope.counter % 2 == 0) {
+            $scope.s = '-' + arg;
+            console.log($scope.counter);
+        }
+        else
+        {
+            $scope.s = arg;
+        }
+    };
+
     $scope.LogOut = function () {
         alert('going to log out' + $window.localStorage['token']);
         $http({
@@ -516,5 +578,9 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
            .error(function (response) { // optional
                console.log(response.error);
            });
-    }
+    };
+
+   getUser.getAllUsers($scope, $http);
+
+
 }]);

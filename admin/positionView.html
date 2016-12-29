@@ -1,9 +1,7 @@
 ﻿<div>
     <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="showModal('positionModal', '', 'add')">Add new</button>
-
-
     <br />
-    <input type="text" id="search-position" class="myInput" onkeyup="searchFunction('select-block-pos',  'search-position','posTable')" placeholder="Search by..." title="Type in a name">
+    <input data-ira="ira" type="text" id="search-position" class="myInput" onkeyup="searchFunction('select-block-pos',  'search-position','posTable')" placeholder="Search by..." title="Type in a name">
     <select class="styled-select" onchange="changeOption('select-block-pos')" id="select-block-pos" data-option="name">
 
         <option selected value="name">by name</option>
@@ -11,36 +9,34 @@
     </select>
 
 
-    <table id="posTable" class="sort table table-hover tablesorter ">
+    <table id="posTable" class="table table-hover">
         <thead id="positionsTable" class="thead-inverse">
             <tr>
-                <th id="position-name" onclick="sort_table('people', 0, asc1); asc1 *= -1; asc2 = 1; asc3 = 1;">
-                    Name ▼
-                </th>
-                <th id="position-subtitle" onclick="sort_table('people', 1, asc2); asc2 *= -1; asc3 = 1; asc1 = 1;">Subtitle  ▼ </th>
+                <th id="position-name"> Name <span style="cursor:default" ng-click="changeScope('name')">▼</span>  </th>
+                <th id="position-subtitle">Subtitle<span style="cursor:default" ng-click="changeScope('subTitle')">▼</span> </th>
                 <th>Requirements</th>
                 <th>Edit existing</th>
                 <th>Remove entry</th>
             </tr>
         </thead>
         <tbody id="people">
-            <tr class="table-info" ng-repeat="data in dataTable">
+            <tr class="table-info" ng-repeat="data in dataTable | orderBy: s ">
                 <td>{{data.name}}</td>
                 <td>{{data.subTitle}}</td>
                 <td id="requirements">
-                    <button type="button" class="btn btn-info" ng-click="" data-toggle="collapse" data-target="#demo-{{$index}}">View Requirements</button>
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo-{{$index}}">View Requirements</button>
+                    <a class="label label-success" ng-click="setPositionId(data)">+</a>
                     <div id="demo-{{$index}}" class="collapse">
-
                         <ul>
-                            <li ng-repeat="i in data.assigned" ng-if="i.hasOwnProperty('_id')">
-
-                                {{i.title}}
-                                {{i.value}}
+                            <li ng-repeat="i in data.assigned">
+                                <b>
+                                    {{i.title}}
+                                    {{i.value}}
+                                </b><br />
                                 {{i.description}}
-
-                                <a class="label label2 label-pill label-info" ng-click="unlinkReq(data,i)">-</a>
+                                <a class="label label-danger" ng-click="unlinkReq(data,i)">-</a>
                         </ul>
-                        <a class="label label1 label-pill label-info" ng-click="setPositionId(data)">+</a>
+
                     </div>
                 </td>
                 <td><button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('positionModal', data, 'edit')">Edit</button></td>
@@ -69,21 +65,17 @@
         <div class="my-modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan('requirementsModal')">×</span>
             <h4>Please, choose the requirement you wanna add...</h4>
-            <input type="text" class="myInput" id="search-req" onkeyup="searchFunction('select-block-req', 'search-req', 'req-table-modal')" placeholder="Search by..." title="Type in a name">
-            <select class="styled-select" onchange="changeOption('select-block-req')" id="select-block-req" data-option="name">
+            <input type="text" class="myInput" id="search-req-modal" onkeyup="searchFunction('select-block-req-modal', 'search-req-modal', 'req-table-modal')" placeholder="Search by..." title="Type in a name">
+            <select class="styled-select" onchange="changeOption('select-block-req')" id="select-block-req-modal" data-option="name">
                 <option value="name">by title</option>
                 <option value="title">by value </option>
-
             </select> <span>or</span>
-
             <button class="btn  btn-success " type="button" ng-click="showModal('reqModal','','add')">Add new</button>
-
             <table id="req-table-modal" class="table-hover table">
                 <thead class="thead-inverse">
                     <tr>
                         <th>Title</th>
                         <th>Value</th>
-
                         <th>Add existing</th>
                     </tr>
                 </thead>
@@ -91,15 +83,10 @@
                     <tr class="table-info" ng-repeat="i in unassigned">
                         <td>{{i.title}}</td>
                         <td>{{i.value}}</td>
-
                         <td><button class="btn btn-danger" type="button" ng-click="linkReq(i)">Add</button></td>
                     </tr>
-
                 </tbody>
             </table>
-
         </div>
-
     </div>
 </div>
-

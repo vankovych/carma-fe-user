@@ -1,16 +1,14 @@
 ﻿
 
-function myINFO(a)
-{
+function myINFO(a) {
     console.log(a);
     angular.element(document.getElementById('divisionsTable')).scope().myINFO();
-    a.setAttribute('id',   ( angular.element(document.getElementById('divisionsTable')).scope().s._id));
+    a.setAttribute('id', (angular.element(document.getElementById('divisionsTable')).scope().s._id));
     console.log(a);
 }
 
 
-﻿function changeOption(selectBlock)
-{
+function changeOption(selectBlock) {
     if (document.getElementById(selectBlock).value === "name") {
         document.getElementById(selectBlock).setAttribute("data-option", "name");
         console.log(document.getElementById(selectBlock).value);
@@ -44,7 +42,7 @@ function searchFunction(selectBlock, searchBar, outTable) {
     }
 }
 function closeAddSpan(modalId) {//close only upper
-    $('#'+ modalId).modal('hide');
+    $('#' + modalId).modal('hide');
 
 }
 
@@ -77,7 +75,7 @@ function sort_table(body, col, asc) {
         rlen = rows.length,
         arr = new Array(),
         i, j, cells, clen;
-    // fill the array with values from the table
+    //fill the array with values from the table
     for (i = 0; i < rlen; i++) {
         cells = rows[i].cells;
         clen = cells.length;
@@ -94,21 +92,40 @@ function sort_table(body, col, asc) {
     for (i = 0; i < rlen; i++) {
         rows[i].innerHTML = "<td>" + arr[i].join("</td><td>") + "</td>";
     }
-
-    if (asc > 0) {
-        if (col == 0) {
-            document.getElementById('position-name').innerHTML = "Name ▲"
+    if (body === 'people') {
+        if (asc > 0) {
+            if (col == 0) {
+                document.getElementById('position-name').innerHTML = "Name ▲"
+            }
+            else {
+                document.getElementById('position-subtitle').innerHTML = "Subtitle ▲"
+            }
         }
         else {
-            document.getElementById('position-subtitle').innerHTML = "Subtitle ▲"
+            if (col == 0) {
+                document.getElementById('position-name').innerHTML = "Name ▼"
+            }
+            else {
+                document.getElementById('position-subtitle').innerHTML = "Subtitle ▼"
+            }
         }
     }
-    else {
-        if (col == 0) {
-            document.getElementById('position-name').innerHTML = "Name ▼"
+    if (body === 'requirementsTable') {
+        if (asc > 0) {
+            if (col == 0) {
+                document.getElementById('req-title').innerHTML = "Title ▲"
+            }
+            else {
+                document.getElementById('req-value').innerHTML = "Value ▲"
+            }
         }
         else {
-            document.getElementById('position-subtitle').innerHTML = "Subtitle ▼"
+            if (col == 0) {
+                document.getElementById('req-title').innerHTML = "Title ▼"
+            }
+            else {
+                document.getElementById('req-value').innerHTML = "Value ▼"
+            }
         }
     }
 }

@@ -51,40 +51,11 @@
         </div>
     </div>
 
-    <!--<table id="posTable" class="sort table table-hover tablesorter ">
-        <thead id="divisionsTable" class="thead-inverse">
-            <tr>
-                <th>Title</th>
-                <th>SubTitle</th>
-                <th>SubDivisions</th>
-                <th>Edit existing</th>
-                <th>Remove entry</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="table-info" ng-repeat="data in divisionTable">
-                <td>{{data.title}}</td>
-                <td>{{data.subTitle}}</td>
-                <td id="id-subDivisions">
-                    <button type="button" class="btn btn-info" ng-click="" data-toggle="collapse" data-target="#subDiv-{{$index}}">Show Subdivisions</button>
-                    <div id="subDiv-{{$index}}" class="collapse">
-                        <ul>
-                            <li ng-repeat="i in data.assigned">
-                                {{i.name}}
-                                {{i.subTitle}}
-                                <a class="label label2 label-pill label-info" ng-click="unlinkReq(data,i)">-</a>
-                        </ul>
-                        <a class="label label1 label-pill label-info" ng-click="setSubDivivsionId(data)">+</a>
-                    </div>
-                </td>
+    
 
-            </tr>
-        </tbody>
-    </table>-->
-
-    <div id="divModal" class="modal">
+    <div id="divModal" class="modal modal-padding">
         <!-- Modal content -->
-        <div class="modal-content">
+        <div class="my-modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan('divModal')">×</span>
 
             <label for="inputNormal" class="required">Name</label>
@@ -93,7 +64,7 @@
             <label for="inputNormal" class="required">Sub Title</label>
             <input id="divInput2" type="text" name="subTitle" placeholder="Subtitle" class="form-control">
 
-            <button class="btn btn-primary" type="button" ng-click="modalButtonAction('divModal', 'divisions/')">Save</button>
+            <button class="btn btn-primary modal-padding" type="button" ng-click="modalButtonAction('divModal', 'divisions/')">Save</button>
         </div>
     </div>
 
