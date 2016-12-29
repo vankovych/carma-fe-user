@@ -308,7 +308,8 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
         }
         //////
         if (lastModal.getAttribute('data-lastUsage') === 'newUser')
-        { 
+        {
+
             $scope.myPost(path, obj, function (arg) {
                 $scope.allUsers.push(arg.data);
                 console.log('add user, fine!');
@@ -335,9 +336,9 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
                 });
             });
         }
-        if (dataSource === 'reqTable') {
-            $scope.dataTable = getTable.getRequirementsTable($scope, $http);
-        }
+        //if (dataSource === 'reqTable') {
+        //    $scope.dataTable = getTable.getPositionsTable($scope, $http);
+        //}
         $('#' + senderModalForm).modal('hide');
     };
 
@@ -490,12 +491,14 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
 
                 $scope[dataSource].splice(index, 1);
 
-                if (path === 'requirements/') {
-                    $scope.dataTable = getTable.getRequirementsTable($scope, $http);
-                }
+                //if (path === 'requirements/') {
+                //    $scope.dataTable = getTable.getPositionsTable($scope, $http);
+                //}
             }, $scope);//<----- delegate?
         }
     };
+
+    $scope.counter = 0;
 
     $scope.submit = function () {
         var uname = $scope.username;
@@ -521,6 +524,19 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
             user.className = "red";
             pass.className = "red";
         });
+    };
+
+    $scope.changeScope = function (arg) {
+        
+        $scope.counter += 1;
+        if ($scope.counter % 2 == 0) {
+            $scope.s = '-' + arg;
+            console.log($scope.counter);
+        }
+        else
+        {
+            $scope.s = arg;
+        }
     };
 
     $scope.LogOut = function () {

@@ -11,15 +11,14 @@
     <table id ="reqTable"class="table table-hover">
         <thead class="thead-inverse">
             <tr>
-                <th>Title</th>
-                <th>Value</th>
-                <th>Description</th>
-                <th>Edit existing</th>
+                <th id="req-title"> Title<span style="cursor:default" ng-click="changeScope('title')">▼</span>  </th>
+                <th id ="req-value" >Value<span style="cursor:default" ng-click="changeScope('value')"> ▼ </span></th>
+                <th>Description<span style="cursor:default" ng-click="changeScope('description')"> ▼ </span> </th>
                 <th>Remove entry</th>
             </tr>
         </thead>
-        <tbody>
-            <tr class="table-info" ng-repeat="data in reqTable">
+        <tbody id="requirementsTable">
+            <tr class="table-info" ng-repeat="data in reqTable | orderBy: s ">
                 <td>{{data.title}}</td>
                 <td>{{data.value}}</td>
                 <td>{{data.description}}  </td>

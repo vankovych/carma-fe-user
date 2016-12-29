@@ -7,7 +7,7 @@
             <ul class="list-group">
                 <li class="list-group-item"> <b>{{$index+1}}.</b> Login: {{user.login}}; Password: {{user.password}}
                     <a class="label label-danger" ng-click="removeUser(user,$index)">-</a>
-                    <a class="label label-warning">edit </a> 
+                    <a class="label label-warning"  ng-click="showModal('newUserModal',user,'edit')" >edit </a> 
                    </li>
                
 
@@ -25,7 +25,9 @@
         <label for="inputNormal" class="required">Password</label>
         <input id="userInput2" type="text" name="password" placeholder="Value" class="form-control">
 
-        <button class="btn btn-primary modal-padding" type="button" ng-click="modalButtonAction('newUserModal', 'user')">Save</button>
+        <button class="btn btn-primary modal-padding" type="button" ng-click="modalButtonAction('newUserModal', 'user/')">Save</button>
     </div>
 </div>
+
+
 </div>
