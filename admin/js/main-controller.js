@@ -11,6 +11,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
         })
     .success(function (response) {
 
+    
         //  console.log(response.data);
         $scope.dataTable = response.data;
         $scope.dataTable.forEach(function (entry) {
@@ -21,6 +22,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 $scope.reqTable.forEach(function (reqEntry) {
                     if (reqEntry._id === innerReq) {
                         entry.assigned.push(reqEntry);
+                       
                     }
                 });
             });
@@ -42,8 +44,6 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
         })
     .success(function (response) {
         $scope.reqTable = response.data;
-
-        //    console.log(response.data);
     })
     .error(function (response) {
         console.log('Error occured: ' + response);
@@ -92,8 +92,9 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
             }
         })
     .success(function (response) {
+        var assignedEntity = [];
         $scope.SubDivisionTable = response.data;
-        console.log('getDivision responce: ' + response.data);
+        console.log('getDivision response: ' + response.data);
 
         $scope.SubDivisionTable.forEach(function (entry) {
             entry.subnodes.forEach(function (innerDiv) {//add watch here 
@@ -103,10 +104,17 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 $scope.dataTable.forEach(function (reqEntry) {
                     if (reqEntry._id === innerDiv) {
                         entry.assigned.push(reqEntry);
+                    
+                        assignedEntity.push(reqEntry);
+                      
+                        
                     }
                 });
             });
         });
+        $scope.allAssigned = assignedEntity.filter(function (item, pos, self) {
+            return self.indexOf(item) == pos;
+        })
     })
     .error(function (response) {
         console.log('Error occured: ' + response);
@@ -208,13 +216,10 @@ app.service('CommunicationProvider', ['$http', '$window', function ($http, $wind
 
 }]);
 
-<<<<<<< HEAD
 app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'getUser','CommunicationProvider', function ($scope, $http, $window, getTable, getUser,CommunicationProvider) {
-    $scope.allAssigned = [];
-=======
-app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'getUser', 'CommunicationProvider', function ($scope, $http, $window, getTable, getUser, CommunicationProvider) {
+   
 
->>>>>>> origin/hotfix-Divisions
+
     $scope.reqTable = getTable.getRequirementsTable($scope, $http);
     $scope.dataTable = getTable.getPositionsTable($scope, $http);
     $scope.SubDivisionTable = getTable.getSubDivisionTable($scope, $http);
@@ -230,7 +235,6 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
         $scope.unassigned = arr_diff($scope.reqTable, data.assigned);
         $('#requirementsModal').modal('show');
     };
-
     $scope.setSubDivivsionId = function (sender, data) {
         document.getElementById(sender).setAttribute("data-id", data._id);
         $scope.unassignedPositions = arr_diff($scope.dataTable, $scope.allAssigned);
