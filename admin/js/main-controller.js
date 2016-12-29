@@ -208,13 +208,12 @@ app.service('CommunicationProvider', ['$http', '$window', function ($http, $wind
 }]);
 
 app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'getUser','CommunicationProvider', function ($scope, $http, $window, getTable, getUser,CommunicationProvider) {
-
+    $scope.allAssigned = [];
     $scope.reqTable = getTable.getRequirementsTable($scope, $http);
     $scope.dataTable = getTable.getPositionsTable($scope, $http);
     $scope.SubDivisionTable = getTable.getSubDivisionTable($scope, $http);
     $scope.divisionTable = getTable.getDivisionTable($scope, $http);
     $scope.s = {};
-
     $scope.myINFO = function () {
         console.log($scope.divisionTable);
     }
@@ -228,6 +227,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
 
     $scope.setSubDivivsionId = function (sender, data) {
         document.getElementById(sender).setAttribute("data-id", data._id);
+        $scope.unassignedPositions = arr_diff($scope.dataTable, $scope.allAssigned);
         $('#' + sender).modal('show');
     };
 
@@ -377,10 +377,10 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
          });
     };
 
-    $scope.linkNode = function (parent, child, parentId, childId, dataHead, dataTail) {
+    $scope.linkNode = function (parent, child, parentId, childPos, dataHead, dataTail) {
         var _id = document.getElementById(parentId).getAttribute("data-id");
         $http({
-            url: 'http://localhost:3000/api/' + parent + _id + '/' + child + childId,
+            url: 'http://localhost:3000/api/' + parent + _id + '/' + child + childPos._id,
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + $window.localStorage['token'],
@@ -388,19 +388,22 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
             }
         })
          .success(function (response) {
+             var index = $scope.unassignedPositions.indexOf(childPos);
+             $scope.unassignedPositions.splice(index, 1);
              var result = $.grep($scope[dataHead], function (e) { return e._id == _id; });
              if (result[0].assigned === undefined) {
                  result[0].assigned = [];
              }
-             result[0].assigned.push($.grep($scope[dataTail], function (e) { return e._id == childId; })[0]);
+             result[0].assigned.push($.grep($scope[dataTail], function (e) { return e._id == childPos._id; })[0]);
+             $scope.allAssigned.push(childPos);
          })
          .error(function (response) { // optional
              console.log('epic fail error');
          });
     };
 
-    $scope.unLinkNode = function (parent, child, parentId, childId) {
-        var url = parent + parentId._id + child + childId._id;
+    $scope.unLinkNode = function (parent, child, parentId, childPos) {
+        var url = parent + parentId._id + child + childPos._id;
         $http({
             url: 'http://localhost:3000/api/' + url,
             method: 'DELETE',
@@ -411,7 +414,8 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
         })
      .success(function (response) {
          console.log('unlink');
-         parentId.assigned.splice(parentId.assigned.indexOf(childId), 1);
+         parentId.assigned.splice(parentId.assigned.indexOf(childPos), 1);
+         $scope.allAssigned.splice($scope.allAssigned.indexOf(childPos), 1);
      })
      .error(function (response) { // optional
          console.log('epic fail error');

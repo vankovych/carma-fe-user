@@ -1,6 +1,5 @@
 ﻿<div>
     <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="showModal('divModal', '', 'add')">Add new</button>
-    <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="myINFO()">Add new</button>
     <div class="panel-group">
         <div class="panel panel-default" ng-repeat="data in divisionTable">
             <div class="panel-heading">
@@ -51,8 +50,6 @@
         </div>
     </div>
 
-    
-
     <div id="divModal" class="modal modal-padding">
         <!-- Modal content -->
         <div class="my-modal-content">
@@ -96,9 +93,18 @@
     </div>
 
     <div id="subdivisionsPositionsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
-        <div class="modal-content modal-dialog">
+        <div class="my-modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan('subdivisionsPositionsModal')">×</span>
-            <table class="table-hover table-sm">
+
+            <h4>Please, choose the position you wanna add...</h4>
+            <input type="text" class="myInput" id="search-pos-modal-sub" onkeyup="searchFunction('select-block-pos-modal', 'search-pos-modal-sub', 'pos-table-modal')" placeholder="Search by..." title="Type in a name">
+            <select class="styled-select" onchange="changeOption('select-block-pos-modal')" id="select-block-req-modal" data-option="name">
+                <option value="name">by title</option>
+                <option value="title">by value </option>
+            </select> <span>or</span>
+            <button class="btn  btn-success " type="button" ng-click="showModal('subDivAddModal', '', 'add')">Add new</button>   
+
+            <table id="pos-table-modal" class="table-hover table">
                 <thead class="thead-inverse">
                     <tr>
                         <th>Title</th>
@@ -107,14 +113,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-info" ng-repeat="position in dataTable">
+                    <tr class="table-info" ng-repeat="position in unassignedPositions">
                         <td>{{position.name}}</td>
                         <td>{{position.subTitle}}</td>
-                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('subdivisions/','positions/','subdivisionsPositionsModal',position._id,'SubDivisionTable','dataTable')">Add</button></td>
+                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('subdivisions/','positions/','subdivisionsPositionsModal',position,'SubDivisionTable','dataTable')">Add</button></td>
                     </tr>
                 </tbody>
             </table>
-            <button class="btn  btn-success " type="button" ng-click="showModal('subDivAddModal', '', 'add')">Add new Subdivision</button>
+        
         </div>
     </div>
 
