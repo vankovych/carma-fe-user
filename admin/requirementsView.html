@@ -14,16 +14,19 @@
                 <th id="req-title"> Title<span style="cursor:default" ng-click="changeScope('title')">▼</span>  </th>
                 <th id ="req-value" >Value<span style="cursor:default" ng-click="changeScope('value')"> ▼ </span></th>
                 <th>Description<span style="cursor:default" ng-click="changeScope('description')"> ▼ </span> </th>
+                <th>Edit entry</th>
                 <th>Remove entry</th>
             </tr>
         </thead>
         <tbody id="requirementsTable">
             <tr class="table-info" ng-repeat="data in reqTable | orderBy: s">
+
+
                 <td>{{data.title}}</td>
                 <td>{{data.value}}</td>
                 <td>{{data.description}}  </td>
                 <td><button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('reqModal', data, 'edit')">Edit</button></td>
-                <td><button class="btn btn-danger" type="button" ng-click="removePosition('requirements/', data)">Remove</button></td>
+                <td><button class="btn btn-danger" type="button" ng-click="removePosition('requirements/', data,'reqTable')">Remove</button></td>
             </tr>
         </tbody>
     </table>

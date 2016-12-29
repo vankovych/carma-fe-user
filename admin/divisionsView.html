@@ -7,13 +7,13 @@
                     <!-- top level -->
                     <button class="btn btn-info button-fill  " data-toggle="collapse" data-target="#collapse-{{$index}}">{{data.title}} {{data.subTitle}}</button>
                     <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('divModal', data, 'edit')">Edit</button></>
-                    <button class="btn btn-danger" type="button" ng-click="removePosition('divisions/', data)">Remove</button></>
+                    <button class="btn btn-danger" type="button" ng-click="removePosition('divisions/', data,'divisionTable')">Remove</button></>
                 </h4>
             </div>
             <div id="collapse-{{$index}}" class="panel-collapse collapse">
                 <!-- collapsable inner represens subdivisions -->
                 <!-- subDiv is only id field -->
-                <div class="panel-body" ng-repeat="subDiv in data.assigned">
+                <div class="panel-body" ng-repeat="subDiv in data.assigned" ng-if="subDiv.hasOwnProperty('_id')"> 
                     <div class="panel-group">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -26,7 +26,7 @@
                                 </h4>
                                 <div id="collapseInner-{{$parent.$index}}-{{$index}}" class="panel-collapse collapse">
                                     <br>
-                                    <div class="panel-body" ng-repeat="poss in subDiv.assigned">
+                                    <div class="panel-body" ng-repeat="poss in subDiv.assigned" ng-if="poss.hasOwnProperty('_id')">
                                         <div class="panel-group">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
@@ -78,12 +78,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-info" ng-repeat="subDivisionElement in SubDivisionTable">
+                    <tr class="table-info" ng-repeat="subDivisionElement in SubDivisionTable" ng-if="subDivisionElement.hasOwnProperty('_id')">
                         <td>{{subDivisionElement.name}}</td>
                         <td>{{subDivisionElement.subTitle}}</td>
-                        <!-- лінк дівіжина збережений в атрибутах модалки... може якось витягувати не з атрибута а зразу передавати таргет обєкт -->
                         <td><button class="btn btn-danger" type="button" ng-click="linkNode('divisions/','subdivisions/','subdivisionsModal',subDivisionElement._id,'divisionTable','SubDivisionTable')">Add</button></td>
-                        <td><button class="btn btn-danger" type="button" ng-click="removePosition('subdivisions/', subDivisionElement)">Remove</button></td>
+                        <td><button class="btn btn-danger" type="button" ng-click="removePosition('subdivisions/', subDivisionElement,'SubDivisionTable')">Remove</button></td>
 
                       </tr>
                 </tbody>
