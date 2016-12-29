@@ -1,12 +1,11 @@
 ﻿<div>
     <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="showModal('divModal', '', 'add')">Add new</button>
-    <button class="btn btn-success" type="button" data-lastUsage="none" ng-click="myINFO()">Add new</button>
     <div class="panel-group">
-        <div class="panel panel-default" ng-repeat="data in divisionTable" ng-init="parentIndex=$index">
+        <div class="panel panel-default" ng-repeat="data in divisionTable" ng-init="parentIndex=$index" ng-if="data.hasOwnProperty('_id')">
             <div class="panel-heading">
                 <h4 class="panel-title button-container">
                     <button class="btn btn-info button-fill  " data-toggle="collapse" data-target="#collapse-{{$index}}">{{data.title}} {{data.subTitle}}</button>
-                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('divModal', data, 'edit')">Edit{{$index}}</button></>
+                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('divModal', data, 'edit')">Edit</button></>
                     <button class="btn btn-danger" type="button" ng-click="removePosition('divisions/', data,'divisionTable')">Remove</button></>
                 </h4>
             </div>
@@ -17,8 +16,8 @@
                             <div class="panel-heading">
                                 <div class="panel-title button-container">
                                     <button class="btn btn-info button-fill  button-gray" data-toggle="collapse" data-target="#collapseInner-{{parentIndex}}-{{$index}}">{{subDiv.name}} {{subDiv.subTitle}}</button>
-                                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('subDivAddModal', subDiv, 'edit')">Edit {{$index}}</button></>
-                                    <button class="btn btn-danger" type="button" ng-click="unLinkNode('divisions/','/subdivisions/',data,subDiv )">Unlink {{parentIndex}}</button></>
+                                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('subDivAddModal', subDiv, 'edit')">Edit</button></>
+                                    <button class="btn btn-danger" type="button" ng-click="unLinkNode('divisions/','/subdivisions/',data,subDiv )">Unlink</button></>
                                 </div>
                                 <div id="collapseInner-{{parentIndex}}-{{$index}}" class="panel-collapse collapse">
                                     <br>
@@ -43,9 +42,7 @@
                 <button class="btn btn-info" data-container-id="{{data._id}}" ng-click="setSubDivivsionId('subdivisionsModal',data)">Add Subdivision</button>
             </div>
         </div>
-    </div>
-
-    
+    </div>   
 
     <div id="divModal" class="modal modal-padding">
         <!-- Modal content -->

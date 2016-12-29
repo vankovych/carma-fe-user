@@ -10,8 +10,6 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
             }
         })
     .success(function (response) {
-
-        //  console.log(response.data);
         $scope.dataTable = response.data;
         $scope.dataTable.forEach(function (entry) {
             entry.requirements.forEach(function (innerReq) {
@@ -25,12 +23,12 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 });
             });
         });
-        //  console.log($scope.dataTable);
     })
         .error(function (response) {
             console.log('Error occured: ' + response);
         });
     };
+
     this.getRequirementsTable = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/requirements',
@@ -42,13 +40,12 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
         })
     .success(function (response) {
         $scope.reqTable = response.data;
-
-        //    console.log(response.data);
     })
     .error(function (response) {
         console.log('Error occured: ' + response);
     });
     };
+
     this.getDivisionTable = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/divisions',
@@ -61,9 +58,9 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
     .success(function (response) {
         $scope.divisionTable = response.data;
         console.log('getDivision responce: ' + response.data);
-        ////////////
+
         $scope.divisionTable.forEach(function (entry) {
-            entry.subdivisions.forEach(function (innerDiv) {//add watch here 
+            entry.subdivisions.forEach(function (innerDiv) {
                 if (entry.assigned === undefined) {
                     entry.assigned = [];
                 }
@@ -74,14 +71,33 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 });
             });
         });
-        ////////////
-        console.log("blah blah");
 
+        $scope.divisionTable.forEach(function (element, index) {
+            if (element.assigned != undefined) {
+                element.assigned.forEach(function (subDivElement, sdIndex) {
+                    if (subDivElement.assigned != undefined) {
+                        subDivElement.assigned.forEach(function (posElement, posIndex) {
+                            posElement.nestedObj = {
+                                "subDivName": subDivElement.name,
+                                "subDivTitle": subDivElement.subTitle,
+                                "divTitle" : element.title,
+                                "divSubTitle" : element.subTitle,                            };
+                        })
+                    }
+                })
+            }
+        });
+
+        
+        console.log($scope.dataTable);
+        var t = {};
     })
+
     .error(function (response) {
         console.log('Error occured: ' + response);
     });
     };
+
     this.getSubDivisionTable = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/subdivisions',
@@ -96,7 +112,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
         console.log('getDivision responce: ' + response.data);
 
         $scope.SubDivisionTable.forEach(function (entry) {
-            entry.subnodes.forEach(function (innerDiv) {//add watch here 
+            entry.subnodes.forEach(function (innerDiv) {
                 if (entry.assigned === undefined) {
                     entry.assigned = [];
                 }
@@ -388,6 +404,9 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
                  result[0].assigned = [];
              }
              result[0].assigned.push($.grep($scope[dataTail], function (e) { return e._id == childId; })[0]);
+
+
+
          })
          .error(function (response) { // optional
              console.log('epic fail error');
@@ -407,6 +426,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
      .success(function (response) {
          console.log('unlink');
          parentId.assigned.splice(parentId.assigned.indexOf(childId), 1);
+         childId.nestedObj = {};
      })
      .error(function (response) { // optional
          console.log('epic fail error');
@@ -458,7 +478,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
         }
     }
 
-    $scope.removePosition = function (path, data,dataSource) {
+    $scope.removePosition = function (path, data, dataSource) {
 
         if (confirm('Do you realy want to delete this record?')) {
             CommunicationProvider.DeleteData(path + data._id, function (arg) {
