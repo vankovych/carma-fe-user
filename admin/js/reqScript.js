@@ -57,11 +57,9 @@ function arr_diff(allReq, assignedReq) {
     for (var i = 0; i < allReq.length; i++) {
         res.push(allReq[i]);
     }
-    for (var i = 0; i < assignedReq.length; i++) {
-        if (res.indexOf(assignedReq[i] != -1)) {
-            res.splice(res.indexOf(assignedReq[i]), 1);
-        }
-    }
+    res.filter(function (n) {
+        return assignedReq.indexOf(n) != -1;
+    })
     return res;
 
 };

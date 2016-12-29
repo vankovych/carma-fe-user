@@ -14,7 +14,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
         //  console.log(response.data);
         $scope.dataTable = response.data;
         $scope.dataTable.forEach(function (entry) {
-            entry.requirements.forEach(function (innerReq) {
+            entry.requirements.forEach(function (innerReq) {//requirements contains only _id field
                 if (entry.assigned === undefined) {
                     entry.assigned = [];
                 }
@@ -24,6 +24,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                     }
                 });
             });
+
         });
         //  console.log($scope.dataTable);
     })
@@ -82,6 +83,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
         console.log('Error occured: ' + response);
     });
     };
+
     this.getSubDivisionTable = function ($scope, $http) {
         $http({
             url: 'http://localhost:3000/api/subdivisions',
@@ -203,12 +205,17 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
     $scope.dataTable = getTable.getPositionsTable($scope, $http);
     $scope.SubDivisionTable = getTable.getSubDivisionTable($scope, $http);
     $scope.divisionTable = getTable.getDivisionTable($scope, $http);
-    $scope.s = {};
+    $scope.s = 'title';
 
     $scope.myINFO = function () {
-        console.log($scope.divisionTable);
+        console.log($scope.dataTable);
     }
-
+    $scope.myINFO2 = function () {
+        $scope.s = 'title';
+    }
+    $scope.myINFO3 = function () {
+        $scope.s = 'value';
+     }
     $scope.setPositionId = function (data) {
         document.getElementById("requirementsModal").setAttribute("data-id", data._id);
         console.log("posId:" + document.getElementById("requirementsModal").getAttribute("data-id"));
@@ -317,9 +324,9 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
                 });
             });
         }
-        if (dataSource === 'reqTable') {
-            $scope.dataTable = getTable.getRequirementsTable($scope, $http);
-        }
+        //if (dataSource === 'reqTable') {
+        //    $scope.dataTable = getTable.getPositionsTable($scope, $http);
+        //}
         $('#' + senderModalForm).modal('hide');
     }
 
@@ -347,6 +354,14 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
                      if (element.assigned.indexOf(data) === -1) {
                          element.assigned.push(data);
                      }
+
+                     if (element.requirements === undefined) {
+                         element.requirements = [];
+                     }
+                     if (element.requirements.indexOf(data) === -1) {
+                         element.requirements.push(data);
+                     }
+
                      else {
                          alert('cant add duplicates');
                      }
@@ -391,7 +406,6 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
             }
         })
      .success(function (response) {
-         console.log('unlink');
          parentId.assigned.splice(parentId.assigned.indexOf(childId), 1);
      })
      .error(function (response) { // optional
@@ -448,13 +462,14 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'Com
                         throw 'Error: data source can not be found';
                 }
                 var index = $scope[dataSource].indexOf(data);
-
+                for (var property in $scope[dataSource][index]) {
+                    if ($scope[dataSource][index].hasOwnProperty(property)) {
+                        delete $scope[dataSource][index][property];
+                    }
+                }
                 $scope[dataSource].splice(index, 1);
 
-                if (path === 'requirements/') {
-                    $scope.dataTable = getTable.getRequirementsTable($scope, $http);
-                }
-            }, $scope);//<----- delegate?
+            }, $scope);
         }
     }
 

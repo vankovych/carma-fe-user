@@ -19,10 +19,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="table-info" ng-repeat="data in reqTable">
+            <tr class="table-info" ng-repeat="data in reqTable" ng-if="data.hasOwnProperty('_id')">
                 <td>{{data.title}}</td>
                 <td>{{data.value}}</td>
-                <td>{{data.description}}  </td>
+                <td>{{data.description}}</td>
                 <td><button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('reqModal', data, 'edit')">Edit</button></td>
                 <td><button class="btn btn-danger" type="button" ng-click="removePosition('requirements/', data)">Remove</button></td>
             </tr>

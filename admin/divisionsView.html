@@ -14,7 +14,7 @@
             <div id="collapse-{{$index}}" class="panel-collapse collapse">
                 <!-- collapsable inner represens subdivisions -->
                 <!-- subDiv is only id field -->
-                <div class="panel-body" ng-repeat="subDiv in data.assigned">
+                <div class="panel-body" ng-repeat="subDiv in data.assigned" ng-if="subDiv.hasOwnProperty('_id')">
                     <div class="panel-group">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -27,7 +27,7 @@
                                 </h4>
                                 <div id="collapseInner-{{$parent.$index}}-{{$index}}" class="panel-collapse collapse">
                                     <br>
-                                    <div class="panel-body" ng-repeat="poss in subDiv.assigned">
+                                    <div class="panel-body" ng-repeat="poss in subDiv.assigned" ng-if="poss.hasOwnProperty('_id')">
                                         <div class="panel-group">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
