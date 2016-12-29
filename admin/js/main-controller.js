@@ -114,6 +114,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
     };
 
 }]);
+
 app.service('getUser', ['$http', '$window', function ($http, $window) {
     this.getAllUsers = function ($scope, $http) {
         $http({
@@ -207,7 +208,7 @@ app.service('CommunicationProvider', ['$http', '$window', function ($http, $wind
 
 }]);
 
-app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'getUser','CommunicationProvider', function ($scope, $http, $window, getTable, getUser,CommunicationProvider) {
+app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'getUser', 'CommunicationProvider', function ($scope, $http, $window, getTable, getUser, CommunicationProvider) {
 
     $scope.reqTable = getTable.getRequirementsTable($scope, $http);
     $scope.dataTable = getTable.getPositionsTable($scope, $http);
@@ -281,8 +282,6 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
             obj[all[index].name] = all[index].value;
         }
 
-        console.log(obj);
-
         //////refactoring required
         var dataSource = {};
         switch (senderModalForm) {
@@ -307,8 +306,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
                 throw 'Error: data source can not be found';
         }
         //////
-        if (lastModal.getAttribute('data-lastUsage') === 'newUser')
-        {
+        if (lastModal.getAttribute('data-lastUsage') === 'newUser') {
 
             $scope.myPost(path, obj, function (arg) {
                 $scope.allUsers.push(arg.data);
@@ -336,9 +334,6 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
                 });
             });
         }
-        //if (dataSource === 'reqTable') {
-        //    $scope.dataTable = getTable.getPositionsTable($scope, $http);
-        //}
         $('#' + senderModalForm).modal('hide');
     };
 
@@ -354,7 +349,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
         })
          .success(function (response) {
              console.log('succes');
-             ////////////////////////////////////////////////////////////////////////////////////////////////////
+
              var index = $scope.unassigned.indexOf(data);
              $scope.unassigned.splice(index, 1);
 
@@ -444,9 +439,8 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
          });
     };
 
-    $scope.removeUser = function (data,index) {
-        if (confirm('Do you realy want to delete this user?'))
-        {
+    $scope.removeUser = function (data, index) {
+        if (confirm('Do you realy want to delete this user?')) {
             $http({
                 url: 'http://localhost:3000/api/user/' + data._id,
                 method: 'DELETE',
@@ -455,46 +449,26 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
                     'Content-Type': 'application/json'
                 }
             })
-       .success(function (response) {
-           $scope.allUsers.splice(index, 1);
-       })
-       .error(function (response) { // optional
-          alert('Error occured: ' + response.error);
-       });
+           .success(function (response) {
+               $scope.allUsers.splice(index, 1);
+           })
+           .error(function (response) { // optional
+               alert('Error occured: ' + response.error);
+           });
         }
-
     }
 
-    $scope.removePosition = function (path, data) {
+    $scope.removePosition = function (path, data,dataSource) {
 
         if (confirm('Do you realy want to delete this record?')) {
             CommunicationProvider.DeleteData(path + data._id, function (arg) {
-                var dataSource;
-                switch (path) {
-                    case 'subdivisions/':
-                        dataSource = 'SubDivisionTable';
-                        break;
-                    case 'divisions/':
-                        dataSource = 'divisionTable';
-                        break;
-                    case 'requirements/':
-                        dataSource = 'reqTable';
-                        break;
-                    case 'positions/':
-                        dataSource = 'dataTable';
-                        break;
-                    default:
-                        throw 'Error: data source can not be found';
-                }
-                
                 var index = $scope[dataSource].indexOf(data);
-
-                $scope[dataSource].splice(index, 1);
-
-                //if (path === 'requirements/') {
-                //    $scope.dataTable = getTable.getPositionsTable($scope, $http);
-                //}
-            }, $scope);//<----- delegate?
+                for (var property in $scope[dataSource][index]) {
+                    if ($scope[dataSource][index].hasOwnProperty(property)) {
+                        delete $scope[dataSource][index][property];
+                    }
+                }
+            }, $scope);
         }
     };
 
@@ -527,14 +501,13 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
     };
 
     $scope.changeScope = function (arg) {
-        
+
         $scope.counter += 1;
         if ($scope.counter % 2 == 0) {
             $scope.s = '-' + arg;
             console.log($scope.counter);
         }
-        else
-        {
+        else {
             $scope.s = arg;
         }
     };
@@ -558,7 +531,6 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
            });
     };
 
-   getUser.getAllUsers($scope, $http);
-
+    getUser.getAllUsers($scope, $http);
 
 }]);
