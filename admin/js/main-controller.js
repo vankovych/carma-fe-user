@@ -415,8 +415,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
             }
         })
          .success(function (response) {
-             var index = $scope.unassignedPositions.indexOf(childPos);
-             $scope.unassignedPositions.splice(index, 1);
+
              var result = $.grep($scope[dataHead], function (e) { return e._id == _id; });
              if (result[0].assigned === undefined) {
                  result[0].assigned = [];
@@ -455,7 +454,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
          console.log('unlink');
 
          parentId.assigned.splice(parentId.assigned.indexOf(childPos), 1);
-        delete childId.nestedObj;
+         delete childPos.nestedObj;
      })
      .error(function (response) {
          console.log('epic fail error');

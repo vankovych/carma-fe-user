@@ -114,11 +114,10 @@
                     </tr>
                 </thead>
                 <tbody>
-<<<<<<< HEAD
                     <tr class="table-info" ng-repeat="position in dataTable" ng-if="!position.hasOwnProperty('nestedObj') && position.hasOwnProperty('_id') ">
                 <td>{{position.name}}</td>
                 <td>{{position.subTitle}}</td>
-                <td><button class="btn btn-danger" type="button" ng-click="linkNode('subdivisions/','positions/','subdivisionsPositionsModal',position._id,'SubDivisionTable','dataTable')">Add</button></td>
+                <td><button class="btn btn-danger" type="button" ng-click="linkNode('subdivisions/','positions/','subdivisionsPositionsModal',position,'SubDivisionTable','dataTable')">Add</button></td>
                 </tr>
                 </tbody>
             </table>
