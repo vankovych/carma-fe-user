@@ -15,18 +15,27 @@ function myINFO(a)
         document.getElementById(selectBlock).setAttribute("data-option", "name");
         console.log(document.getElementById(selectBlock).value);
     }
-    else {
+    if (document.getElementById(selectBlock).value === "title")
+     {
         document.getElementById(selectBlock).setAttribute("data-option", "title");
+        console.log(document.getElementById(selectBlock).value);
+    }
+    if (document.getElementById(selectBlock).value === "division")
+    {
+        document.getElementById(selectBlock).setAttribute("data-option", "division");
         console.log(document.getElementById(selectBlock).value);
     }
 }
 function searchFunction(selectBlock, searchBar, outTable) {
     if (document.getElementById(selectBlock).value == "title") {
         var parameter = 1;
-    } else {
+    } if (document.getElementById(selectBlock).value == "name") {
         var parameter = 0;
     }
-
+    if (document.getElementById(selectBlock).value == "division")
+    {
+        var parameter = 3;
+    }
     var input, filter, table, tr, td, i;
     input = document.getElementById(searchBar);
     filter = input.value.toUpperCase();
@@ -57,80 +66,9 @@ function arr_diff(allReq, assignedReq) {
     for (var i = 0; i < allReq.length; i++) {
         res.push(allReq[i]);
     }
-    for (var i = 0; i < assignedReq.length; i++) {
-        if (res.indexOf(assignedReq[i] != -1)) {
-            res.splice(res.indexOf(assignedReq[i]), 1);
-        }
-    }
+    res.filter(function (n) {
+        return assignedReq.indexOf(n) != -1;
+    })
     return res;
 
 };
-
-var people, asc1 = 1,
-       asc2 = 1,
-       asc3 = 1;
-window.onload = function () {
-    people = document.getElementById("people");
-}
-
-function sort_table(body, col, asc) {
-    var tbody = document.getElementById(body);
-    var rows = tbody.rows,
-        rlen = rows.length,
-        arr = new Array(),
-        i, j, cells, clen;
-     //fill the array with values from the table
-    for (i = 0; i < rlen; i++) {
-        cells = rows[i].cells;
-        clen = cells.length;
-        arr[i] = new Array();
-        for (j = 0; j < clen; j++) {
-            arr[i][j] = cells[j].innerHTML;
-        }
-    }
-    // sort the array by the specified column number (col) and order (asc)
-    arr.sort(function (a, b) {
-        return (a[col] == b[col]) ? 0 : ((a[col] > b[col]) ? asc : -1 * asc);
-    });
-    // replace existing rows with new rows created from the sorted array
-    for (i = 0; i < rlen; i++) {
-        rows[i].innerHTML = "<td>" + arr[i].join("</td><td>") + "</td>";
-    }
-    if (body === 'people') {
-        if (asc > 0) {
-            if (col == 0) {
-                document.getElementById('position-name').innerHTML = "Name ▲"
-            }
-            else {
-                document.getElementById('position-subtitle').innerHTML = "Subtitle ▲"
-            }
-        }
-        else {
-            if (col == 0) {
-                document.getElementById('position-name').innerHTML = "Name ▼"
-            }
-            else {
-                document.getElementById('position-subtitle').innerHTML = "Subtitle ▼"
-            }
-        }
-    }
-    if (body === 'requirementsTable')
-    {
-        if (asc > 0) {
-            if (col == 0) {
-                document.getElementById('req-title').innerHTML = "Title ▲"
-            }
-            else {
-                document.getElementById('req-value').innerHTML = "Value ▲"
-            }
-        }
-        else {
-            if (col == 0) {
-                document.getElementById('req-title').innerHTML = "Title ▼"
-            }
-            else {
-                document.getElementById('req-value').innerHTML = "Value ▼"
-            }
-        }
-    }
-}

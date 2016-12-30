@@ -19,7 +19,9 @@
             </tr>
         </thead>
         <tbody id="requirementsTable">
-            <tr class="table-info" ng-repeat="data in reqTable | orderBy: s " ng-if="data.hasOwnProperty('_id')">
+            <tr class="table-info" ng-repeat="data in reqTable | orderBy: s">
+
+
                 <td>{{data.title}}</td>
                 <td>{{data.value}}</td>
                 <td>{{data.description}}  </td>

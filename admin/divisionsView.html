@@ -27,7 +27,7 @@
                                                 <div class="panel-heading">
                                                     {{poss.subTitle}}
                                                     {{poss.name}}
-                                                    <button class="btn btn-danger" type="button" ng-click="unLinkNode('subdivisions/','/positions/', subDiv, poss)">Unlink{{poss.nestedObj.parentAPI}}</button></>
+                                                    <button class="btn btn-danger" type="button" ng-click="unLinkNode('subdivisions/','/positions/', subDiv, poss)">Unlink</button></>
                                                 </div>
                                             </div>
                                         </div>
@@ -42,6 +42,7 @@
                 <button class="btn btn-info" data-container-id="{{data._id}}" ng-click="setSubDivivsionId('subdivisionsModal',data)">Add Subdivision</button>
             </div>
         </div>
+
     </div>
 
     <div id="divModal" class="modal modal-padding">
@@ -60,9 +61,17 @@
     </div>
 
     <div id="subdivisionsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
-        <div class="modal-content modal-dialog">
+        <div class="my-modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan('subdivisionsModal')">×</span>
-            <table class="table-hover table-sm">
+
+            <h4>Please, choose the subdivision you wanna add...</h4>
+            <input type="text" class="myInput" id="search-sub-modal" onkeyup="searchFunction('select-block-sub-modal', 'search-sub-modal', 'sub-table-modal')" placeholder="Search by..." title="Type in a name">
+            <select class="styled-select" onchange="changeOption('select-block-sub-modal')" id="select-block-sub-modal" data-option="name">
+                <option value="name">by title</option>
+                <option value="title">by value </option>
+            </select> 
+
+            <table class="table-hover table" id  ="sub-table-modal">
                 <thead class="thead-inverse">
                     <tr>
                         <th>Title</th>
@@ -72,23 +81,31 @@
                     </tr>
                 </thead>
                 <tbody>
+
                     <tr class="table-info" ng-repeat="subDivisionElement in SubDivisionTable" ng-if="subDivisionElement.hasOwnProperty('_id')&& !subDivisionElement.hasOwnProperty('nestedObj') ">
+
                         <td>{{subDivisionElement.name}}</td>
                         <td>{{subDivisionElement.subTitle}}</td>
-                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('divisions/','subdivisions/','subdivisionsModal',subDivisionElement._id,'divisionTable','SubDivisionTable')">Add</button></td>
+                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('divisions/','subdivisions/','subdivisionsModal',subDivisionElement,'divisionTable','SubDivisionTable')">Add</button></td>
                         <td><button class="btn btn-danger" type="button" ng-click="removePosition('subdivisions/', subDivisionElement,'SubDivisionTable')">Remove</button></td>
-
                     </tr>
                 </tbody>
             </table>
-            <button class="btn  btn-success " type="button" ng-click="showModal('subDivAddModal', '', 'add')">Add new Subdivision</button>
         </div>
     </div>
 
     <div id="subdivisionsPositionsModal" class="modal" data-lastUsage="none" role="dialog" data-id="">
-        <div class="modal-content modal-dialog">
+        <div class="my-modal-content">
             <span class="close" id="addClose" onclick="closeAddSpan('subdivisionsPositionsModal')">×</span>
-            <table class="table-hover table-sm">
+
+            <h4>Please, choose the position you wanna add...</h4>
+            <input type="text" class="myInput" id="search-pos-modal-sub" onkeyup="searchFunction('select-block-pos-modal', 'search-pos-modal-sub', 'pos-table-modal')" placeholder="Search by..." title="Type in a name">
+            <select class="styled-select" onchange="changeOption('select-block-pos-modal')" id="select-block-pos-modal" data-option="name">
+                <option value="name">by title</option>
+                <option value="title">by value </option>
+            </select> 
+
+            <table id="pos-table-modal" class="table-hover table">
                 <thead class="thead-inverse">
                     <tr>
                         <th>Title</th>
@@ -97,6 +114,7 @@
                     </tr>
                 </thead>
                 <tbody>
+<<<<<<< HEAD
                     <tr class="table-info" ng-repeat="position in dataTable" ng-if="!position.hasOwnProperty('nestedObj') && position.hasOwnProperty('_id') ">
                 <td>{{position.name}}</td>
                 <td>{{position.subTitle}}</td>
@@ -105,6 +123,7 @@
                 </tbody>
             </table>
             <button class="btn  btn-success " type="button" ng-click="showModal('positionModal', '', 'add')">Add new Position</button>
+
         </div>
     </div>
 
