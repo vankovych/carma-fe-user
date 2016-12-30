@@ -21,13 +21,13 @@
                                 </div>
                                 <div id="collapseInner-{{parentIndex}}-{{$index}}" class="panel-collapse collapse">
                                     <br>
-                                    <div class="panel-body" ng-repeat="poss in subDiv.assigned" ng-if="poss.hasOwnProperty('_id')">
+                                    <div class="panel-body" ng-repeat="poss in subDiv.assigned" ng-if="poss.nestedObj.hasOwnProperty('parentAPI')">
                                         <div class="panel-group">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
                                                     {{poss.subTitle}}
                                                     {{poss.name}}
-                                                    <button class="btn btn-danger" type="button" ng-click="unLinkNode('subdivisions/','/positions/', subDiv, poss)">Unlink</button></>
+                                                    <button class="btn btn-danger" type="button" ng-click="unLinkNode('subdivisions/','/positions/', subDiv, poss)">Unlink{{poss.nestedObj.parentAPI}}</button></>
                                                 </div>
                                             </div>
                                         </div>
@@ -97,14 +97,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-info" ng-repeat="position in dataTable">
+                    <tr class="table-info" ng-repeat="position in dataTable" ng-if="!position.hasOwnProperty('nestedObj')" >
                         <td>{{position.name}}</td>
                         <td>{{position.subTitle}}</td>
                         <td><button class="btn btn-danger" type="button" ng-click="linkNode('subdivisions/','positions/','subdivisionsPositionsModal',position._id,'SubDivisionTable','dataTable')">Add</button></td>
                     </tr>
                 </tbody>
             </table>
-            <button class="btn  btn-success " type="button" ng-click="showModal('subDivAddModal', '', 'add')">Add new Subdivision</button>
+            <button class="btn  btn-success " type="button" ng-click="showModal('subDivAddModal', '', 'add')">Add new Position</button>
         </div>
     </div>
 

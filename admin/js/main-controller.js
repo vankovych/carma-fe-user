@@ -78,17 +78,21 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                     if (subDivElement.assigned != undefined) {
                         subDivElement.assigned.forEach(function (posElement, posIndex) {
                             posElement.nestedObj = {
+                                "parentAPI": "subdivisions/",
+                                "currentAPI": "positions/",
+                                "parent_id": subDivElement._id,
                                 "subDivName": subDivElement.name,
                                 "subDivTitle": subDivElement.subTitle,
-                                "divTitle" : element.title,
-                                "divSubTitle" : element.subTitle,                            };
+                                "divTitle": element.title,
+                                "divSubTitle": element.subTitle,
+                            };
                         })
                     }
                 })
             }
         });
 
-        
+
         console.log($scope.dataTable);
         var t = {};
     })
@@ -383,7 +387,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
                  }
              });
          })
-         .error(function (response) { // optional
+         .error(function (response) {
              console.log('epic fail error');
          });
     };
@@ -403,12 +407,21 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
              if (result[0].assigned === undefined) {
                  result[0].assigned = [];
              }
-             result[0].assigned.push($.grep($scope[dataTail], function (e) { return e._id == childId; })[0]);
+             var target = $.grep($scope[dataTail], function (e) { return e._id == childId; })[0];
+             target.nestedObj = {
+                 "parentAPI": "subdivisions/",
+                 "currentAPI": "positions/",
+                 "parent_id": result[0]._id,
+                 "subDivName": result[0].name,
+                 "subDivTitle": result[0].subTitle,
+                 "divTitle": "",
+                 "divSubTitle": ""
+             };
 
-
+             result[0].assigned.push(target);
 
          })
-         .error(function (response) { // optional
+         .error(function (response) {
              console.log('epic fail error');
          });
     };
@@ -426,12 +439,18 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
      .success(function (response) {
          console.log('unlink');
          parentId.assigned.splice(parentId.assigned.indexOf(childId), 1);
-         childId.nestedObj = {};
+        delete childId.nestedObj;
      })
-     .error(function (response) { // optional
+     .error(function (response) {
          console.log('epic fail error');
      });
     };
+
+    $scope.removeAssignement = function (elem) {
+        CommunicationProvider.DeleteData(elem.nestedObj.parentAPI + elem.nestedObj.parent_id + '/' + elem.nestedObj.currentAPI + elem._id, function (arg) {
+            delete elem.nestedObj;
+        }, $scope);
+    }
 
     $scope.unlinkReq = function (pos_id, req_id) {
         var url = "/positions/" + pos_id._id + "/requirements/" + req_id._id;
@@ -454,7 +473,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
                  }
              });
          })
-         .error(function (response) { // optional
+         .error(function (response) {
              console.log('epic fail error');
          });
     };
@@ -546,7 +565,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
            .success(function (response) {
                window.location.hash = '#/';
            })
-           .error(function (response) { // optional
+           .error(function (response) {
                console.log(response.error);
            });
     };
