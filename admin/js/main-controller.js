@@ -21,8 +21,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 }
                 $scope.reqTable.forEach(function (reqEntry) {
                     if (reqEntry._id === innerReq) {
-                        entry.assigned.push(reqEntry);
-                       
+                        entry.assigned.push(reqEntry);                      
                     }
                 });
             });
@@ -59,6 +58,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
             }
         })
     .success(function (response) {
+        var assignedEntity = [];
         $scope.divisionTable = response.data;
         console.log('getDivision responce: ' + response.data);
         ////////////
@@ -70,12 +70,15 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 $scope.SubDivisionTable.forEach(function (reqEntry) {
                     if (reqEntry._id === innerDiv) {
                         entry.assigned.push(reqEntry);
+                        assignedEntity.push(reqEntry);
                     }
                 });
             });
         });
         ////////////
-        console.log("blah blah");
+        $scope.allAssignedSub = assignedEntity.filter(function (item, pos, self) {
+            return self.indexOf(item) == pos;
+        })
 
     })
     .error(function (response) {
@@ -237,6 +240,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
     };
     $scope.setSubDivivsionId = function (sender, data) {
         document.getElementById(sender).setAttribute("data-id", data._id);
+        $scope.allAssignedSub = arr_diff($scope.SubDivisionTable, $scope.allAssignedSub);
         $scope.unassignedPositions = arr_diff($scope.dataTable, $scope.allAssigned);
         $('#' + sender).modal('show');
     };
@@ -400,6 +404,8 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
              }
              result[0].assigned.push($.grep($scope[dataTail], function (e) { return e._id == childPos._id; })[0]);
              $scope.allAssigned.push(childPos);
+             $scope.allAssignedSub.push(childPos);
+             
          })
          .error(function (response) { // optional
              console.log('epic fail error');
@@ -420,6 +426,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
          console.log('unlink');
          parentId.assigned.splice(parentId.assigned.indexOf(childPos), 1);
          $scope.allAssigned.splice($scope.allAssigned.indexOf(childPos), 1);
+         $scope.allAssignedSub.splice($scope.allAssignedSub.indexOf(childPos), 1);
      })
      .error(function (response) { // optional
          console.log('epic fail error');

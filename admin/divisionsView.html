@@ -5,7 +5,7 @@
             <div class="panel-heading">
                 <h4 class="panel-title button-container">
                     <button class="btn btn-info button-fill  " data-toggle="collapse" data-target="#collapse-{{$index}}">{{data.title}} {{data.subTitle}}</button>
-                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('divModal', data, 'edit')">Edit{{$index}}</button></>
+                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('divModal', data, 'edit')">Edit</button></>
                     <button class="btn btn-danger" type="button" ng-click="removePosition('divisions/', data,'divisionTable')">Remove</button></>
                 </h4>
             </div>
@@ -16,8 +16,8 @@
                             <div class="panel-heading">
                                 <div class="panel-title button-container">
                                     <button class="btn btn-info button-fill  button-gray" data-toggle="collapse" data-target="#collapseInner-{{parentIndex}}-{{$index}}">{{subDiv.name}} {{subDiv.subTitle}}</button>
-                                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('subDivAddModal', subDiv, 'edit')">Edit {{$index}}</button></>
-                                    <button class="btn btn-danger" type="button" ng-click="unLinkNode('divisions/','/subdivisions/',data,subDiv )">Unlink {{parentIndex}}</button></>
+                                    <button class="btn btn-warning" type="button" data-lastUsage="none" ng-click="showModal('subDivAddModal', subDiv, 'edit')">Edit</button></>
+                                    <button class="btn btn-danger" type="button" ng-click="unLinkNode('divisions/','/subdivisions/',data,subDiv )">Unlink</button></>
                                 </div>
                                 <div id="collapseInner-{{parentIndex}}-{{$index}}" class="panel-collapse collapse">
                                     <br>
@@ -72,13 +72,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-info" ng-repeat="subDivisionElement in SubDivisionTable" ng-if="subDivisionElement.hasOwnProperty('_id')">
+                    <tr class="table-info" ng-repeat="subDivisionElement in allAssignedSub" ng-if="subDivisionElement.hasOwnProperty('_id')">
                         <td>{{subDivisionElement.name}}</td>
                         <td>{{subDivisionElement.subTitle}}</td>
                         <td><button class="btn btn-danger" type="button" ng-click="linkNode('divisions/','subdivisions/','subdivisionsModal',subDivisionElement,'divisionTable','SubDivisionTable')">Add</button></td>
                         <td><button class="btn btn-danger" type="button" ng-click="removePosition('subdivisions/', subDivisionElement,'SubDivisionTable')">Remove</button></td>
-
-                      </tr>
+                     </tr>
                 </tbody>
             </table>
             <button class="btn  btn-success " type="button" ng-click="showModal('subDivAddModal', '', 'add')">Add new Subdivision</button>
