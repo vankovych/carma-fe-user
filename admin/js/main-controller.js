@@ -10,12 +10,6 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
             }
         })
     .success(function (response) {
-<<<<<<< HEAD
-
-    
-        //  console.log(response.data);
-=======
->>>>>>> origin/hotfix-Divisions
         $scope.dataTable = response.data;
         $scope.dataTable.forEach(function (entry) {
             entry.requirements.forEach(function (innerReq) {
@@ -79,13 +73,7 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 });
             });
         });
-<<<<<<< HEAD
-        ////////////
-        $scope.allAssignedSub = assignedEntity.filter(function (item, pos, self) {
-            return self.indexOf(item) == pos;
-        })
-=======
->>>>>>> origin/hotfix-Divisions
+
 
         $scope.divisionTable.forEach(function (element, index) {
             if (element.assigned != undefined) {
@@ -434,13 +422,8 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
              if (result[0].assigned === undefined) {
                  result[0].assigned = [];
              }
-<<<<<<< HEAD
-             result[0].assigned.push($.grep($scope[dataTail], function (e) { return e._id == childPos._id; })[0]);
-             $scope.allAssigned.push(childPos);
-             $scope.allAssignedSub.push(childPos);
-             
-=======
-             var target = $.grep($scope[dataTail], function (e) { return e._id == childId; })[0];
+
+             var target = $.grep($scope[dataTail], function (e) { return e._id == childPos._id; })[0];
              target.nestedObj = {
                  "parentAPI": "subdivisions/",
                  "currentAPI": "positions/",
@@ -453,7 +436,6 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
 
              result[0].assigned.push(target);
 
->>>>>>> origin/hotfix-Divisions
          })
          .error(function (response) {
              console.log('epic fail error');
@@ -472,14 +454,9 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
         })
      .success(function (response) {
          console.log('unlink');
-<<<<<<< HEAD
+
          parentId.assigned.splice(parentId.assigned.indexOf(childPos), 1);
-         $scope.allAssigned.splice($scope.allAssigned.indexOf(childPos), 1);
-         $scope.allAssignedSub.splice($scope.allAssignedSub.indexOf(childPos), 1);
-=======
-         parentId.assigned.splice(parentId.assigned.indexOf(childId), 1);
         delete childId.nestedObj;
->>>>>>> origin/hotfix-Divisions
      })
      .error(function (response) {
          console.log('epic fail error');

@@ -15,18 +15,27 @@ function myINFO(a)
         document.getElementById(selectBlock).setAttribute("data-option", "name");
         console.log(document.getElementById(selectBlock).value);
     }
-    else {
+    if (document.getElementById(selectBlock).value === "title")
+     {
         document.getElementById(selectBlock).setAttribute("data-option", "title");
+        console.log(document.getElementById(selectBlock).value);
+    }
+    if (document.getElementById(selectBlock).value === "division")
+    {
+        document.getElementById(selectBlock).setAttribute("data-option", "division");
         console.log(document.getElementById(selectBlock).value);
     }
 }
 function searchFunction(selectBlock, searchBar, outTable) {
     if (document.getElementById(selectBlock).value == "title") {
         var parameter = 1;
-    } else {
+    } if (document.getElementById(selectBlock).value == "name") {
         var parameter = 0;
     }
-
+    if (document.getElementById(selectBlock).value == "division")
+    {
+        var parameter = 3;
+    }
     var input, filter, table, tr, td, i;
     input = document.getElementById(searchBar);
     filter = input.value.toUpperCase();
