@@ -71,10 +71,16 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 });
             });
         });
-
         $scope.divisionTable.forEach(function (element, index) {
             if (element.assigned != undefined) {
                 element.assigned.forEach(function (subDivElement, sdIndex) {
+                    subDivElement.nestedObj = {
+                        "parentAPI": "divisions/",
+                        "currentAPI": "subdivisions/",
+                        "parent_id": element._id,
+                        "subDivName": element.name,
+                        "subDivTitle": element.subTitle,
+                    };                    
                     if (subDivElement.assigned != undefined) {
                         subDivElement.assigned.forEach(function (posElement, posIndex) {
                             posElement.nestedObj = {
