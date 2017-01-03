@@ -113,7 +113,7 @@
                 </thead>
                 <tbody>
 
-                    <tr class="table-info" ng-repeat="position in dataTable" ng-if="!position.hasOwnProperty('nestedObj')" >
+                    <tr class="table-info" ng-repeat="position in dataTable" ng-if="!position.hasOwnProperty('nestedObj') && position.hasOwnProperty('_id')">
 
                         <td>{{position.name}}</td>
                         <td>{{position.subTitle}}</td>
