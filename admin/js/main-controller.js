@@ -73,11 +73,16 @@ app.service('getTable', ['$http', '$window', function ($http, $window) {
                 });
             });
         });
-
-
         $scope.divisionTable.forEach(function (element, index) {
             if (element.assigned != undefined) {
                 element.assigned.forEach(function (subDivElement, sdIndex) {
+                    subDivElement.nestedObj = {
+                        "parentAPI": "divisions/",
+                        "currentAPI": "subdivisions/",
+                        "parent_id": element._id,
+                        "subDivName": element.name,
+                        "subDivTitle": element.subTitle,
+                    };                    
                     if (subDivElement.assigned != undefined) {
                         subDivElement.assigned.forEach(function (posElement, posIndex) {
                             posElement.nestedObj = {
@@ -240,17 +245,12 @@ app.service('CommunicationProvider', ['$http', '$window', function ($http, $wind
 }]);
 
 app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'getUser','CommunicationProvider', function ($scope, $http, $window, getTable, getUser,CommunicationProvider) {
-   
-
 
     $scope.reqTable = getTable.getRequirementsTable($scope, $http);
     $scope.dataTable = getTable.getPositionsTable($scope, $http);
     $scope.SubDivisionTable = getTable.getSubDivisionTable($scope, $http);
     $scope.divisionTable = getTable.getDivisionTable($scope, $http);
     $scope.s = {};
-    $scope.myINFO = function () {
-        console.log($scope.divisionTable);
-    }
 
     $scope.setPositionId = function (data) {
         document.getElementById("requirementsModal").setAttribute("data-id", data._id);
@@ -258,10 +258,9 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
         $scope.unassigned = arr_diff($scope.reqTable, data.assigned);
         $('#requirementsModal').modal('show');
     };
+
     $scope.setSubDivivsionId = function (sender, data) {
         document.getElementById(sender).setAttribute("data-id", data._id);
-        $scope.allAssignedSub = arr_diff($scope.SubDivisionTable, $scope.allAssignedSub);
-        $scope.unassignedPositions = arr_diff($scope.dataTable, $scope.allAssigned);
         $('#' + sender).modal('show');
     };
 
@@ -416,8 +415,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
             }
         })
          .success(function (response) {
-             var index = $scope.unassignedPositions.indexOf(childPos);
-             $scope.unassignedPositions.splice(index, 1);
+
              var result = $.grep($scope[dataHead], function (e) { return e._id == _id; });
              if (result[0].assigned === undefined) {
                  result[0].assigned = [];
@@ -456,7 +454,7 @@ app.controller('mainController', ['$scope', '$http', '$window', 'getTable', 'get
          console.log('unlink');
 
          parentId.assigned.splice(parentId.assigned.indexOf(childPos), 1);
-        delete childId.nestedObj;
+         delete childPos.nestedObj;
      })
      .error(function (response) {
          console.log('epic fail error');

@@ -10,7 +10,7 @@
                 </h4>
             </div>
             <div id="collapse-{{$index}}" class="panel-collapse collapse">
-                <div class="panel-body" ng-repeat="subDiv in data.assigned" ng-if="subDiv.hasOwnProperty('_id')"> 
+                <div class="panel-body" ng-repeat="subDiv in data.assigned" ng-if="subDiv.hasOwnProperty('_id')">
                     <div class="panel-group">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-    </div>   
+    </div>
 
     <div id="divModal" class="modal modal-padding">
         <!-- Modal content -->
@@ -81,12 +81,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-info" ng-repeat="subDivisionElement in allAssignedSub" ng-if="subDivisionElement.hasOwnProperty('_id')">
+
+                    <tr class="table-info" ng-repeat="subDivisionElement in SubDivisionTable" ng-if="subDivisionElement.hasOwnProperty('_id')&& !subDivisionElement.hasOwnProperty('nestedObj') ">
+
                         <td>{{subDivisionElement.name}}</td>
                         <td>{{subDivisionElement.subTitle}}</td>
                         <td><button class="btn btn-danger" type="button" ng-click="linkNode('divisions/','subdivisions/','subdivisionsModal',subDivisionElement,'divisionTable','SubDivisionTable')">Add</button></td>
                         <td><button class="btn btn-danger" type="button" ng-click="removePosition('subdivisions/', subDivisionElement,'SubDivisionTable')">Remove</button></td>
-                     </tr>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -113,14 +115,15 @@
                 </thead>
                 <tbody>
 
-                    <tr class="table-info" ng-repeat="position in dataTable" ng-if="!position.hasOwnProperty('nestedObj') && position.hasOwnProperty('_id')">
-
-                        <td>{{position.name}}</td>
-                        <td>{{position.subTitle}}</td>
-                        <td><button class="btn btn-danger" type="button" ng-click="linkNode('subdivisions/','positions/','subdivisionsPositionsModal',position,'SubDivisionTable','dataTable')">Add</button></td>
-                    </tr>
+                    <tr class="table-info" ng-repeat="position in dataTable" ng-if="!position.hasOwnProperty('nestedObj') && position.hasOwnProperty('_id') ">
+                <td>{{position.name}}</td>
+                <td>{{position.subTitle}}</td>
+                <td><button class="btn btn-danger" type="button" ng-click="linkNode('subdivisions/','positions/','subdivisionsPositionsModal',position,'SubDivisionTable','dataTable')">Add</button></td>
+                </tr>
                 </tbody>
             </table>
+            <button class="btn  btn-success " type="button" ng-click="showModal('positionModal', '', 'add')">Add new Position</button>
+
         </div>
     </div>
 
